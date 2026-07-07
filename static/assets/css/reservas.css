@@ -1,0 +1,764 @@
+/* ============================================================
+   RESERVAS — reservas.css
+   ============================================================ */
+
+/* === ENCABEZADO === */
+.reservas-hero {
+  padding: var(--space-xl) 0 var(--space-lg);
+  text-align: center;
+}
+
+.reservas-hero h1 {
+  margin-bottom: var(--space-sm);
+}
+
+.reservas-hero p {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.0625rem;
+  color: var(--gris-text);
+  max-width: 50ch;
+  margin: 0 auto;
+}
+
+/* === TABS (compat antigua, sin uso actual) === */
+.reservas-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: var(--space-lg) auto var(--space-md);
+  padding: 0 var(--space-md);
+  max-width: var(--max-width);
+}
+
+.reservas-tab {
+  flex: 1;
+  max-width: 240px;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius);
+  background: transparent;
+  border: 2px solid var(--gris-suave);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--gris-text);
+  text-align: center;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: all var(--t-base);
+  position: relative;
+}
+
+.reservas-tab:hover {
+  border-color: var(--negro);
+  color: var(--negro);
+}
+
+.reservas-tab--active--jueves {
+  background: var(--violeta);
+  border-color: var(--violeta);
+  color: var(--crema);
+}
+
+.reservas-tab--active--viernes {
+  background: var(--rojo);
+  border-color: var(--rojo);
+  color: var(--crema);
+}
+
+.reservas-tab small {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 2px;
+  opacity: 0.85;
+}
+
+/* === FUNCIÓN INFO === */
+.funcion-info {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md) var(--space-md);
+}
+
+.funcion-info__day-badge {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius);
+  margin-bottom: var(--space-sm);
+  color: var(--crema);
+}
+
+.funcion-info__day-badge--jueves { background: var(--violeta); }
+.funcion-info__day-badge--viernes { background: var(--rojo); }
+
+.funcion-info h2 {
+  margin-bottom: var(--space-xs);
+}
+
+.funcion-info__fecha {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--rojo);
+  margin-bottom: var(--space-md);
+}
+
+.funcion-info__elenco {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--gris-text);
+  margin-bottom: var(--space-md);
+}
+
+.funcion-info__elenco strong {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--negro);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  display: block;
+  margin-bottom: 0.375rem;
+}
+
+.funcion-info__descripcion {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--gris-text);
+  margin-bottom: var(--space-lg);
+}
+
+/* === FORMULARIO RESERVA === */
+.reserva-form {
+  background: var(--crema-papel);
+  border: 1px solid var(--gris-suave);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  max-width: var(--max-width-narrow);
+  margin: 0 auto var(--space-xl);
+}
+
+.reserva-form h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin-bottom: var(--space-sm);
+}
+
+.reserva-form > p {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--gris-text);
+  margin-bottom: var(--space-md);
+}
+
+.reserva-form__campos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+@media (min-width: 600px) {
+  .reserva-form__campos {
+    grid-template-columns: 1fr 1fr;
+  }
+  .reserva-form__campo--full {
+    grid-column: 1 / -1;
+  }
+}
+
+.reserva-form__campo label {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--negro);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.375rem;
+}
+
+.reserva-form__campo input,
+.reserva-form__campo select,
+.reserva-form__campo textarea {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  background: var(--crema);
+  border: 1px solid var(--gris-suave);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--negro);
+  transition: border-color var(--t-fast);
+}
+
+.reserva-form__campo input:focus,
+.reserva-form__campo select:focus,
+.reserva-form__campo textarea:focus {
+  outline: none;
+  border-color: var(--rojo);
+}
+
+.reserva-form__campo textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.reserva-form__submit {
+  width: 100%;
+}
+
+.reserva-form__note {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.875rem;
+  color: var(--gris-text);
+  text-align: center;
+  margin-top: var(--space-sm);
+}
+
+/* === HORARIOS COMPLETOS === */
+.horarios-card {
+  background: var(--crema);
+  border: 1px solid var(--gris-suave);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  max-width: var(--max-width-narrow);
+  margin: 0 auto var(--space-lg);
+}
+
+.horarios-card h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  margin-bottom: var(--space-sm);
+}
+
+/* Variante TOP del semáforo en /reservas/ — bordes Mondrian sutiles */
+.horarios-card--top {
+  border-top: 6px solid var(--dorado);
+  margin-top: 0;
+  margin-bottom: var(--space-lg);
+  background: linear-gradient(180deg, var(--crema) 0%, var(--crema-papel) 100%);
+}
+
+.horarios-card--top h3 {
+  color: var(--rojo);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-bottom: var(--space-md);
+}
+
+/* === INFO COMPLEMENTARIA === */
+.reservas-extra {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: 0 var(--space-md) var(--space-xl);
+}
+
+.reservas-extra h3 {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  margin-bottom: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.reservas-extra h3:first-child { margin-top: 0; }
+
+.reservas-extra p {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--gris-text);
+  margin-bottom: var(--space-sm);
+}
+
+.reservas-extra a {
+  color: var(--rojo);
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   LISTADO DE EVENTOS (/reservas/)
+   ============================================================ */
+.eventos-listado {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md) var(--space-xl);
+}
+
+/* === ESTADO VACÍO: SIN FUNCIONES CARGADAS === */
+.eventos-vacio {
+  background: var(--crema-papel);
+  border: 1px solid var(--gris-suave);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl) var(--space-md);
+  text-align: center;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+}
+
+.eventos-vacio h2 {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  color: var(--negro);
+  margin: 0 0 var(--space-sm);
+}
+
+.eventos-vacio p {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--gris-text);
+  margin: 0 auto var(--space-md);
+  max-width: 32rem;
+}
+
+.eventos-listado__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 720px) {
+  .eventos-listado__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+  }
+}
+
+.evento-card {
+  display: block;
+  background: var(--crema-papel);
+  border: 1px solid var(--gris-suave);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  border-top: 6px solid var(--gris-suave);
+  text-decoration: none !important;
+  color: var(--negro);
+  transition: transform var(--t-base), box-shadow var(--t-base);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Detalle decorativo Mondrian en la esquina (sin distraer) */
+.evento-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 36px;
+  height: 6px;
+  background: var(--dorado);
+  border-bottom-left-radius: var(--radius);
+}
+
+.evento-card:hover {
+  color: var(--negro);
+}
+
+@media (hover: hover) {
+  .evento-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+}
+
+.evento-card--rojo    { border-top-color: var(--rojo); }
+.evento-card--violeta { border-top-color: var(--violeta); }
+
+.evento-card--rojo::before { background: var(--rojo); }
+.evento-card--violeta::before { background: var(--violeta); }
+
+.evento-card--agotado {
+  opacity: 0.65;
+}
+
+.evento-card--programado {
+  opacity: 0.92;
+}
+
+.evento-card--programado .evento-card__cta {
+  font-style: italic;
+  font-weight: 600;
+}
+
+.evento-card__dia-badge {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--crema);
+  background: var(--gris-text);
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius);
+  margin-bottom: var(--space-sm);
+}
+
+.evento-card--rojo .evento-card__dia-badge { background: var(--rojo); }
+.evento-card--violeta .evento-card__dia-badge { background: var(--violeta); }
+
+.evento-card__titulo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  margin: 0 0 0.375rem;
+  color: var(--negro);
+}
+
+.evento-card__fecha {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--rojo);
+  margin: 0 0 var(--space-sm);
+}
+
+.evento-card--violeta .evento-card__fecha {
+  color: var(--violeta);
+}
+
+.evento-card__elenco {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--gris-text);
+  margin: 0 0 var(--space-md);
+}
+
+.evento-card__cta {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--rojo);
+  margin-top: var(--space-xs);
+}
+
+.evento-card--violeta .evento-card__cta {
+  color: var(--violeta);
+}
+
+.evento-card--agotado .evento-card__cta {
+  color: var(--gris-text);
+}
+
+
+/* ============================================================
+   EVENTO INDIVIDUAL (/reservas/<id>/)
+   ============================================================ */
+.evento-hero {
+  padding: var(--space-lg) 0 var(--space-md);
+}
+
+.evento-hero .container {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.evento-hero__back {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gris-text);
+  text-decoration: none;
+  margin-bottom: var(--space-md);
+}
+
+.evento-hero__back:hover {
+  color: var(--rojo);
+}
+
+.evento-hero h1 {
+  margin: var(--space-xs) 0;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.1;
+}
+
+.evento-hero__fecha {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.125rem;
+  color: var(--rojo);
+  margin: 0 0 var(--space-md);
+}
+
+.page-evento--violeta .evento-hero__fecha {
+  color: var(--violeta);
+}
+
+.evento-hero__desc {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--gris-text);
+  margin: 0 0 var(--space-md);
+}
+
+
+/* === FLYER === */
+.evento-flyer {
+  max-width: 480px;
+  margin: 0 auto var(--space-lg);
+  padding: 0 var(--space-md);
+}
+
+.evento-flyer img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gris-suave);
+}
+
+
+/* === AVISOS (cancelado / agotado / pasado / programado) === */
+.evento-aviso {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto var(--space-xl);
+  padding: var(--space-lg);
+  background: var(--crema-papel);
+  border: 1px solid var(--gris-suave);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.evento-aviso h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin: 0 0 var(--space-sm);
+  color: var(--negro);
+}
+
+.evento-aviso p {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--gris-text);
+  margin: 0 0 var(--space-md);
+}
+
+.evento-aviso--agotado h2,
+.evento-aviso--cancelado h2 {
+  color: var(--rojo-oscuro);
+}
+
+.evento-aviso--cancelado {
+  border-left: 6px solid var(--rojo-oscuro);
+  text-align: left;
+}
+
+.evento-aviso--cancelado .evento-aviso__motivo {
+  background: rgba(179, 50, 39, 0.07);
+  border-radius: var(--radius);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--rojo-tinto);
+  margin: var(--space-md) 0;
+}
+
+.evento-aviso--programado {
+  border-left: 6px solid var(--dorado);
+}
+
+.evento-aviso--programado h2 {
+  color: var(--negro);
+}
+
+
+/* === CHECKBOX DEL FORMULARIO === */
+.reserva-form__check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.reserva-form__check label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--gris-text);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  cursor: pointer;
+  margin: 0;
+}
+
+.reserva-form__check input[type="checkbox"] {
+  margin-top: 0.25rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  accent-color: var(--rojo);
+  cursor: pointer;
+}
+
+
+/* === HINT DENTRO DE LABEL === */
+.reserva-form__hint {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-style: italic;
+  font-size: 0.8125rem;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--gris-text);
+  margin-left: 0.375rem;
+}
+
+
+/* === LINK PARA GRUPOS GRANDES === */
+.reserva-form__grupos {
+  background: var(--crema-papel);
+  border-left: 4px solid var(--dorado);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin: 0 0 var(--space-md);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--gris-text);
+  line-height: 1.5;
+}
+
+.reserva-form__grupos a {
+  font-weight: 700;
+  color: var(--rojo);
+  text-decoration: none;
+}
+
+.reserva-form__grupos a:hover {
+  text-decoration: underline;
+}
+
+.reserva-form__grupos small {
+  display: block;
+  font-size: 0.8125rem;
+  font-style: italic;
+  margin-top: 0.25rem;
+  color: var(--gris-text);
+  opacity: 0.85;
+}
+
+
+/* === MENSAJE DE ÉXITO === */
+.reserva-exito {
+  background: #E8F5E9;
+  border: 1px solid #66BB6A;
+  border-left: 6px solid #2E7D32;
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  max-width: var(--max-width-narrow);
+  margin: 0 auto var(--space-xl);
+}
+
+.reserva-exito h3 {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  color: #1B5E20;
+  margin: 0 0 var(--space-sm);
+}
+
+.reserva-exito p {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: #1B3D20;
+  margin: 0 0 var(--space-sm);
+}
+
+.reserva-exito p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* === MENSAJE "ENVIANDO..." (estado intermedio, neutro) === */
+.reserva-enviando {
+  background: var(--crema-papel);
+  border: 1px solid var(--gris-suave);
+  border-left: 6px solid var(--dorado);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  max-width: var(--max-width-narrow);
+  margin: 0 auto var(--space-xl);
+}
+
+.reserva-enviando h3 {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  color: var(--negro);
+  margin: 0 0 var(--space-sm);
+}
+
+.reserva-enviando p {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--gris-text);
+  margin: 0;
+}
+
+/* Tres puntitos animados al lado de "Enviando reserva" */
+.reserva-enviando .dots::after {
+  content: "";
+  display: inline-block;
+  width: 1.5em;
+  text-align: left;
+  animation: tep-dots 1.4s steps(4, end) infinite;
+}
+
+@keyframes tep-dots {
+  0%   { content: ""; }
+  25%  { content: "."; }
+  50%  { content: ".."; }
+  75%  { content: "..."; }
+  100% { content: ""; }
+}
+
+
+/* === MENSAJE DE ERROR (no se pudo registrar) === */
+.reserva-error {
+  background: #FFEBEE;
+  border: 1px solid #EF9A9A;
+  border-left: 6px solid var(--rojo-oscuro);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  max-width: var(--max-width-narrow);
+  margin: 0 auto var(--space-xl);
+}
+
+.reserva-error h3 {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  color: var(--rojo-oscuro);
+  margin: 0 0 var(--space-sm);
+}
+
+.reserva-error p {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: #6E1F18;
+  margin: 0;
+}

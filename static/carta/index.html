@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carta — Tres Empanadas Comedia</title>
+  <meta name="description" content="Carta digital de Tres Empanadas Comedia: empanadas, cinco cervezas artesanales tiradas, latas y opciones sin alcohol. Pedí desde la mesa y acercate a la barra.">
+  <link rel="canonical" href="https://tresempanadas.com.ar/carta/">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Carta — Tres Empanadas Comedia">
+  <meta property="og:description" content="Empanadas, cinco cervezas artesanales tiradas, latas y opciones sin alcohol.">
+  <meta property="og:url" content="https://tresempanadas.com.ar/carta/">
+  <meta property="og:image" content="https://tresempanadas.com.ar/assets/img/og-default.jpg">
+  <meta property="og:locale" content="es_AR">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#B33227">
+
+  <!-- Font Awesome -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Fuentes del sitio -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&display=swap">
+
+  <!-- Google Ads -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11304999909"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-11304999909');
+  </script>
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '546014447181846');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+         src="https://www.facebook.com/tr?id=546014447181846&ev=PageView&noscript=1" alt="">
+  </noscript>
+
+  <style>
+    /* ============================================================
+       CARTA — paleta del sitio (Tres Empanadas)
+       Estructura HTML, IDs y JS originales: INTACTOS
+       ============================================================ */
+
+    :root {
+      --rojo: #B33227;
+      --rojo-oscuro: #8E2A20;
+      --rojo-tinto: #6E1F18;
+      --crema: #F1E8D2;
+      --crema-papel: #ECE0C2;
+      --dorado: #D9B76A;
+      --violeta: #6F6BA0;
+      --amarillo-verde: #BFC543;
+      --negro: #1A1614;
+      --gris-text: #3D352F;
+      --gris-suave: #C8BBA0;
+
+      --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+      --font-body: 'Fraunces', Georgia, serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--rojo);
+      color: var(--crema);
+      line-height: 1.55;
+      padding-bottom: 50px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* HEADER */
+    header {
+      text-align: center;
+      padding: 1.8rem 1rem 1.4rem;
+      color: var(--dorado);
+    }
+    header h3 {
+      font-family: var(--font-display);
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      color: var(--crema);
+      line-height: 1.05;
+    }
+    header h4 {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-style: italic;
+      color: rgba(241, 232, 210, 0.88);
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+    header p {
+      font-size: 0.9rem;
+      color: rgba(217, 183, 106, 0.85);
+    }
+
+    /* INPUT NOMBRE */
+    .input-group { margin: 0 15px 8px; }
+    .input-group label {
+      display: block;
+      margin-bottom: 7px;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--dorado);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 6px;
+      border: 2px solid var(--dorado);
+      background: rgba(241, 232, 210, 0.08);
+      color: var(--crema);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      text-align: center;
+      outline: none;
+      transition: background 150ms ease;
+    }
+    .input-group input::placeholder { color: rgba(241, 232, 210, 0.5); font-style: italic; }
+    .input-group input:focus { background: rgba(241, 232, 210, 0.14); }
+    #saludo-nombre {
+      display: none;
+      text-align: center;
+      margin: 0 15px 8px;
+      padding: 13px 15px;
+      background: rgba(241, 232, 210, 0.08);
+      border: 2px solid var(--dorado);
+      border-radius: 6px;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--crema);
+      letter-spacing: 0.5px;
+    }
+
+    /* CATEGORÍAS */
+    .category {
+      margin: 12px 15px;
+      background: var(--crema);
+      border-radius: 6px;
+      border: 2px solid var(--dorado);
+      overflow: hidden;
+    }
+    .category-header {
+      background: var(--rojo);
+      padding: 10px 16px;
+      text-align: center;
+      border-bottom: 2px solid var(--dorado);
+    }
+    .category-header h2 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--crema);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .category ul { list-style: none; padding: 8px; }
+    .category li {
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--crema-papel);
+      border-radius: 4px;
+      border: 1px solid var(--gris-suave);
+      gap: 10px;
+    }
+    .category li:last-child { margin-bottom: 0; }
+    .category li.no-disponible {
+      opacity: 0.45;
+      background: #e8e0cc;
+      border-color: #c8bba0;
+    }
+    .category li.no-disponible .product-label {
+      text-decoration: line-through;
+      color: #888;
+    }
+    .badge-faltante {
+      font-family: var(--font-display);
+      font-size: 0.66rem;
+      font-weight: 700;
+      background: var(--gris-suave);
+      color: var(--rojo-tinto);
+      border-radius: 10px;
+      padding: 2px 7px;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .product-label {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--negro);
+      text-align: left;
+      flex: 1;
+      line-height: 1.3;
+    }
+
+    /* CONTROLES +/- */
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .qty-btn {
+      width: 36px;
+      height: 36px;
+      border: 2px solid var(--rojo);
+      background: var(--crema);
+      color: var(--rojo);
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 800;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background 0.12s, color 0.12s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .qty-btn:active { background: var(--rojo); color: var(--crema); }
+    .qty-btn.menos:disabled { border-color: #c8bba0; color: #c8bba0; cursor: default; }
+    .qty-display {
+      width: 30px;
+      text-align: center;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--rojo);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* CAJITA TOTAL */
+    #total-live {
+      margin: 12px 15px 0;
+      background: var(--negro);
+      border: 2px solid var(--dorado);
+      border-radius: 6px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    #total-live.oculto { display: none; }
+    #total-label {
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(217, 183, 106, 0.85);
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+    #total-monto {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--dorado);
+      line-height: 1;
+    }
+    #total-items {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: rgba(217, 183, 106, 0.75);
+      font-style: italic;
+    }
+
+    /* BOTÓN WHATSAPP */
+    #whatsapp-button { margin: 12px 15px 0; }
+    #whatsapp-link {
+      display: block;
+      background-color: #25D366;
+      color: white !important;
+      padding: 15px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    #whatsapp-link.bloqueado { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+
+    /* SECCIÓN CUENTA Y PAGOS */
+    .seccion-cuenta {
+      margin: 12px 15px;
+      background: var(--crema);
+      border-radius: 6px;
+      border: 2px solid var(--dorado);
+      overflow: hidden;
+    }
+    .seccion-header {
+      background: var(--rojo);
+      padding: 10px 16px;
+      text-align: center;
+      border-bottom: 2px solid var(--dorado);
+    }
+    .seccion-header h2 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--crema);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .seccion-body { padding: 14px; }
+    .btn-cuenta {
+      display: block;
+      width: 100%;
+      background: var(--dorado);
+      color: var(--rojo-tinto);
+      border: none;
+      padding: 13px 20px;
+      border-radius: 6px;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      margin-bottom: 14px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-cuenta:active { opacity: 0.85; }
+    .pagos-info { display: flex; flex-direction: column; gap: 8px; }
+    .pago-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 13px;
+      background: var(--crema-papel);
+      border-radius: 4px;
+      border: 1px solid var(--gris-suave);
+    }
+    .pago-icono { font-size: 1.4rem; flex-shrink: 0; }
+    .pago-texto {
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      color: var(--negro);
+      line-height: 1.45;
+    }
+    .pago-texto strong {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--rojo);
+    }
+    .alias-pastilla {
+      display: inline-block;
+      background: var(--dorado);
+      color: var(--rojo-tinto);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 2px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.02em;
+    }
+    .panel-pagos {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--gris-suave);
+    }
+    .panel-pagos p {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      color: var(--gris-text);
+      text-align: center;
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+    .panel-pagos .alias-pastilla { font-size: 0.78rem; padding: 1px 8px; }
+
+    /* SECCIONES EXTRA */
+    .seccion-extra {
+      margin: 12px 15px;
+      background: var(--crema);
+      border-radius: 6px;
+      border: 2px solid var(--dorado);
+      overflow: hidden;
+    }
+    .seccion-extra-body { padding: 14px; text-align: center; }
+    .seccion-extra-body p {
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      color: var(--gris-text);
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+    .seccion-extra-body p strong {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--rojo);
+    }
+    .btn-extra {
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      padding: 13px 20px;
+      border-radius: 6px;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      text-align: center;
+      background: var(--dorado);
+      color: var(--rojo-tinto) !important;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-extra:active { opacity: 0.85; }
+
+    /* PANEL HISTORIAL */
+    #panel-historial {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 22, 20, 0.65);
+      z-index: 1000;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    #panel-historial.visible { display: flex; }
+    .panel-inner {
+      background: var(--crema);
+      color: var(--gris-text);
+      width: 100%;
+      max-height: 80vh;
+      border-radius: 16px 16px 0 0;
+      padding: 25px 18px 30px;
+      overflow-y: auto;
+    }
+    .panel-inner h3 {
+      font-family: var(--font-display);
+      color: var(--rojo);
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .pedido-item {
+      background: var(--crema-papel);
+      border-radius: 6px;
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--rojo);
+    }
+    .pedido-item h4 {
+      font-family: var(--font-display);
+      color: var(--rojo);
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .pedido-item p {
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      color: var(--gris-text);
+      margin: 2px 0;
+    }
+    .pedido-item .subtotal {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--rojo);
+      margin-top: 7px;
+      font-size: 0.95rem;
+    }
+    .gran-total {
+      font-family: var(--font-display);
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--rojo);
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 2px solid var(--dorado);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .btn-cerrar-panel {
+      display: block;
+      width: 100%;
+      margin-top: 16px;
+      padding: 13px;
+      background: var(--rojo);
+      color: var(--crema);
+      border: none;
+      border-radius: 6px;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--negro);
+      color: rgba(241, 232, 210, 0.55);
+      text-align: center;
+      padding: 30px 15px 20px;
+      margin-top: 10px;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+    }
+    footer p { margin-bottom: 8px; }
+    footer a {
+      color: var(--dorado);
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h3>Tres Empanadas Comedia</h3>
+    <h4>¡Qué bueno que viniste!</h4>
+    <p>Hacé tu pedido y acercate a la barra.</p>
+  </header>
+
+  <main>
+    <div class="input-group">
+      <label for="nombre">Tu nombre / alias</label>
+      <input type="text" id="nombre" placeholder="¿A quién llamamos?" autocomplete="off">
+    </div>
+    <div id="saludo-nombre"></div>
+
+    <!-- CERVEZAS -->
+    <div class="category">
+      <div class="category-header"><h2>Cervezas 🍺</h2></div>
+      <ul>
+<!--
+<li data-name="Rubia Kolsch" data-price="6000">
+  <span class="product-label">KOLSCH | Rubia — $6.000</span>
+  <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+</li>
+-->
+        <li data-name="Negra Stout" data-price="6000">
+          <span class="product-label">DRY STOUT | Negra — $6.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Golden Honey" data-price="6000">
+          <span class="product-label">GOLDEN HONEY — $6.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Vienna Lager" data-price="6000">
+          <span class="product-label">LAGER | Rubia — $6.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="IPA" data-price="6000">
+          <span class="product-label">IPA | Lupulada — $6.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Budweiser Lata" data-price="4500">
+          <span class="product-label">LATA Budweiser — $4.500</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Cerveza SIN" data-price="4500">
+          <span class="product-label">SIN ALCOHOL — $4.500</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- AGUA Y GASEOSAS -->
+    <div class="category">
+      <div class="category-header"><h2>Agua y Gaseosas 🥤</h2></div>
+      <ul>
+        <li data-name="Agua" data-price="3500">
+          <span class="product-label">Agua 500ml — $3.500</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Pomelo" data-price="4000">
+          <span class="product-label">Saborizada Pomelo — $4.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Coca-Cola" data-price="4000">
+          <span class="product-label">Coca-Cola — $4.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Naranja" data-price="4000">
+          <span class="product-label">Naranja — $4.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Sprite/7UP" data-price="4000">
+          <span class="product-label">Sprite / 7UP — $4.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Coca Sin Azucar" data-price="4000">
+          <span class="product-label">Coca Sin Azúcar — $4.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="7UP Sin Azucar" data-price="4000">
+          <span class="product-label">7UP Sin Azúcar — $4.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- SNACKS -->
+    <div class="category">
+      <div class="category-header"><h2>Snacks 🍿</h2></div>
+      <ul>
+        <li data-name="Maní" data-price="2500">
+          <span class="product-label">Maní Salado — $2.500</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Papitas" data-price="2500">
+          <span class="product-label">Papitas Fritas — $2.500</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Conitos de Queso" data-price="2500">
+          <span class="product-label">Conitos de Queso — $2.500</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- EMPANADAS -->
+    <div class="category">
+      <div class="category-header"><h2>Empanadas 🥟</h2></div>
+      <ul>
+        <li data-name="Bondiola" data-price="3000">
+          <span class="product-label">Bondiola — $3.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Jamon y Queso" data-price="3000">
+          <span class="product-label">Jamón y Queso — $3.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+        <li data-name="Calabaza" data-price="3000">
+          <span class="product-label">Calabaza y Muzzarella — $3.000</span>
+          <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- CAJITA TOTAL -->
+    <div id="total-live" class="oculto">
+      <div>
+        <div id="total-label">Total del pedido</div>
+        <div id="total-monto">$0</div>
+      </div>
+      <div id="total-items"></div>
+    </div>
+
+    <!-- BOTÓN WHATSAPP -->
+    <div id="whatsapp-button">
+      <a id="whatsapp-link" href="#">📲 Enviar pedido por WhatsApp</a>
+    </div>
+
+    <!-- CUENTA Y PAGOS -->
+    <div class="seccion-cuenta">
+      <div class="seccion-header"><h2>🧾 Tu cuenta / Cómo pagar</h2></div>
+      <div class="seccion-body">
+        <button class="btn-cuenta" id="ver-resumen-cliente">Ver mis pedidos / cuenta</button>
+        <div class="pagos-info">
+          <div class="pago-item">
+            <span class="pago-icono">📱</span>
+            <span class="pago-texto">Transferí al alias <span class="alias-pastilla">Comedia123</span> desde cualquier banco o billetera</span>
+          </div>
+          <div class="pago-item">
+            <span class="pago-icono">💳</span>
+            <span class="pago-texto">O acercate a la barra: <strong>efectivo, QR o tarjeta</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GORRA -->
+    <div class="seccion-extra">
+      <div class="seccion-header"><h2>🧢 Show a la Gorra</h2></div>
+      <div class="seccion-extra-body">
+        <p><strong>¡No es gratis, es con onda!</strong><br><strong>Aportá lo que puedas para mantener la magia.</strong></p>
+        <p>Y decile a los demás de la mesa que también pueden aportar transfiriendo a <span class="alias-pastilla">GorraTresEmpanadas</span> — que no sean ratas 😄</p>
+        <p style="margin-top:6px;">💵 Cash: dejá tu aporte en la gorra física.<br>
+           📱 Desde acá: Mercado Pago, 100% seguro.</p>
+        <a href="https://link.mercadopago.com.ar/tresempanadasconedia" target="_blank" class="btn-extra">💰 Aporte digital</a>
+      </div>
+    </div>
+
+    <!-- RESEÑAS -->
+    <div class="seccion-extra">
+      <div class="seccion-header"><h2>⭐ Reseñas</h2></div>
+      <div class="seccion-extra-body">
+        <p>Dejanos una buena reseña de ⭐⭐⭐⭐⭐ y ayudanos a seguir creciendo.</p>
+        <a href="https://g.page/r/CcRc7MWoc9jTEBM/review" target="_blank" class="btn-extra">✍️ Contá tu noche</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- PANEL HISTORIAL -->
+  <div id="panel-historial">
+    <div class="panel-inner">
+      <h3>🧾 Mis pedidos de esta noche</h3>
+      <div id="contenido-historial"></div>
+      <div class="panel-pagos">
+        <p>📱 Transferí al alias <span class="alias-pastilla">Comedia123</span></p>
+        <p>💳 O acercate a la barra: efectivo, QR o tarjeta</p>
+      </div>
+      <button class="btn-cerrar-panel" id="cerrar-panel">Cerrar</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>Tres Empanadas Comedia — La Plata</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      const URL_GOOGLE_SHEETS = "https://script.google.com/macros/s/AKfycbwGB55ice5YuJLvrBkBQ12y0vLgSTbvVN6xg28D9o8RR3MyQ47SkdzyoUAlldRzoySyoQ/exec";
+      const URL_FALTANTES    = "https://script.google.com/macros/s/AKfycbwGB55ice5YuJLvrBkBQ12y0vLgSTbvVN6xg28D9o8RR3MyQ47SkdzyoUAlldRzoySyoQ/exec?action=faltantes";      const DURACION_SESION  = 5 * 60 * 60 * 1000;
+
+      // SESIÓN
+      function obtenerSesion() {
+        try {
+          const raw = sessionStorage.getItem('sesion_carta');
+          if (raw) {
+            const s = JSON.parse(raw);
+            if (Date.now() - s.inicio < DURACION_SESION) return s;
+          }
+        } catch(e) {}
+        const nueva = {
+          id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+          inicio: Date.now(),
+          pedidos: []
+        };
+        sessionStorage.setItem('sesion_carta', JSON.stringify(nueva));
+        return nueva;
+      }
+      function guardarSesion(s) {
+        sessionStorage.setItem('sesion_carta', JSON.stringify(s));
+      }
+      let sesion = obtenerSesion();
+
+      // NOMBRE FIJO EN SESIÓN
+      const inputNombre = document.getElementById('nombre');
+      const saludoNombre = document.getElementById('saludo-nombre');
+      const inputGroup = inputNombre.closest('.input-group');
+
+      function fijarNombre(nombre) {
+        sesion.nombre = nombre.toUpperCase();
+        guardarSesion(sesion);
+        inputGroup.style.display = 'none';
+        saludoNombre.style.display = 'block';
+        saludoNombre.textContent = `Hola, ${nombre} 👋`;
+      }
+
+      // Si la sesión ya tiene nombre, mostrar saludo directamente
+      if (sesion.nombre) {
+        inputGroup.style.display = 'none';
+        saludoNombre.style.display = 'block';
+        saludoNombre.textContent = `Hola, ${sesion.nombre} 👋`;
+      }
+
+      // FALTANTES via JSONP para evitar CORS
+      function cargarFaltantes() {
+        const callback = 'faltantesCallback_' + Date.now();
+        window[callback] = function(data) {
+          document.querySelectorAll('.category li[data-name]').forEach(li => {
+            if (data[li.dataset.name] === false) {
+              li.classList.add('no-disponible');
+              li.querySelector('.qty-btn.mas').disabled = true;
+              const badge = document.createElement('span');
+              badge.className = 'badge-faltante';
+              badge.textContent = 'No disponible';
+              li.querySelector('.product-label').after(badge);
+            }
+          });
+          delete window[callback];
+          script.remove();
+        };
+        const script = document.createElement('script');
+        script.src = URL_FALTANTES + '&callback=' + callback;
+        script.onerror = function() { delete window[callback]; script.remove(); };
+        document.head.appendChild(script);
+      }
+      cargarFaltantes();
+
+      // TOTAL
+      function actualizarTotal() {
+        let total = 0, items = 0;
+        document.querySelectorAll('.category li[data-name]').forEach(li => {
+          const qty = parseInt(li.querySelector('.qty-display').textContent);
+          total += qty * parseFloat(li.dataset.price);
+          items += qty;
+        });
+        const caja = document.getElementById('total-live');
+        if (total > 0) {
+          caja.classList.remove('oculto');
+          document.getElementById('total-monto').textContent = '$' + total.toLocaleString('es-AR');
+          document.getElementById('total-items').textContent = items + (items === 1 ? ' item' : ' items');
+        } else {
+          caja.classList.add('oculto');
+        }
+      }
+
+      // CONTROLES +/-
+      document.querySelectorAll('.category li[data-name]').forEach(li => {
+        const btnMenos = li.querySelector('.qty-btn.menos');
+        const btnMas   = li.querySelector('.qty-btn.mas');
+        const display  = li.querySelector('.qty-display');
+        btnMas.addEventListener('click', () => {
+          if (li.classList.contains('no-disponible')) return;
+          display.textContent = parseInt(display.textContent) + 1;
+          btnMenos.disabled = false;
+          actualizarTotal();
+        });
+        btnMenos.addEventListener('click', () => {
+          let v = Math.max(0, parseInt(display.textContent) - 1);
+          display.textContent = v;
+          btnMenos.disabled = v === 0;
+          actualizarTotal();
+        });
+      });
+
+      // LIMPIAR
+      function limpiarFormulario() {
+        document.querySelectorAll('.category li[data-name]').forEach(li => {
+          li.querySelector('.qty-display').textContent = '0';
+          if (!li.classList.contains('no-disponible')) {
+            li.querySelector('.qty-btn.menos').disabled = true;
+          }
+        });
+        actualizarTotal();
+      }
+
+      // ENVIAR
+      let enviando = false;
+      document.getElementById('whatsapp-link').addEventListener('click', async function(e) {
+        e.preventDefault();
+        if (enviando) return;
+        enviando = true;
+        // Obtener nombre — de sesión o del input
+        let nombre;
+        if (sesion.nombre) {
+          nombre = sesion.nombre;
+        } else {
+          nombre = inputNombre.value.trim();
+          if (!nombre) { alert('Por favor, ingresá tu nombre.'); enviando = false; return; }
+          fijarNombre(nombre);
+        }
+
+        let pedidoTexto = '', total = 0, lineas = [], itemsParaSheet = {};
+        document.querySelectorAll('.category li[data-name]').forEach(li => {
+          if (li.classList.contains('no-disponible')) return;
+          const cant = parseInt(li.querySelector('.qty-display').textContent);
+          if (cant > 0) {
+            const price = parseFloat(li.dataset.price);
+            total += cant * price;
+            pedidoTexto += `${cant} x ${li.dataset.name}\n`;
+            lineas.push(`${cant} x ${li.dataset.name}`);
+            itemsParaSheet[li.dataset.name] = cant;
+          }
+        });
+        if (total === 0) { alert('Seleccioná algo primero.'); enviando = false; return; }
+
+        enviando = true;
+        const link = document.getElementById('whatsapp-link');
+        link.classList.add('bloqueado');
+        let seg = 5;
+        link.textContent = `⏳ Enviando... ${seg}`;
+        const timer = setInterval(() => {
+          seg--;
+          if (seg > 0) {
+            link.textContent = `⏳ Enviando... ${seg}`;
+          } else {
+            clearInterval(timer);
+            link.textContent = '📲 Enviar pedido por WhatsApp';
+            link.classList.remove('bloqueado');
+            enviando = false;
+          }
+        }, 1000);
+
+        sesion = obtenerSesion();
+        sesion.pedidos.push({ detalle: lineas, total: total });
+        guardarSesion(sesion);
+
+        try {
+          await fetch(URL_GOOGLE_SHEETS, {
+            method: 'POST', mode: 'no-cors', cache: 'no-cache',
+            body: JSON.stringify({ nombre: nombre.toUpperCase(), items: itemsParaSheet, total: total, origen: "Web Clientes" })
+          });
+        } catch(e) {}
+
+        const msg = encodeURIComponent(`Hola, soy *${nombre}*. Mi pedido:\n${pedidoTexto}\n*TOTAL: $${total.toLocaleString('es-AR')}*`);
+        const esMovil = /iPhone|Android/i.test(navigator.userAgent);
+        if (esMovil) {
+          window.location.href = `whatsapp://send?phone=542215247488&text=${msg}`;
+        } else {
+          window.open(`https://api.whatsapp.com/send?phone=542215247488&text=${msg}`, '_blank');
+        }
+        limpiarFormulario();
+      });
+
+      // HISTORIAL
+      document.getElementById('ver-resumen-cliente').addEventListener('click', () => {
+        sesion = obtenerSesion();
+        const contenido = document.getElementById('contenido-historial');
+        if (sesion.pedidos.length === 0) {
+          contenido.innerHTML = '<p style="text-align:center;color:#999;padding:20px 0;">Todavía no hiciste ningún pedido esta noche.</p>';
+        } else {
+          let html = '', granTotal = 0;
+          sesion.pedidos.forEach((p, i) => {
+            granTotal += p.total;
+            html += `<div class="pedido-item">
+              <h4>Pedido ${i + 1}</h4>
+              ${p.detalle.map(l => `<p>• ${l}</p>`).join('')}
+              <p class="subtotal">Subtotal: $${p.total.toLocaleString('es-AR')}</p>
+            </div>`;
+          });
+          html += `<div class="gran-total">Total de la noche: $${granTotal.toLocaleString('es-AR')}</div>`;
+          contenido.innerHTML = html;
+        }
+        document.getElementById('panel-historial').classList.add('visible');
+      });
+
+      document.getElementById('cerrar-panel').addEventListener('click', () => {
+        document.getElementById('panel-historial').classList.remove('visible');
+      });
+      document.getElementById('panel-historial').addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('visible');
+      });
+
+    });
+  </script>
+</body>
+</html>

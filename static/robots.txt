@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Panel de administración (privado, sin contenido indexable)
+Disallow: /cocina/
+
+Sitemap: https://tresempanadas.com.ar/sitemap.xml

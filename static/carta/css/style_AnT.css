@@ -1,0 +1,80 @@
+
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  background: #fff;
+  color: #222;
+}
+.logo {
+  max-width: 140px;
+  height: auto;
+}
+header {
+  font-size: 0.9rem;
+  background-color: #882A42;
+  color: white;
+  padding: 0.2rem;
+  text-align: center;
+}
+main {
+  padding: 1rem;
+  max-width: 700px;
+  margin: auto;
+}
+label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.4rem 0;
+}
+input[type="number"], input[type="text"] {
+  font-size: 1rem;
+  padding: 0.25rem;
+  width: 60px;
+  text-align: center;
+}
+#whatsapp-button {
+  text-align: center;
+  margin: 2rem 0 1rem;
+}
+#whatsapp-button button {
+  background-color: #25D366;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+#whatsapp-button button:hover {
+  background-color: #1ebe5d;
+}
+#botones-adicionales {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.info-pago {
+  background-color: #fff8dc;
+  border: 1px dashed #d2a756;
+  padding: 1rem;
+  margin: 1rem auto 2rem;
+  font-size: 0.9rem;
+  max-width: 600px;
+  text-align: center;
+  color: #333;
+}
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1rem;
+  font-size: 0.85rem;
+  background: #f3f3f3;
+}
+
+input[type="text"] {
+  width: 100% !important;
+  max-width: 400px;
+  margin: 0 auto;
+}

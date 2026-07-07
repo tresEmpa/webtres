@@ -1,0 +1,15 @@
+{
+  "name": "tresempanadas-comedia",
+  "version": "2.0.0",
+  "description": "Sitio de Tres Empanadas Comedia — estático + Cloudflare Pages Functions (sin PHP).",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "node build.mjs",
+    "preview": "node build.mjs && npx wrangler pages dev dist",
+    "hash": "node tools/hash-password.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

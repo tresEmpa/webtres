@@ -1,0 +1,26 @@
+{
+    "fecha": "2026-06-04",
+    "nombre_show": "El Rotativo Platense",
+    "descripcion": "Stand up de los jueves en Tres Empanadas. Edición Nuevos Talentos. El line-up cambia cada semana: comediantes con nuevas voces y propuestas que rotan. Show a la gorra.",
+    "hora": "21:30",
+    "duracion_minutos": 90,
+    "estado": "activo",
+    "motivo_cancelacion": "",
+    "plantilla": "rotativo-platense",
+    "link_instagram": "",
+    "notas_internas": "",
+    "color": "violeta",
+    "flyer": "",
+    "elenco": [
+        "Jesús Chaudary",
+        "Lucho Lass",
+        "Lorenzo Almiron",
+        "Ruben Vaena",
+        "Ema Chanta",
+        "Checho Falco (MC)"
+    ],
+    "dia_semana": "jueves",
+    "actualizado": "2026-05-30T22:00:26+00:00",
+    "creado": "2026-05-30T22:00:26+00:00",
+    "id": "2026-06-04-el-rotativo-platense"
+}

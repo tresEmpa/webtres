@@ -1,0 +1,48 @@
+{
+    "sociedad-platense-programado": {
+        "id": "sociedad-platense-programado",
+        "nombre_plantilla": "Sociedad Platense — Fecha programada (genérico)",
+        "nombre_show": "Sociedad Platense de Stand Up",
+        "descripcion": "El clásico de los viernes en Tres Empanadas. Stand up con Julián Dorati, Checho Falco e invitados. Show a la gorra.",
+        "elenco": ["Julián Dorati", "Checho Falco"],
+        "dia_semana": "viernes",
+        "hora": "21:30",
+        "duracion_minutos": 90,
+        "color": "rojo",
+        "estado_default": "programado",
+        "flyer_default": "flyer-sociedad-platense-generico.jpg"
+    },
+    "sociedad-platense": {
+        "id": "sociedad-platense",
+        "nombre_plantilla": "Sociedad Platense de Stand Up",
+        "nombre_show": "Sociedad Platense de Stand Up",
+        "descripcion": "El clásico de los viernes en Tres Empanadas. Stand up con la Sociedad Platense de Stand Up: Checho Falco, Rubén Vaena y Julián Dorati. Show a la gorra.",
+        "elenco": ["Checho Falco", "Rubén Vaena", "Julián Dorati"],
+        "dia_semana": "viernes",
+        "hora": "21:30",
+        "duracion_minutos": 90,
+        "color": "rojo"
+    },
+    "rotativo-platense": {
+        "id": "rotativo-platense",
+        "nombre_plantilla": "El Rotativo Platense",
+        "nombre_show": "El Rotativo Platense",
+        "descripcion": "Stand up de los jueves en Tres Empanadas. El line-up cambia cada semana: comediantes con años de escenario, nuevas voces y propuestas que rotan. Show a la gorra.",
+        "elenco": [],
+        "dia_semana": "jueves",
+        "hora": "21:30",
+        "duracion_minutos": 90,
+        "color": "violeta"
+    },
+    "edicion-especial-alumnos": {
+        "id": "edicion-especial-alumnos",
+        "nombre_plantilla": "Edición Especial Alumnos",
+        "nombre_show": "Edición Especial — Show de Alumnos",
+        "descripcion": "Una noche especial en Tres Empanadas: suben al escenario los alumnos del taller de stand up. Nuevas voces estrenando material. Show a la gorra.",
+        "elenco": [],
+        "dia_semana": "jueves",
+        "hora": "21:30",
+        "duracion_minutos": 90,
+        "color": "violeta"
+    }
+}

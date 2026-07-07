@@ -1,0 +1,23 @@
+{
+    "fecha": "2026-06-12",
+    "nombre_show": "Sociedad Platense de Stand Up",
+    "descripcion": "El clásico de los viernes en Tres Empanadas. Stand up con Julián Dorati, Checho Falco e invitados. Show a la gorra.\r\nComediante invitado Tomas Di Lorenzo \"Dilo\"",
+    "hora": "21:30",
+    "duracion_minutos": 90,
+    "estado": "activo",
+    "motivo_cancelacion": "",
+    "plantilla": "sociedad-platense-programado",
+    "link_instagram": "",
+    "notas_internas": "",
+    "color": "rojo",
+    "flyer": "",
+    "elenco": [
+        "Julián Dorati",
+        "Checho Falco",
+        "Dilo"
+    ],
+    "creado": "2026-06-05T15:43:36+00:00",
+    "dia_semana": "viernes",
+    "actualizado": "2026-06-11T13:11:14+00:00",
+    "id": "2026-06-12-sociedad-platense-de-stand-up"
+}

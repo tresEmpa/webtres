@@ -1,0 +1,607 @@
+/* ============================================
+   HOME — home.css v2
+   La frase de Gemini es protagonista.
+   Las fotos acompañan, no roban escena.
+   ============================================ */
+
+/* === APERTURA === */
+.apertura {
+  padding: var(--space-xxl) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.apertura__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  position: relative;
+}
+
+.apertura__claim {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.875rem, 5vw, 3.75rem);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  color: var(--negro);
+  margin-bottom: var(--space-md);
+  max-width: 14ch;
+}
+
+.apertura__claim em {
+  display: block;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--rojo);
+  font-size: 0.6em;
+  letter-spacing: -0.01em;
+  margin-top: 0.2em;
+  line-height: 1.1;
+}
+
+.apertura__intro {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1rem, 1.6vw, 1.125rem);
+  color: var(--negro);
+  margin-bottom: var(--space-md);
+  max-width: 28ch;
+  line-height: 1.3;
+}
+
+.apertura__intro::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--rojo);
+  margin-top: var(--space-sm);
+}
+
+.apertura__lista {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.4vw, 1.1875rem);
+  line-height: 1.7;
+  color: var(--gris-text);
+  max-width: 56ch;
+  margin-bottom: var(--space-md);
+}
+
+.apertura__lista span {
+  display: inline;
+  background: linear-gradient(transparent 60%, rgba(217, 183, 106, 0.35) 60%);
+  padding: 0 0.15em;
+}
+
+.apertura__pie {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.9375rem;
+  color: var(--gris-text);
+  max-width: 50ch;
+  border-left: 3px solid var(--rojo);
+  padding-left: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.apertura__pie a {
+  color: var(--rojo);
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Foto chica decorativa abajo a la derecha (acompaña, no protagoniza) */
+.apertura__foto {
+  display: none;
+}
+
+@media (min-width: 968px) {
+  .apertura__foto {
+    display: block;
+    position: absolute;
+    right: var(--space-md);
+    top: 60%;
+    width: 240px;
+    transform: rotate(-3deg);
+    filter: sepia(0.15) saturate(1.05);
+    box-shadow:
+      0 0 0 8px var(--crema),
+      0 12px 32px rgba(26, 22, 20, 0.18);
+  }
+
+  .apertura__foto img {
+    display: block;
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+  }
+
+  .apertura__foto figcaption {
+    background: var(--crema);
+    padding: 0.5rem 0.75rem;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    color: var(--gris-text);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* === CUÁNDO Y DÓNDE === */
+.cuando-donde {
+  padding: var(--space-lg) 0;
+  background: var(--crema-papel);
+  border-top: 1px solid rgba(180, 150, 100, 0.18);
+  border-bottom: 1px solid rgba(180, 150, 100, 0.18);
+}
+
+.cuando-donde__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .cuando-donde__inner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.cuando-donde__bloque {
+  font-family: var(--font-body);
+}
+
+.cuando-donde__bloque h3 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--rojo);
+  margin-bottom: 0.5rem;
+}
+
+.cuando-donde__bloque p {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--negro);
+}
+
+.cuando-donde__bloque p strong {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--negro);
+  font-size: 1rem;
+}
+
+.cuando-donde__bloque ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cuando-donde__bloque li {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--negro);
+}
+
+.cuando-donde__bloque li strong {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.cuando-donde__bloque .hora {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.125rem;
+  color: var(--rojo);
+}
+
+/* === COMO ES VENIR (texto corrido) === */
+.como-es-venir {
+  padding: var(--space-xxl) 0;
+  position: relative;
+}
+
+.como-es-venir__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 968px) {
+  .como-es-venir__inner {
+    grid-template-columns: 1.2fr 1fr;
+    align-items: start;
+  }
+}
+
+.como-es-venir__texto h2 {
+  margin-bottom: var(--space-md);
+  max-width: 18ch;
+}
+
+.como-es-venir__texto p {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--gris-text);
+  margin-bottom: var(--space-md);
+}
+
+.como-es-venir__texto p strong {
+  color: var(--rojo);
+  font-weight: 700;
+}
+
+.como-es-venir__texto p em {
+  color: var(--negro);
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* Galería 2 fotos pequeñas que acompañan al texto */
+.como-es-venir__galeria {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+.como-es-venir__foto {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(26, 22, 20, 0.04),
+    0 8px 24px rgba(26, 22, 20, 0.10);
+}
+
+.como-es-venir__foto img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+  transition: transform 600ms ease;
+}
+
+.como-es-venir__foto:hover img {
+  transform: scale(1.02);
+}
+
+.como-es-venir__foto--rotated {
+  transform: rotate(-1.5deg);
+}
+
+.como-es-venir__foto--rotated-r {
+  transform: rotate(1deg);
+}
+
+@media (min-width: 600px) {
+  .como-es-venir__galeria {
+    grid-template-columns: 1fr 1fr;
+  }
+  .como-es-venir__foto:nth-child(2) {
+    margin-top: var(--space-lg);
+  }
+}
+
+/* === ESTA SEMANA === */
+.esta-semana {
+  padding: var(--space-xxl) 0;
+  background:
+    linear-gradient(rgba(241, 232, 210, 0.92), rgba(241, 232, 210, 0.92)),
+    repeating-linear-gradient(0deg, transparent 0, transparent 24px, rgba(26, 22, 20, 0.025) 24px, rgba(26, 22, 20, 0.025) 25px);
+}
+
+.esta-semana__header {
+  max-width: var(--max-width);
+  margin: 0 auto var(--space-xl);
+  padding: 0 var(--space-md);
+}
+
+.esta-semana__header h2 { margin-bottom: var(--space-xs); }
+
+.esta-semana__header p {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--gris-text);
+  font-size: 0.9375rem;
+}
+
+.esta-semana__grid {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .esta-semana__grid {
+    grid-template-columns: 1.1fr 1fr;
+    gap: var(--space-lg);
+  }
+}
+
+.show-card {
+  background: var(--crema);
+  border: 1px solid var(--gris-suave);
+  border-top-width: 6px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  position: relative;
+  transition: transform var(--t-base), box-shadow var(--t-base);
+}
+
+.show-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(26, 22, 20, 0.10);
+}
+
+.show-card--viernes { border-top-color: var(--rojo); }
+.show-card--jueves { border-top-color: var(--violeta); }
+
+.show-card__day {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius);
+  margin-bottom: var(--space-sm);
+}
+
+.show-card--viernes .show-card__day {
+  background: var(--rojo);
+  color: var(--crema);
+}
+
+.show-card--jueves .show-card__day {
+  background: var(--violeta);
+  color: var(--crema);
+}
+
+.show-card h3 {
+  margin-bottom: 0.25rem;
+  font-size: 1.25rem;
+}
+
+.show-card__sub {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--gris-text);
+  font-size: 0.875rem;
+  margin-bottom: var(--space-sm);
+}
+
+.show-card .btn { width: 100%; }
+
+/* === INFO ÚTIL (FAQs sin tener cara de FAQ) === */
+.info-util {
+  padding: var(--space-xxl) 0;
+}
+
+.info-util__header {
+  max-width: var(--max-width);
+  margin: 0 auto var(--space-xl);
+  padding: 0 var(--space-md);
+}
+
+.info-util__header h2 { margin-bottom: var(--space-xs); }
+
+.info-util__header p {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--gris-text);
+  font-size: 0.9375rem;
+}
+
+.info-util__grid {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border-top: 1px solid var(--gris-suave);
+}
+
+@media (min-width: 768px) {
+  .info-util__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.info-item {
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--gris-suave);
+}
+
+@media (min-width: 768px) {
+  .info-item {
+    padding: var(--space-md) var(--space-md);
+  }
+  .info-item:nth-child(odd) {
+    border-right: 1px solid var(--gris-suave);
+    padding-left: 0;
+  }
+  .info-item:nth-child(even) {
+    padding-right: 0;
+  }
+}
+
+.info-item h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--negro);
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-item h3::before {
+  content: '→';
+  color: var(--rojo);
+  font-weight: 800;
+}
+
+.info-item p {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--gris-text);
+}
+
+.info-item p strong {
+  color: var(--rojo);
+}
+
+.info-item p a {
+  color: var(--rojo);
+  font-weight: 600;
+}
+
+/* === CIERRE === */
+.cierre {
+  padding: var(--space-xxl) 0;
+  background:
+    linear-gradient(135deg, rgba(110, 31, 24, 0.96) 0%, rgba(179, 50, 39, 0.92) 100%),
+    url('/assets/img/cartel-noche.jpg');
+  background-size: cover;
+  background-position: center;
+  color: var(--crema);
+  text-align: center;
+  position: relative;
+}
+
+.cierre__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  position: relative;
+  z-index: 1;
+}
+
+.cierre h2 {
+  color: var(--crema);
+  margin-bottom: var(--space-md);
+  font-size: clamp(1.625rem, 3.5vw, 2.5rem);
+}
+
+.cierre h2 em {
+  display: block;
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--dorado);
+  font-size: 0.6em;
+  margin-top: 0.3em;
+}
+
+.cierre p {
+  font-size: 1rem;
+  margin-bottom: var(--space-lg);
+  color: rgba(241, 232, 210, 0.92);
+}
+
+.cierre .btn-primary {
+  background: var(--crema);
+  color: var(--rojo-oscuro);
+  font-size: 1rem;
+  padding: 0.875rem 2rem;
+}
+
+.cierre .btn-primary:hover {
+  background: var(--dorado);
+  color: var(--rojo-tinto);
+}
+
+/* === WhatsApp flotante === */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 52px;
+  height: 52px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  z-index: 99;
+  transition: transform var(--t-base);
+  text-decoration: none !important;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.08);
+  color: white;
+}
+
+/* === RESERVAR CTA (después de Esta Semana) === */
+.reservar-cta {
+  padding: var(--space-xl) 0;
+  background: var(--crema-papel);
+  border-top: 1px solid rgba(180, 150, 100, 0.18);
+  border-bottom: 1px solid rgba(180, 150, 100, 0.18);
+}
+
+.reservar-cta__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  align-items: center;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .reservar-cta__inner {
+    grid-template-columns: 1fr auto;
+    text-align: left;
+    gap: var(--space-lg);
+  }
+}
+
+.reservar-cta h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--negro);
+  margin-bottom: 0.375rem;
+}
+
+.reservar-cta p {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--gris-text);
+  margin: 0;
+}
+
+.reservar-cta p em {
+  font-style: italic;
+  color: var(--rojo);
+  font-weight: 600;
+}

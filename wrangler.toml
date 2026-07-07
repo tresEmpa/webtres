@@ -1,0 +1,11 @@
+# Configuración de Cloudflare Pages para Tres Empanadas Comedia.
+# El sitio se genera con `node build.mjs` en la carpeta ./dist y las funciones
+# viven en ./functions (Cloudflare las detecta solas).
+
+name = "tresempanadas"
+compatibility_date = "2024-11-01"
+pages_build_output_dir = "dist"
+
+# Las variables sensibles (COCINA_USER, COCINA_PASS_HASH, SESSION_SECRET,
+# GITHUB_TOKEN, GITHUB_REPO, GITHUB_BRANCH, APPS_SCRIPT_URL) NO van acá.
+# Se cargan en el panel de Cloudflare como "Environment variables / Secrets".
