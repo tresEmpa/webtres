@@ -566,11 +566,6 @@
   </header>
 
   <main>
-    <div class="input-group">
-      <label for="nombre">Tu nombre / alias</label>
-      <input type="text" id="nombre" placeholder="¿A quién llamamos?" autocomplete="off">
-    </div>
-    <div id="saludo-nombre"></div>
 
     <!-- CERVEZAS -->
     <div class="category">
@@ -691,9 +686,32 @@
       <div id="total-items"></div>
     </div>
 
+    <!-- NOMBRE (pegado al envío) -->
+    <style>
+      #grupo-nombre { transition: box-shadow .2s; border-radius: 12px; }
+      #grupo-nombre.destacar {
+        animation: latido-nombre 1.3s ease;
+        box-shadow: 0 0 0 3px rgba(179, 50, 39, .40);
+      }
+      @keyframes latido-nombre {
+        0%, 100% { transform: translateX(0); }
+        15% { transform: translateX(-7px); }
+        30% { transform: translateX(7px); }
+        45% { transform: translateX(-5px); }
+        60% { transform: translateX(5px); }
+        75% { transform: translateX(-2px); }
+      }
+      #grupo-nombre .nombre-hint { font-weight: 400; opacity: .65; font-size: .85em; }
+    </style>
+    <div class="input-group" id="grupo-nombre">
+      <label for="nombre">Tu nombre / alias <span class="nombre-hint">— para llamarte cuando esté listo</span></label>
+      <input type="text" id="nombre" placeholder="¿A quién llamamos?" autocomplete="name" enterkeyhint="send">
+    </div>
+    <div id="saludo-nombre"></div>
+
     <!-- BOTÓN WHATSAPP -->
     <div id="whatsapp-button">
-      <a id="whatsapp-link" href="#">📲 Enviar pedido por WhatsApp</a>
+      <a id="whatsapp-link" href="#">📲 Agregá tu nombre y enviá tu pedido</a>
     </div>
 
     <!-- CUENTA Y PAGOS -->
@@ -802,6 +820,29 @@
         saludoNombre.textContent = `Hola, ${sesion.nombre} 👋`;
       }
 
+      // Botón que se adapta al estado del nombre
+      let enviando = false;
+      function nombreActual() {
+        return sesion.nombre || inputNombre.value.trim();
+      }
+      function actualizarBotonNombre() {
+        if (enviando) return;
+        const link = document.getElementById('whatsapp-link');
+        const n = nombreActual();
+        link.textContent = n
+          ? `📲 Enviar pedido de ${n} →`
+          : '📲 Agregá tu nombre y enviá tu pedido';
+      }
+      inputNombre.addEventListener('input', actualizarBotonNombre);
+      // Enter en el campo del nombre = enviar
+      inputNombre.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          document.getElementById('whatsapp-link').click();
+        }
+      });
+      actualizarBotonNombre();
+
       // FALTANTES via JSONP para evitar CORS
       function cargarFaltantes() {
         const callback = 'faltantesCallback_' + Date.now();
@@ -875,21 +916,12 @@
       }
 
       // ENVIAR
-      let enviando = false;
       document.getElementById('whatsapp-link').addEventListener('click', async function(e) {
         e.preventDefault();
         if (enviando) return;
         enviando = true;
-        // Obtener nombre — de sesión o del input
-        let nombre;
-        if (sesion.nombre) {
-          nombre = sesion.nombre;
-        } else {
-          nombre = inputNombre.value.trim();
-          if (!nombre) { alert('Por favor, ingresá tu nombre.'); enviando = false; return; }
-          fijarNombre(nombre);
-        }
 
+        // 1) Armar el pedido primero
         let pedidoTexto = '', total = 0, lineas = [], itemsParaSheet = {};
         document.querySelectorAll('.category li[data-name]').forEach(li => {
           if (li.classList.contains('no-disponible')) return;
@@ -902,9 +934,31 @@
             itemsParaSheet[li.dataset.name] = cant;
           }
         });
-        if (total === 0) { alert('Seleccioná algo primero.'); enviando = false; return; }
+        if (total === 0) {
+          enviando = false;
+          alert('Tocá el + en lo que quieras pedir 🍺🥟');
+          return;
+        }
 
-        enviando = true;
+        // 2) Recién ahora el nombre (si no lo tenemos), sin cartel que bloquee:
+        //    resaltamos el campo y hacemos foco ahí mismo.
+        let nombre;
+        if (sesion.nombre) {
+          nombre = sesion.nombre;
+        } else {
+          nombre = inputNombre.value.trim();
+          if (!nombre) {
+            enviando = false;
+            inputGroup.classList.add('destacar');
+            inputGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            inputNombre.focus();
+            setTimeout(() => inputGroup.classList.remove('destacar'), 1400);
+            return;
+          }
+          fijarNombre(nombre);
+        }
+
+        // 3) Enviar
         const link = document.getElementById('whatsapp-link');
         link.classList.add('bloqueado');
         let seg = 5;
@@ -915,9 +969,9 @@
             link.textContent = `⏳ Enviando... ${seg}`;
           } else {
             clearInterval(timer);
-            link.textContent = '📲 Enviar pedido por WhatsApp';
             link.classList.remove('bloqueado');
             enviando = false;
+            actualizarBotonNombre();
           }
         }, 1000);
 
