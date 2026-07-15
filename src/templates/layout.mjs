@@ -108,6 +108,22 @@ function navLink(href, path, currentPath, label) {
   return `<a href="${href}"${active}>${label}</a>`;
 }
 
+function renderNav(currentPath, opts = {}) {
+  if (opts.adsSafe) {
+    return `
+        <a href="/">Inicio</a>
+        <a href="#donde">Dónde</a>
+        <a href="https://wa.me/5492215247488?text=Hola%2C%20quiero%20reservar%20lugar%20para%20stand%20up" class="site-nav__cta" target="_blank" rel="noopener">Reservar</a>`;
+  }
+
+  return `
+        ${navLink('/reservas/', '/reservas', currentPath, 'Funciones')}
+        ${navLink('/carta/', '/carta', currentPath, 'Carta')}
+        ${navLink('/cursos/', '/cursos', currentPath, 'Cursos')}
+        <a href="#contacto">Contacto</a>
+        <a href="/reservas/" class="site-nav__cta">Reservar</a>`;
+}
+
 /**
  * Envuelve el contenido de una página en el layout completo.
  * opts: { title, description, url, image, bodyClass, extraCss, extraSchema,
@@ -182,11 +198,7 @@ ${TRACKING}
       </button>
 
       <nav class="site-nav" id="main-nav">
-        ${navLink('/reservas/', '/reservas', currentPath, 'Funciones')}
-        ${navLink('/carta/', '/carta', currentPath, 'Carta')}
-        ${navLink('/cursos/', '/cursos', currentPath, 'Cursos')}
-        <a href="#contacto">Contacto</a>
-        <a href="/reservas/" class="site-nav__cta">Reservar</a>
+        ${renderNav(currentPath, opts)}
       </nav>
     </div>
   </header>

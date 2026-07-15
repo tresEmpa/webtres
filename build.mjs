@@ -16,6 +16,7 @@ import { renderHome } from './src/templates/home.mjs';
 import { renderReservasList } from './src/templates/reservas-list.mjs';
 import { renderEvento } from './src/templates/evento.mjs';
 import { renderCursos } from './src/templates/cursos.mjs';
+import { renderStandupLaPlata } from './src/templates/standup-la-plata.mjs';
 import { renderNotFound } from './src/templates/not-found.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -88,6 +89,7 @@ function sitemap(eventosUpcoming) {
     { loc: `${base}/reservas/`, freq: 'weekly', pri: '0.9' },
     { loc: `${base}/reservas/viernes/`, freq: 'weekly', pri: '0.9' },
     { loc: `${base}/reservas/jueves/`, freq: 'weekly', pri: '0.9' },
+    { loc: `${base}/stand-up-la-plata/`, freq: 'weekly', pri: '0.9' },
     { loc: `${base}/cursos/`, freq: 'monthly', pri: '0.8' },
     { loc: `${base}/carta/`, freq: 'monthly', pri: '0.3' },
   ];
@@ -180,13 +182,16 @@ async function main() {
   // 7) Cursos
   await writeFile('cursos/index.html', renderCursos(YEAR));
 
-  // 8) 404
+  // 8) Landing limpia para Google Ads
+  await writeFile('stand-up-la-plata/index.html', renderStandupLaPlata(YEAR));
+
+  // 9) 404
   await writeFile('404.html', renderNotFound(YEAR));
 
-  // 9) Sitemap (base + próximos eventos)
+  // 10) Sitemap (base + próximos eventos)
   await writeFile('sitemap.xml', sitemap(listado));
 
-  // 10) Agenda para las Functions jueves/viernes (todos los eventos, mínima)
+  // 11) Agenda para las Functions jueves/viernes (todos los eventos, mínima)
   const agenda = eventos.map((ev) => ({
     id: ev.id,
     fecha: ev.fecha,
@@ -197,7 +202,7 @@ async function main() {
   }));
   await writeFile('data/agenda.json', JSON.stringify(agenda));
 
-  // 11) Cloudflare _redirects y _headers
+  // 12) Cloudflare _redirects y _headers
   await writeFile('_redirects', REDIRECTS);
   await writeFile('_headers', HEADERS);
 
