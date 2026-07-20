@@ -19,10 +19,18 @@
         * { box-sizing: border-box; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--gris); margin: 0; padding: 10px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         .header { background: var(--rojo); color: var(--oro); padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 10px; font-weight: bold; font-size: 1.2rem; }
-        
-        /* Input con placeholder más clarito */
-        .mesa-input { width: 100%; padding: 15px; font-size: 1.5rem; border-radius: 8px; border: 2px solid #ccc; text-align: center; margin-bottom: 10px; background: white; font-weight: bold; text-transform: uppercase; }
+
+        /* Input mesa */
+        .mesa-input { width: 100%; padding: 15px; font-size: 1.5rem; border-radius: 8px; border: 2px solid #ccc; text-align: center; margin-bottom: 6px; background: white; font-weight: bold; text-transform: uppercase; }
         .mesa-input::placeholder { color: #d1d1d1; font-weight: normal; font-size: 1.1rem; }
+
+        /* Mesas abiertas */
+        .mesas-wrap { margin-bottom: 8px; }
+        .mesas-titulo { font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; text-align: center; }
+        .mesas-lista { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; min-height: 36px; }
+        .mesa-btn { background: var(--rojo); color: var(--oro); border: none; border-radius: 6px; padding: 6px 14px; font-weight: bold; font-size: 0.9rem; cursor: pointer; text-transform: uppercase; }
+        .mesa-btn.activa { background: var(--azul); }
+        .mesas-empty { font-size: 0.82rem; color: #bbb; align-self: center; }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; overflow-y: auto; flex-grow: 1; padding-bottom: 170px; }
         .card { background: white; padding: 15px 5px; border-radius: 10px; border-bottom: 4px solid #ddd; display: flex; flex-direction: column; align-items: center; position: relative; border-left: 5px solid transparent; }
@@ -48,7 +56,11 @@
 <body>
 
 <div class="header">PEDIDOS</div>
-<input type="text" id="codMesa" class="mesa-input" placeholder="CÓDIGO (Ej: B1, M5)">
+<input type="text" id="codMesa" class="mesa-input" placeholder="NUEVA MESA (Ej: M FLORENCIA X3)">
+<div class="mesas-wrap">
+    <div class="mesas-titulo">Mesas abiertas</div>
+    <div class="mesas-lista" id="mesasLista"><span class="mesas-empty">Cargando...</span></div>
+</div>
 
 <div class="grid" id="grid"></div>
 
@@ -69,13 +81,41 @@
         {n: "Rubia Kolsch", p: 6000, g: "cerveza"}, {n: "Negra Stout", p: 6000, g: "cerveza"}, {n: "Golden Honey", p: 6000, g: "cerveza"},
         {n: "Vienna Lager", p: 6000, g: "cerveza"}, {n: "IPA", p: 6000, g: "cerveza"}, {n: "Budweiser Lata", p: 4500, g: "cerveza"},
         {n: "Cerveza SIN", p: 4500, g: "cerveza"},
-        {n: "Maní", p: 2500, g: "snack"}, {n: "Papitas", p: 2500, g: "snack"},
+        {n: "Maní", p: 2500, g: "snack"}, {n: "Papitas", p: 2500, g: "snack"}, {n: "Conitos de Queso", p: 2500, g: "snack"},
         {n: "Agua", p: 3500, g: "gaseosa"}, {n: "Pomelo", p: 4000, g: "gaseosa"}, {n: "Coca-Cola", p: 4000, g: "gaseosa"}, 
         {n: "Naranja", p: 4000, g: "gaseosa"}, {n: "Sprite/7UP", p: 4000, g: "gaseosa"}, {n: "Coca Sin Azucar", p: 4000, g: "gaseosa"}, 
         {n: "7UP Sin Azucar", p: 4000, g: "gaseosa"}
     ];
 
     let carrito = {}; let total = 0;
+
+    // Cargar mesas abiertas al iniciar y cada 30 segundos
+    async function cargarMesas() {
+        try {
+            const res = await fetch(URL_SCRIPT);
+            const d = await res.json();
+            const lista = document.getElementById('mesasLista');
+            const mesaActual = document.getElementById('codMesa').value.trim().toUpperCase();
+            if (!d.mesas || d.mesas.length === 0) {
+                lista.innerHTML = '<span class="mesas-empty">Sin mesas abiertas</span>';
+            } else {
+                lista.innerHTML = '';
+                d.mesas.forEach(m => {
+                    const btn = document.createElement('button');
+                    btn.className = 'mesa-btn' + (m === mesaActual ? ' activa' : '');
+                    btn.textContent = m;
+                    btn.onclick = () => {
+                        document.getElementById('codMesa').value = m;
+                        document.querySelectorAll('.mesa-btn').forEach(b => b.classList.remove('activa'));
+                        btn.classList.add('activa');
+                    };
+                    lista.appendChild(btn);
+                });
+            }
+        } catch(e) {
+            document.getElementById('mesasLista').innerHTML = '<span class="mesas-empty">Sin conexión</span>';
+        }
+    }
 
     function render() {
         const g = document.getElementById('grid'); g.innerHTML = '';
@@ -91,22 +131,36 @@
         document.getElementById('btnSend').innerText = `CARGAR PEDIDO: $${total}`;
     }
 
-    function resetear() { carrito = {}; total = 0; document.getElementById('codMesa').value = ''; render(); }
+    function resetear() { carrito = {}; total = 0; document.getElementById('codMesa').value = ''; render(); cargarMesas(); }
 
     async function enviar() {
         const m = document.getElementById('codMesa').value.trim();
         if (!m || total === 0) return alert("Falta código de mesa o productos");
+        const mesaUp = m.toUpperCase();
         const b = document.getElementById('btnSend'); b.disabled = true; b.innerText = "ENVIANDO...";
         try {
-            await fetch(URL_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ nombre: m.toUpperCase(), items: carrito, total: total, origen: "Pedidos" })});
-            carrito = {}; total = 0; render(); alert("Cargado a " + m.toUpperCase());
-        } catch (e) { alert("Error de conexión"); }
+            await fetch(URL_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ nombre: mesaUp, items: carrito, total: total, origen: "Barra" })});
+            carrito = {}; total = 0; render(); cargarMesas();
+            // Confirmación REAL: releemos la mesa y mostramos el total actualizado.
+            // Si la relectura trae el total, es que el pedido quedó guardado de verdad.
+            let msg = "✅ Cargado a " + mesaUp;
+            try {
+                const res = await fetch(URL_SCRIPT + "?nombre=" + encodeURIComponent(mesaUp));
+                const d = await res.json();
+                if (d && d.total != null) msg = "✅ Cargado a " + mesaUp + "\nTotal de la mesa: $" + d.total;
+            } catch (e) {
+                msg = "Cargado a " + mesaUp + "\n(no pude confirmar el total; revisá con CUENTA)";
+            }
+            alert(msg);
+        } catch (e) {
+            alert("⚠️ Error de conexión — el pedido NO se cargó.\nProbá de nuevo.");
+        }
         finally { b.disabled = false; render(); }
     }
 
     async function verCuenta() {
         const m = document.getElementById('codMesa').value.trim();
-        if (!m) return alert("Poné el código");
+        if (!m) return alert("Seleccioná o ingresá una mesa");
         try {
             const res = await fetch(URL_SCRIPT + "?nombre=" + encodeURIComponent(m.toUpperCase()));
             const d = await res.json();
@@ -122,7 +176,11 @@
             resetear(); alert("Mesa cerrada exitosamente");
         } catch (e) { alert("Error al cerrar"); }
     }
+
+    // Iniciar
     render();
+    cargarMesas();
+    setInterval(cargarMesas, 30000); // Actualiza mesas cada 30 segundos
 </script>
 </body>
 </html>

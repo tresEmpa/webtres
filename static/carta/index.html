@@ -23,10 +23,6 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#B33227">
 
-  <!-- Font Awesome -->
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
   <!-- Fuentes del sitio -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -555,9 +551,82 @@
       text-decoration: none;
     }
     footer a:hover { text-decoration: underline; }
+
+    /* ============================================================
+       BOTÓN + MODO NOCTURNO
+       ============================================================ */
+    #toggle-tema {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 1100;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px solid var(--dorado);
+      background: rgba(26, 22, 20, 0.55);
+      color: var(--dorado);
+      font-size: 1.25rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+      -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(4px);
+      transition: transform 0.12s ease;
+    }
+    #toggle-tema:active { transform: scale(0.9); }
+
+    /* --- Tema oscuro: fondo profundo, tarjetas cálidas, acentos rojo/dorado intactos --- */
+    :root[data-theme="dark"] body { background: #17100e; }
+
+    :root[data-theme="dark"] .category,
+    :root[data-theme="dark"] .seccion-cuenta,
+    :root[data-theme="dark"] .seccion-extra,
+    :root[data-theme="dark"] .panel-inner { background: #241c19; }
+
+    :root[data-theme="dark"] .category li,
+    :root[data-theme="dark"] .pago-item,
+    :root[data-theme="dark"] .pedido-item { background: #2f2521; border-color: #43352e; }
+
+    :root[data-theme="dark"] .product-label,
+    :root[data-theme="dark"] .pago-texto,
+    :root[data-theme="dark"] .panel-inner { color: #F1E8D2; }
+
+    :root[data-theme="dark"] .seccion-extra-body p,
+    :root[data-theme="dark"] .panel-pagos p,
+    :root[data-theme="dark"] .pedido-item p { color: #D8CCB5; }
+
+    :root[data-theme="dark"] .qty-btn { background: #2f2521; }
+    :root[data-theme="dark"] .qty-btn.menos:disabled { border-color: #5a4a40; color: #5a4a40; }
+
+    :root[data-theme="dark"] .category li.no-disponible { background: #2a221f; border-color: #43352e; }
+    :root[data-theme="dark"] .category li.no-disponible .product-label { color: #9c9083; }
+
+    :root[data-theme="dark"] .input-group input,
+    :root[data-theme="dark"] #saludo-nombre { background: rgba(241, 232, 210, 0.06); }
+
+    @media (prefers-reduced-motion: reduce) {
+      #toggle-tema { transition: none; }
+    }
   </style>
+
+  <!-- Fijar el tema antes de pintar, para que no parpadee -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('tema-carta');
+        if (!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
+
+  <button id="toggle-tema" type="button" aria-label="Cambiar modo claro/oscuro" title="Modo claro / oscuro">🌙</button>
 
   <header>
     <h3>Tres Empanadas Comedia</h3>
@@ -775,7 +844,23 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
 
+      // TOGGLE MODO NOCTURNO
+      const btnTema = document.getElementById('toggle-tema');
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      function pintarTema(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        btnTema.textContent = t === 'dark' ? '☀️' : '🌙';
+        if (metaTheme) metaTheme.setAttribute('content', t === 'dark' ? '#17100e' : '#B33227');
+      }
+      pintarTema(document.documentElement.getAttribute('data-theme') || 'light');
+      btnTema.addEventListener('click', () => {
+        const nuevo = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem('tema-carta', nuevo); } catch (e) {}
+        pintarTema(nuevo);
+      });
+
       const URL_GOOGLE_SHEETS = "https://script.google.com/macros/s/AKfycbwGB55ice5YuJLvrBkBQ12y0vLgSTbvVN6xg28D9o8RR3MyQ47SkdzyoUAlldRzoySyoQ/exec";
+      const TEL_WA = "5492215247488"; // 54 9 221 5247488 (celular AR: lleva el 9)
       const URL_FALTANTES    = "https://script.google.com/macros/s/AKfycbwGB55ice5YuJLvrBkBQ12y0vLgSTbvVN6xg28D9o8RR3MyQ47SkdzyoUAlldRzoySyoQ/exec?action=faltantes";      const DURACION_SESION  = 5 * 60 * 60 * 1000;
 
       // SESIÓN
@@ -961,39 +1046,38 @@
         // 3) Enviar
         const link = document.getElementById('whatsapp-link');
         link.classList.add('bloqueado');
-        let seg = 5;
-        link.textContent = `⏳ Enviando... ${seg}`;
-        const timer = setInterval(() => {
-          seg--;
-          if (seg > 0) {
-            link.textContent = `⏳ Enviando... ${seg}`;
-          } else {
-            clearInterval(timer);
-            link.classList.remove('bloqueado');
-            enviando = false;
-            actualizarBotonNombre();
-          }
-        }, 1000);
+        link.textContent = '⏳ Abriendo WhatsApp...';
 
         sesion = obtenerSesion();
         sesion.pedidos.push({ detalle: lineas, total: total });
         guardarSesion(sesion);
 
+        // Registrar el pedido en la planilla SIN frenar el envío.
+        // sendBeacon se manda aunque el celu salte a WhatsApp al toque.
         try {
-          await fetch(URL_GOOGLE_SHEETS, {
-            method: 'POST', mode: 'no-cors', cache: 'no-cache',
-            body: JSON.stringify({ nombre: nombre.toUpperCase(), items: itemsParaSheet, total: total, origen: "Web Clientes" })
-          });
+          const datos = JSON.stringify({ nombre: nombre.toUpperCase(), items: itemsParaSheet, total: total, origen: "Web Clientes" });
+          if (navigator.sendBeacon) {
+            navigator.sendBeacon(URL_GOOGLE_SHEETS, datos);
+          } else {
+            fetch(URL_GOOGLE_SHEETS, { method: 'POST', mode: 'no-cors', cache: 'no-cache', keepalive: true, body: datos });
+          }
         } catch(e) {}
 
+        // Abrir WhatsApp DENTRO del mismo click (si esperás un fetch, la compu bloquea el pop-up).
+        // wa.me anda en celu, compu y en el navegador de Instagram/Facebook.
         const msg = encodeURIComponent(`Hola, soy *${nombre}*. Mi pedido:\n${pedidoTexto}\n*TOTAL: $${total.toLocaleString('es-AR')}*`);
-        const esMovil = /iPhone|Android/i.test(navigator.userAgent);
-        if (esMovil) {
-          window.location.href = `whatsapp://send?phone=542215247488&text=${msg}`;
-        } else {
-          window.open(`https://api.whatsapp.com/send?phone=542215247488&text=${msg}`, '_blank');
-        }
+        const waUrl = `https://wa.me/${TEL_WA}?text=${msg}`;
+        const waRef = window.open(waUrl, '_blank');
+        if (!waRef) window.location.href = waUrl; // fallback si el navegador bloquea la pestaña
+
         limpiarFormulario();
+
+        // Reponer el botón enseguida: el pedido ya salió.
+        setTimeout(() => {
+          link.classList.remove('bloqueado');
+          enviando = false;
+          actualizarBotonNombre();
+        }, 1500);
       });
 
       // HISTORIAL
