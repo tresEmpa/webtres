@@ -68,6 +68,12 @@ export function renderCursos(year, lugar = {}) {
     .curso-nuevo__pago { font-family: var(--font-body); font-size: 0.92rem; font-style: italic; color: var(--gris-text); max-width: 40ch; margin: 0.5rem auto 0; line-height: 1.4; }
     .curso-nuevo__nota { font-family: var(--font-body); font-size: 0.85rem; font-style: italic; color: var(--gris-text); max-width: 46ch; margin: 0.6rem auto 0; line-height: 1.4; }
     .curso-nuevo__nota a { color: var(--rojo); }
+    .curso-nuevo__programa { margin: var(--space-md) auto 0; max-width: 40ch; text-align: left; background: var(--crema-papel); border: 1px solid var(--gris-suave); border-radius: var(--radius); padding: var(--space-sm) var(--space-md); }
+    .curso-nuevo__programa .programa-titulo { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.8rem; color: var(--rojo); text-align: center; margin: 0 0 8px; }
+    .curso-nuevo__programa ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+    .curso-nuevo__programa li { font-family: var(--font-body); font-size: 0.95rem; color: var(--gris-text); padding-left: 1.5rem; position: relative; line-height: 1.4; }
+    .curso-nuevo__programa li::before { content: '→'; position: absolute; left: 0; color: var(--rojo); font-family: var(--font-display); font-weight: 700; }
+    .curso-nuevo__programa li strong { color: var(--rojo); font-family: var(--font-display); }
     .curso-form__btn { width: 100%; background: var(--rojo, #B33227); color: var(--crema, #F1E8D2); border: none; padding: 15px 20px; border-radius: var(--radius, 8px); font-family: var(--font-display); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; margin-top: 4px; }
     .curso-form__btn:active { opacity: 0.9; }
     .curso-form { text-align: left; margin-top: var(--space-md); background: var(--crema-papel); border: 1px solid var(--gris-suave); border-radius: var(--radius-lg); padding: var(--space-md); }
@@ -86,7 +92,16 @@ export function renderCursos(year, lugar = {}) {
     <h2>Curso de stand up — arranca el jueves 13 de agosto</h2>
     <p>Un curso con arranque y horario fijo para meterte de lleno en el stand up. Y si querés, te quedás a la práctica abierta y al show. Todo el mismo jueves.</p>
 
-    <div class="cursos-horario"><span>Curso de stand up</span><span class="cursos-horario__hora">18 hs</span></div>
+    <div class="curso-nuevo__programa">
+      <p class="programa-titulo">La cursada · de agosto a noviembre</p>
+      <ul>
+        <li><strong>16 clases</strong> semanales, los jueves</li>
+        <li><strong>2 open mics</strong> para probar tu material en vivo</li>
+        <li><strong>1 muestra final</strong> arriba del escenario</li>
+      </ul>
+    </div>
+
+    <div class="cursos-horario"><span>Curso de stand up</span><span class="cursos-horario__hora">18 a 19:30 hs</span></div>
     <div class="cursos-horario"><span>Práctica abierta</span><span class="cursos-horario__hora">20 hs</span></div>
     <div class="cursos-horario"><span>El Rotativo Platense (show)</span><span class="cursos-horario__hora">21:30 hs</span></div>
     <p class="curso-nuevo__nota">La práctica abierta de las 20 hs es para los alumnos libres de <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">aprendestandup.com.ar</a> (la teoría, gratis y online). Si hacés el curso y te querés quedar, dale — sos bienvenido/a.</p>
@@ -160,7 +175,7 @@ export function renderCursos(year, lugar = {}) {
     <h2>Los jueves en el club</h2>
     <div class="cursos-horario">
       <span>Curso de stand up</span>
-      <span class="cursos-horario__hora">18 hs</span>
+      <span class="cursos-horario__hora">18 a 19:30 hs</span>
     </div>
     <div class="cursos-horario">
       <span>Práctica abierta</span>
