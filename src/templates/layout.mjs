@@ -124,6 +124,30 @@ function renderNav(currentPath, opts = {}) {
         <a href="/reservas/" class="site-nav__cta">Reservar</a>`;
 }
 
+// Aviso temporal de vacaciones. Se muestra solo hasta el 2026-08-07 (según la
+// fecha del visitante); después se oculta solo. Se puede borrar tras esa fecha.
+const AVISO_VACACIONES = `
+  <style>
+    .aviso-vacaciones { background: var(--dorado, #D9B76A); color: var(--rojo-tinto, #6E1F18); font-family: var(--font-display, sans-serif); text-align: center; padding: 10px 16px; font-size: 0.92rem; font-weight: 700; line-height: 1.35; }
+    .aviso-vacaciones strong { font-weight: 800; }
+  </style>
+  <div class="aviso-vacaciones" id="aviso-vacaciones" hidden>
+    🌴 <strong>Vacaciones:</strong> no hay shows los viernes 24/7, 31/7 y 7/8. ¡Volvemos el <strong>viernes 14 de agosto</strong>!
+  </div>
+  <script>
+    (function () {
+      try {
+        var ahora = new Date();
+        var ar = new Date(ahora.getTime() - (ahora.getTimezoneOffset() + 180) * 60000);
+        var hoy = ar.toISOString().slice(0, 10);
+        if (hoy <= '2026-08-07') {
+          var el = document.getElementById('aviso-vacaciones');
+          if (el) el.hidden = false;
+        }
+      } catch (e) {}
+    })();
+  </script>`;
+
 /**
  * Envuelve el contenido de una página en el layout completo.
  * opts: { title, description, url, image, bodyClass, extraCss, extraSchema,
@@ -202,7 +226,7 @@ ${TRACKING}
       </nav>
     </div>
   </header>
-
+${AVISO_VACACIONES}
   <main>
 ${opts.content || ''}
   </main>

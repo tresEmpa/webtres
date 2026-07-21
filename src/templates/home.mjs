@@ -200,6 +200,25 @@ export function renderHome(year) {
   </div>
 </section>
 
+<!-- ============= CURSO CTA ============= -->
+<style>
+  .curso-banner { background: var(--rojo, #B33227); color: var(--crema, #F1E8D2); padding: clamp(2rem, 6vw, 3.5rem) 1rem; text-align: center; }
+  .curso-banner__inner { max-width: 640px; margin: 0 auto; }
+  .curso-banner__badge { display: inline-block; background: var(--dorado, #D9B76A); color: var(--rojo-tinto, #6E1F18); font-family: var(--font-display); font-weight: 800; font-size: 0.8rem; letter-spacing: 0.04em; padding: 6px 14px; border-radius: 999px; margin-bottom: 1rem; text-transform: uppercase; }
+  .curso-banner h2 { font-family: var(--font-display); font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.15; margin-bottom: 0.6rem; color: var(--crema, #F1E8D2); }
+  .curso-banner p { font-family: var(--font-body); font-size: 1.05rem; line-height: 1.5; margin-bottom: 1.4rem; opacity: 0.92; }
+  .curso-banner__btn { display: inline-block; background: var(--dorado, #D9B76A) !important; color: var(--rojo-tinto, #6E1F18) !important; border: none; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; padding: 15px 28px; border-radius: var(--radius, 8px); text-decoration: none; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+  .curso-banner__btn:hover { transform: translateY(-1px); }
+</style>
+<section class="curso-banner">
+  <div class="curso-banner__inner">
+    <span class="curso-banner__badge">🔥 Cupos limitados · Arranca jueves 13/8</span>
+    <h2>¿Y si el próximo en el escenario sos vos?</h2>
+    <p>Curso de stand up en La Plata: aprendé a escribir, probá tu material y subite al escenario. Cuota $35.000 por mes.</p>
+    <a href="/cursos/#inscripcion" class="curso-banner__btn">Anotarme al curso →</a>
+  </div>
+</section>
+
 <!-- ============= DIVISOR MONDRIAN ============= -->
 <div class="mondrian-divider" aria-hidden="true">
   <div></div><div></div><div></div><div></div><div></div>
