@@ -180,7 +180,7 @@ async function main() {
   }
 
   // 7) Cursos
-  await writeFile('cursos/index.html', renderCursos(YEAR));
+  await writeFile('cursos/index.html', renderCursos(YEAR, lugar));
 
   // 8) Landing limpia para Google Ads
   await writeFile('stand-up-la-plata/index.html', renderStandupLaPlata(YEAR));
