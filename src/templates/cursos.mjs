@@ -66,6 +66,10 @@ export function renderCursos(year, lugar = {}) {
     .curso-nuevo__precio strong { color: var(--rojo); font-size: 1.4rem; }
     .curso-nuevo__precio small { display: block; font-family: var(--font-body); font-style: italic; font-size: 0.85rem; color: var(--gris-text); margin-top: 2px; }
     .curso-nuevo__pago { font-family: var(--font-body); font-size: 0.92rem; font-style: italic; color: var(--gris-text); max-width: 40ch; margin: 0.5rem auto 0; line-height: 1.4; }
+    .curso-nuevo__nota { font-family: var(--font-body); font-size: 0.85rem; font-style: italic; color: var(--gris-text); max-width: 46ch; margin: 0.6rem auto 0; line-height: 1.4; }
+    .curso-nuevo__nota a { color: var(--rojo); }
+    .curso-form__btn { width: 100%; background: var(--rojo, #B33227); color: var(--crema, #F1E8D2); border: none; padding: 15px 20px; border-radius: var(--radius, 8px); font-family: var(--font-display); font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; margin-top: 4px; }
+    .curso-form__btn:active { opacity: 0.9; }
     .curso-form { text-align: left; margin-top: var(--space-md); background: var(--crema-papel); border: 1px solid var(--gris-suave); border-radius: var(--radius-lg); padding: var(--space-md); }
     .curso-form h3 { font-family: var(--font-display); color: var(--rojo); text-transform: uppercase; letter-spacing: 0.06em; font-size: 1rem; text-align: center; margin-bottom: var(--space-md); }
     .curso-form__campo { margin-bottom: var(--space-sm); }
@@ -80,14 +84,15 @@ export function renderCursos(year, lugar = {}) {
   <section class="cursos-bloque curso-nuevo" id="inscripcion">
     <span class="curso-nuevo__badge">🔥 Cupos limitados</span>
     <h2>Curso de stand up — arranca el jueves 13 de agosto</h2>
-    <p>Un curso con arranque y horario fijo para meterte de lleno en el stand up. Después te quedás a la práctica abierta y ves el show. Todo el mismo jueves.</p>
+    <p>Un curso con arranque y horario fijo para meterte de lleno en el stand up. Y si querés, te quedás a la práctica abierta y al show. Todo el mismo jueves.</p>
 
     <div class="cursos-horario"><span>Curso de stand up</span><span class="cursos-horario__hora">18 hs</span></div>
     <div class="cursos-horario"><span>Práctica abierta</span><span class="cursos-horario__hora">20 hs</span></div>
     <div class="cursos-horario"><span>El Rotativo Platense (show)</span><span class="cursos-horario__hora">21:30 hs</span></div>
+    <p class="curso-nuevo__nota">La práctica abierta de las 20 hs es para los alumnos libres de <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">aprendestandup.com.ar</a> (la teoría, gratis y online). Si hacés el curso y te querés quedar, dale — sos bienvenido/a.</p>
 
     <p class="curso-nuevo__precio">Cuota: <strong>${precioCurso}</strong><small>por mes</small></p>
-    <p class="curso-nuevo__pago">😌 No pagás nada por adelantado. Anotate, vení, y el pago lo arreglamos ahí, en persona.</p>
+    <p class="curso-nuevo__pago">😌 No pagás nada por adelantado. Anotate, vení, y el pago lo arreglamos personalmente según tu medio de pago (efectivo, tarjeta, transferencia o QR).</p>
 
     <form class="curso-form" id="curso-form" onsubmit="return inscribirCurso(event)">
       <h3>Anotate al curso</h3>
@@ -108,7 +113,7 @@ export function renderCursos(year, lugar = {}) {
           <option value="Ya tengo experiencia">Ya tengo experiencia</option>
         </select>
       </div>
-      <button type="submit" class="btn-whatsapp">📲 Anotarme por WhatsApp →</button>
+      <button type="submit" class="curso-form__btn">Anotarme al curso →</button>
       <p class="curso-form__note">Te abrimos WhatsApp con tu inscripción lista para enviar. No te suscribimos a nada.</p>
     </form>
 
