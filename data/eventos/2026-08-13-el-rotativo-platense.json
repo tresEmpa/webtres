@@ -1,0 +1,22 @@
+{
+    "fecha": "2026-08-13",
+    "nombre_show": "El Rotativo Platense",
+    "descripcion": "Stand up de los jueves en Tres Empanadas. El line-up cambia cada semana: comediantes con años de escenario, nuevas voces y propuestas que rotan. Show a la gorra.",
+    "hora": "21:30",
+    "duracion_minutos": 90,
+    "estado": "activo",
+    "motivo_cancelacion": "",
+    "plantilla": "rotativo-platense",
+    "link_instagram": "",
+    "notas_internas": "",
+    "color": "violeta",
+    "flyer": "",
+    "elenco": [
+        "Presentado por Checho Falco",
+        "Elenco a confirmar."
+    ],
+    "dia_semana": "jueves",
+    "actualizado": "2026-08-06T14:48:37.437Z",
+    "creado": "2026-08-06T14:48:37.437Z",
+    "id": "2026-08-13-el-rotativo-platense"
+}
