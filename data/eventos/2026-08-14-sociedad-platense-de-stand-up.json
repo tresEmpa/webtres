@@ -1,7 +1,7 @@
 {
     "fecha": "2026-08-14",
     "nombre_show": "Sociedad Platense de Stand Up",
-    "descripcion": "El clásico de los viernes en Tres Empanadas. Stand up con la Sociedad Platense de Stand Up: Checho Falco, Rubén Vaena y Julián Dorati. Show a la gorra.",
+    "descripcion": "El clásico de los viernes en Tres Empanadas. Stand up con la Sociedad Platense de Stand Up: Checho Falco, Bea Malvaso y Julián Dorati. Show a la gorra.",
     "hora": "21:30",
     "duracion_minutos": 90,
     "estado": "activo",
@@ -13,10 +13,11 @@
     "flyer": "",
     "elenco": [
         "Checho Falco",
-        "Julián Dorati"
+        "Julián Dorati",
+        "Bea Malvaso."
     ],
     "dia_semana": "viernes",
-    "actualizado": "2026-08-10T15:08:26.995Z",
+    "actualizado": "2026-08-10T16:44:02.230Z",
     "creado": "2026-07-21T14:21:22.301Z",
     "id": "2026-08-14-sociedad-platense-de-stand-up"
 }
