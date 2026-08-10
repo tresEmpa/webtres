@@ -4,7 +4,7 @@
     "descripcion": "Stand up de los jueves en Tres Empanadas. El line-up cambia cada semana: comediantes con años de escenario, nuevas voces y propuestas que rotan. Show a la gorra.",
     "hora": "21:30",
     "duracion_minutos": 90,
-    "estado": "programado",
+    "estado": "activo",
     "motivo_cancelacion": "",
     "plantilla": "rotativo-platense",
     "link_instagram": "",
@@ -13,10 +13,10 @@
     "flyer": "",
     "elenco": [
         "Presentado por Checho Falco",
-        "Elenco a confirmar."
+        "Con Rubén Vaena y elenco a confirmar."
     ],
     "dia_semana": "jueves",
-    "actualizado": "2026-08-06T14:49:08.052Z",
+    "actualizado": "2026-08-10T15:07:57.012Z",
     "creado": "2026-08-06T14:48:37.437Z",
     "id": "2026-08-13-el-rotativo-platense"
 }
