@@ -4,20 +4,20 @@
     "descripcion": "Stand up de los jueves en Tres Empanadas. El line-up cambia cada semana: comediantes con años de escenario, nuevas voces y propuestas que rotan. Show a la gorra.",
     "hora": "21:30",
     "duracion_minutos": 90,
-    "estado": "programado",
+    "estado": "activo",
     "motivo_cancelacion": "",
     "plantilla": "rotativo-platense",
     "link_instagram": "",
     "notas_internas": "",
     "color": "violeta",
-    "flyer": "",
+    "flyer": "2026-08-20-el-rotativo-platense.png",
     "elenco": [
         "MC Checho Falco",
-        "Invitado especial Leandro Beavis en su regreso a la comedia platense.",
-        "Resto del elenco a confirmar!"
+        "Leandro Beavis (invitado especial en su regreso a la comedia platense).",
+        "Rubén Vaena"
     ],
     "dia_semana": "jueves",
-    "actualizado": "2026-08-10T15:10:53.752Z",
+    "actualizado": "2026-08-15T16:47:30.505Z",
     "creado": "2026-08-10T15:10:53.752Z",
     "id": "2026-08-20-el-rotativo-platense"
 }
