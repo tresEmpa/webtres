@@ -50,7 +50,7 @@ const EXTRA = (lugar) => `
 </section>`;
 
 const HORARIOS_CARD = `
-  <div class="horarios-card">
+  <div class="horarios-card" data-tep-estado="NORMAL SIN_FUNCION ULTIMA_HORA">
     <h3>Horarios de la noche</h3>
     <div class="semaforo">
       <div class="semaforo__row semaforo__row--verde">
@@ -195,6 +195,32 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
 
   <div id="evento-pasado-aviso" hidden>${pasadoBlock()}</div>
 
+  <!-- ── ES LA NOCHE DEL SHOW, DE 20:00 A 22:00 ────────────────────────────
+       Las reservas web ya no sirven: nadie las está mirando. Se ofrece el
+       camino que sí funciona a esa hora, que es escribir por WhatsApp. -->
+  <section class="evento-aviso tep-ultima-hora" data-tep-estado="ULTIMA_HORA">
+    <span class="tep-ultima-hora__hora">Hoy · el show empieza ${esc(ev.hora)}</span>
+    <h2>¿Estás sobre la hora?</h2>
+    <p>Consultanos por WhatsApp si quedan lugares. Te contestamos al toque.</p>
+    <a href="https://wa.me/${wa}?text=${encodeURIComponent('Hola! Estoy sobre la hora para ' + ev.nombre_show + ' de hoy. ¿Quedan lugares?')}"
+       target="_blank" rel="noopener"
+       class="btn btn-primary tep-btn-wsp" id="tep-wsp-ultima-hora">
+      Consultar por WhatsApp →
+    </a>
+    <p class="reserva-form__note">
+      Recordá: las reservas vencen 21:45 y después de las 22:01 no se entra más.
+    </p>
+  </section>
+
+  <!-- ── YA CERRAMOS POR HOY (22:00 EN ADELANTE) ───────────────────────── -->
+  <section class="evento-aviso tep-cerrado" data-tep-estado="CERRADO">
+    <h2>Por hoy ya cerramos</h2>
+    <p>Mirá las próximas funciones y reservá para la que te quede mejor.</p>
+    <a href="/reservas/" class="btn btn-primary">Ver próximas funciones →</a>
+  </section>
+
+  <div data-tep-estado="NORMAL SIN_FUNCION">
+
   <form class="reserva-form" id="reserva-form" onsubmit="return enviarReserva(event)">
     <h3>Reservá tu mesa</h3>
     <p>Completá los datos y te abrimos WhatsApp con el mensaje listo para enviar.</p>
@@ -254,6 +280,8 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
   <div class="reserva-error" id="reserva-error" hidden>
     <h3>⚠ No pudimos registrar tu reserva</h3>
     <p>Mandanos el WhatsApp igual y te confirmamos por ahí.</p>
+  </div>
+
   </div>`;
 
     formScript = `
@@ -303,11 +331,22 @@ function enviarReserva(e) {
       gtag('event', 'conversion', { 'send_to': 'AW-11304999909/reserva_whatsapp' });
     }
   } catch (_) {}
+  // Mismo evento estándar Lead que los otros caminos de reserva; lo que los
+  // distingue es content_category.
   try {
-    if (typeof fbq === 'function') {
-      fbq('track', 'Lead', { content_name: showNombre, content_category: 'reserva', num_items: personas });
+    if (window.TEP) {
+      TEP.track(
+        'Lead',
+        { content_name: showNombre, content_category: 'reserva_web', num_items: personas },
+        'generate_lead',
+        { content_name: showNombre, content_category: 'reserva_web', num_items: personas }
+      );
     }
   } catch (_) {}
+
+  // Ya reservó: que el reloj no le cambie la página abajo de los pies si justo
+  // dan las 20:00 mientras lee la confirmación.
+  window.TEP_CONGELADO = true;
 
   const $form     = document.getElementById('reserva-form');
   const $enviando = document.getElementById('reserva-enviando');
@@ -357,6 +396,45 @@ function enviarReserva(e) {
 </script>`;
   }
 
+  // Medición común a toda página de función, tenga formulario o no.
+  const trackScript = `
+<script>
+(function () {
+  if (!window.TEP) return;
+  var show = ${JSON.stringify(ev.nombre_show)};
+  var evId = ${JSON.stringify(ev.id)};
+
+  // Vio la función.
+  TEP.track('ViewContent', { content_name: show, content_category: 'funcion' },
+            'view_item',    { content_name: show, content_category: 'funcion' });
+
+  // Empezó a completar el formulario: primer foco en cualquier campo, una sola
+  // vez por sesión y por función.
+  var form = document.getElementById('reserva-form');
+  if (form) {
+    var arrancoCheckout = function () {
+      TEP.unaVez('checkout:' + evId, function () {
+        TEP.track('InitiateCheckout', { content_name: show },
+                  'begin_checkout',   { content_name: show });
+      });
+    };
+    form.addEventListener('focusin', arrancoCheckout, { once: true });
+  }
+
+  // Consultó por WhatsApp estando sobre la hora. Mismo Lead, otra categoría.
+  // Sin preventDefault: el link abre en pestaña nueva y la página no se
+  // descarga, así que al evento le sobra tiempo para salir.
+  var wspUltima = document.getElementById('tep-wsp-ultima-hora');
+  if (wspUltima) {
+    wspUltima.addEventListener('click', function () {
+      window.TEP_CONGELADO = true;
+      TEP.track('Lead',        { content_name: show, content_category: 'reserva_ultima_hora' },
+                'generate_lead', { content_name: show, content_category: 'reserva_ultima_hora' });
+    });
+  }
+})();
+</script>`;
+
   const content = `
 <section class="evento-hero">
   <div class="container">
@@ -377,6 +455,7 @@ ${flyer}
 ${central}
 ${EXTRA(lugar)}
 ${formScript}
+${trackScript}
 `;
 
   return page({
@@ -390,6 +469,9 @@ ${formScript}
     extraCss: '/assets/css/reservas.css',
     extraSchema,
     currentPath: `/reservas/${ev.id}/`,
+    // Sólo la fecha de ESTA función: el jueves a las 21:10 se apaga la página
+    // del jueves, no la del viernes que viene.
+    funciones: formScript ? [ev.fecha] : null,
     content,
     year,
   });

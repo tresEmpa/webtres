@@ -3,6 +3,10 @@
  * Devuelve el HTML completo de una página pública.
  */
 
+import {
+  ESTADO_CSS, estadoScript, TRACKING_JS, WSP_FLOTANTE_JS, GA4_ID,
+} from '../lib/cliente.mjs';
+
 const SITE_NAME = 'Tres Empanadas Comedia';
 const BASE_URL = 'https://tresempanadas.com.ar';
 const DEFAULT_TITLE = 'Tres Empanadas Comedia | Microteatro de Stand Up en La Plata';
@@ -81,7 +85,10 @@ const TRACKING = `
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'AW-11304999909');
+    gtag('config', 'AW-11304999909');${GA4_ID ? `
+    gtag('config', '${GA4_ID}');` : `
+    // Google Analytics 4: falta el ID "G-…". Cargalo en GA4_ID, arriba de
+    // src/lib/cliente.mjs, y los eventos empiezan a llegar a Analytics.`}
   </script>
 
   <!-- Meta Pixel — 546014447181846 -->
@@ -202,6 +209,8 @@ export function page(opts) {
 ${ORG_SCHEMA}
   ${extraSchema || ''}
 ${TRACKING}
+${TRACKING_JS}
+${opts.funciones ? ESTADO_CSS + estadoScript(opts.funciones, !!opts.refrescarAgenda) : ''}
 </head>
 <body${bodyClass ? ` class="${esc(bodyClass)}"` : ''}>
 
@@ -326,7 +335,7 @@ ${opts.content || ''}
       });
     });
   </script>
-
+${WSP_FLOTANTE_JS}
 </body>
 </html>`;
 }

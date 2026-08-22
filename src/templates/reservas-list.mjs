@@ -2,8 +2,33 @@
 import { page, esc } from './layout.mjs';
 import { fechaHumana, ucfirst } from '../lib/eventos.mjs';
 
+const WA = '542215247488';
+
+/** Es la noche del show, entre las 20 y las 22: el formulario ya no sirve. */
+const AVISO_ULTIMA_HORA = `
+<section class="evento-aviso tep-ultima-hora" data-tep-estado="ULTIMA_HORA">
+  <span class="tep-ultima-hora__hora">Hoy hay función</span>
+  <h2>¿Estás sobre la hora?</h2>
+  <p>Consultanos por WhatsApp si quedan lugares. Te contestamos al toque.</p>
+  <a href="https://wa.me/${WA}?text=${encodeURIComponent('Hola! Estoy sobre la hora para la función de hoy. ¿Quedan lugares?')}"
+     target="_blank" rel="noopener"
+     class="btn btn-primary tep-btn-wsp" id="tep-wsp-ultima-hora">
+    Consultar por WhatsApp →
+  </a>
+  <p class="reserva-form__note">
+    Recordá: las reservas vencen 21:45 y después de las 22:01 no se entra más.
+  </p>
+</section>`;
+
+/** Ya pasaron las 22 de una noche de show. */
+const AVISO_CERRADO = `
+<section class="evento-aviso tep-cerrado" data-tep-estado="CERRADO">
+  <h2>Por hoy ya cerramos</h2>
+  <p>Mirá las próximas funciones y reservá para la que te quede mejor.</p>
+</section>`;
+
 const SEMAFORO_TOP = `
-<div class="horarios-card horarios-card--top">
+<div class="horarios-card horarios-card--top" data-tep-estado="NORMAL SIN_FUNCION ULTIMA_HORA">
   <h3>Horarios de la noche</h3>
   <div class="semaforo">
     <div class="semaforo__row semaforo__row--verde">
@@ -136,9 +161,23 @@ export function renderReservasList(eventos, year) {
     <p>Reservar es gratis y te asegura la mesa. Conviene — los lugares vuelan.</p>
   </div>
 </section>
+${AVISO_ULTIMA_HORA}
+${AVISO_CERRADO}
 ${SEMAFORO_TOP}
 ${cuerpo}
 ${EXTRA}
+<script>
+(function () {
+  if (!window.TEP) return;
+  var boton = document.getElementById('tep-wsp-ultima-hora');
+  if (!boton) return;
+  boton.addEventListener('click', function () {
+    window.TEP_CONGELADO = true;
+    TEP.track('Lead',          { content_category: 'reserva_ultima_hora' },
+              'generate_lead', { content_category: 'reserva_ultima_hora' });
+  });
+})();
+</script>
 `;
 
   return page({
@@ -149,6 +188,11 @@ ${EXTRA}
     extraCss: '/assets/css/reservas.css',
     extraSchema,
     currentPath: '/reservas/',
+    // Todas las fechas de la cartelera: acá sí importa cualquier noche de show.
+    funciones: eventos
+      .filter((ev) => ev.fecha && (ev.estado || 'activo') !== 'cancelado')
+      .map((ev) => ev.fecha),
+    refrescarAgenda: true,
     content,
     year,
   });
