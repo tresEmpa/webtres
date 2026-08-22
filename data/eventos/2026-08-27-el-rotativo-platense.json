@@ -1,0 +1,23 @@
+{
+    "fecha": "2026-08-27",
+    "nombre_show": "El Rotativo Platense",
+    "descripcion": "Stand up de los jueves en Tres Empanadas. El line-up cambia cada semana: comediantes con años de escenario, nuevas voces y propuestas que rotan. Show a la gorra.",
+    "hora": "21:30",
+    "duracion_minutos": 90,
+    "estado": "activo",
+    "motivo_cancelacion": "",
+    "plantilla": "rotativo-platense",
+    "link_instagram": "",
+    "notas_internas": "",
+    "color": "violeta",
+    "flyer": "2026-08-27-el-rotativo-platense.png",
+    "elenco": [
+        "Bea Malvaso",
+        "Rubén Vaena",
+        "Checho Falco"
+    ],
+    "dia_semana": "jueves",
+    "actualizado": "2026-08-22T17:14:17.531Z",
+    "creado": "2026-08-22T17:14:17.531Z",
+    "id": "2026-08-27-el-rotativo-platense"
+}
