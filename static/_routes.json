@@ -1,10 +1,6 @@
 {
   "version": 1,
   "include": [
-    "/reservas/jueves",
-    "/reservas/jueves/",
-    "/reservas/viernes",
-    "/reservas/viernes/",
     "/reservas/registrar",
     "/cocina",
     "/cocina/*"
