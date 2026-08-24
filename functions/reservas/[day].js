@@ -9,11 +9,7 @@
  * posicionar y toda la autoridad iba a una URL con fecha que caduca en una
  * semana. Ver src/templates/dia.mjs.
  *
- * Lo que sigue haciendo: cualquier otro segmento (/reservas/sabado/, un id mal
- * escrito, un link viejo) cae acá y va al listado. Para jueves/viernes queda
- * como red de seguridad si alguna vez faltara el archivo estático.
- *
- * Lee la agenda generada en el build (/data/agenda.json) vía ASSETS, así que
+  * Lee la agenda generada en el build (/data/agenda.json) vía ASSETS, así que
  * recalcula "el próximo" en cada visita según la fecha real.
  *
  * Las páginas de eventos (/reservas/YYYY-MM-DD-slug/) son estáticas y las sirve
