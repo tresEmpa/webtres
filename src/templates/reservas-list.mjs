@@ -1,5 +1,5 @@
 /** Listado de funciones — port de reservas/index.php */
-import { page, esc } from './layout.mjs';
+import { page, esc, GOOGLE, estrellaSVG } from './layout.mjs';
 import { fechaHumana, ucfirst } from '../lib/eventos.mjs';
 
 const WA = '542215247488';
@@ -26,6 +26,25 @@ const AVISO_CERRADO = `
   <h2>Por hoy ya cerramos</h2>
   <p>Mirá las próximas funciones y reservá para la que te quede mejor.</p>
 </section>`;
+
+/** La prueba social, arriba de todo: 4,9 sobre 140 opiniones. */
+const CHAPA_GOOGLE = `
+<a class="gmaps-chapa" href="${GOOGLE.url}" target="_blank" rel="noopener"
+   aria-label="${GOOGLE.nota} estrellas sobre ${GOOGLE.opiniones} opiniones en Google Maps. Se abre en una pestaña nueva.">
+  <span class="gmaps-chapa__nota">${GOOGLE.nota}</span>
+  <span class="gmaps-chapa__lado">
+    <span class="gmaps-estrellas">${estrellaSVG(18).repeat(5)}</span>
+    <span class="gmaps-chapa__txt">${GOOGLE.opiniones} opiniones en Google Maps</span>
+  </span>
+</a>`;
+
+/** Refuerzo dentro de la tarjeta: la tarjeta ya es un <a>, así que acá va un <span>. */
+const MICRO_GOOGLE = `
+        <span class="evento-card__gmaps">
+          <span class="gmaps-estrellas">${estrellaSVG(13)}</span>
+          <span class="evento-card__gmaps-nota">${GOOGLE.nota}</span>
+          <span>· ${GOOGLE.opiniones} opiniones en Google</span>
+        </span>`;
 
 const SEMAFORO_TOP = `
 <div class="horarios-card horarios-card--top" data-tep-estado="NORMAL SIN_FUNCION ULTIMA_HORA">
@@ -143,6 +162,7 @@ export function renderReservasList(eventos, year) {
         <p class="evento-card__fecha">${esc(fechaHumana(ev.fecha))}</p>
         ${elenco}
         <span class="evento-card__cta">${cta}</span>
+${MICRO_GOOGLE}
       </a>`;
     }).join('\n');
 
@@ -159,6 +179,7 @@ export function renderReservasList(eventos, year) {
   <div class="container">
     <h1>Reservar</h1>
     <p>Reservar es gratis y te asegura la mesa. Conviene — los lugares vuelan.</p>
+    ${CHAPA_GOOGLE}
   </div>
 </section>
 ${AVISO_ULTIMA_HORA}

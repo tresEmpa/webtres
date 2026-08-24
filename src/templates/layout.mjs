@@ -13,6 +13,23 @@ const DEFAULT_TITLE = 'Tres Empanadas Comedia | Microteatro de Stand Up en La Pl
 const DEFAULT_DESC = 'Microteatro de stand up en La Plata. Funciones jueves y viernes 21:30hs. Reservá gratis.';
 const DEFAULT_IMAGE = `${BASE_URL}/assets/img/og-default.jpg`;
 
+/**
+ * Reputación en Google Maps — único lugar donde se actualiza.
+ * `nota` va con coma (se muestra); `notaSchema` con punto (JSON-LD).
+ * Al actualizar `opiniones`, revisar también el badge de /reservas/.
+ */
+export const GOOGLE = {
+  nota: '4,9',
+  notaSchema: '4.9',
+  opiniones: 140,
+  url: 'https://share.google/dyTTJVXR25JTlU7kX',
+};
+
+/** Estrella maciza, dorada. `px` = alto/ancho en píxeles. */
+export function estrellaSVG(px) {
+  return `<svg width="${px}" height="${px}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2l2.9 6.26 6.85.72-5.1 4.6 1.44 6.72L12 16.9 5.91 20.3l1.44-6.72-5.1-4.6 6.85-.72z"/></svg>`;
+}
+
 /** htmlspecialchars equivalente. */
 export function esc(s) {
   return String(s ?? '')
@@ -53,8 +70,8 @@ const ORG_SCHEMA = `
     "priceRange": "$",
     "aggregateRating": {
       "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "112"
+      "ratingValue": "${GOOGLE.notaSchema}",
+      "reviewCount": "${GOOGLE.opiniones}"
     },
     "founder": {
       "@type": "Person",
@@ -270,7 +287,7 @@ ${opts.content || ''}
         <ul>
           <li><a href="https://www.instagram.com/tresempanadascomedia">Instagram</a></li>
           <li><a href="https://www.facebook.com/TresEmpanadasComedia">Facebook</a></li>
-          <li><a href="https://share.google/dyTTJVXR25JTlU7kX">Google Maps · 4.9 ⭐</a></li>
+          <li><a href="${GOOGLE.url}">Google Maps · ${GOOGLE.nota} ⭐ (${GOOGLE.opiniones})</a></li>
         </ul>
       </div>
 

@@ -1,0 +1,33 @@
+BADGE DE GOOGLE MAPS — /reservas/
+Tres Empanadas Comedia · 24 de agosto de 2026
+
+QUÉ HAY ACÁ
+Tres archivos completos, con la misma estructura de carpetas del repo.
+Descomprimí este zip en la RAÍZ de webtres y pisá los tres archivos.
+
+  src/templates/layout.mjs         constante GOOGLE + helper estrellaSVG()
+  src/templates/reservas-list.mjs  la chapa en el hero + la microlínea en las tarjetas
+  static/assets/css/reservas.css   los estilos
+
+BASE
+Salen del commit d3ca612 ("cocina: crea 2026-08-27-el-rotativo-platense").
+Si desde entonces tocaste alguno de esos TRES archivos, pisarlos te borra
+ese cambio. Los archivos de /data/eventos/ no se tocan, así que cargar
+funciones nuevas no es problema.
+
+PASOS
+  git checkout main && git pull
+  git checkout -b badge-google-maps
+  (descomprimir el zip acá, pisando los tres archivos)
+  npm run build
+  git add -A
+  git commit -m "reservas: el 4,9 de Google arriba y al lado del boton"
+  git push -u origin badge-google-maps
+
+PARA ACTUALIZAR LA NOTA MÁS ADELANTE
+Un solo lugar: la constante GOOGLE arriba de src/templates/layout.mjs.
+La usan el badge, el footer y el JSON-LD.
+
+  nota: '4,9'         lo que se ve en pantalla (con coma)
+  notaSchema: '4.9'   lo que va al JSON-LD (con punto, lo exige schema.org)
+  opiniones: 140      la cantidad de reseñas
