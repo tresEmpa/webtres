@@ -1,33 +1,38 @@
-BADGE DE GOOGLE MAPS — /reservas/
-Tres Empanadas Comedia · 24 de agosto de 2026
+ARREGLOS DE SEO — Tres Empanadas
+24 de agosto de 2026
 
-QUÉ HAY ACÁ
-Tres archivos completos, con la misma estructura de carpetas del repo.
-Descomprimí este zip en la RAÍZ de webtres y pisá los tres archivos.
+CÓMO SE APLICA
+Descomprimí este zip en la RAÍZ de webtres, pisando lo que pregunte.
+Después: commit y push. Cloudflare hace el build solo.
 
-  src/templates/layout.mjs         constante GOOGLE + helper estrellaSVG()
-  src/templates/reservas-list.mjs  la chapa en el hero + la microlínea en las tarjetas
-  static/assets/css/reservas.css   los estilos
+Todo esto ya lo probé: el build corre limpio y verifiqué las páginas
+generadas una por una en un navegador de verdad.
 
-BASE
-Salen del commit d3ca612 ("cocina: crea 2026-08-27-el-rotativo-platense").
-Si desde entonces tocaste alguno de esos TRES archivos, pisarlos te borra
-ese cambio. Los archivos de /data/eventos/ no se tocan, así que cargar
-funciones nuevas no es problema.
+QUÉ TRAE
+  build.mjs                       genera las páginas de jueves y viernes; mide los flyers
+  src/templates/dia.mjs           NUEVO — las páginas perennes de cada día
+  src/templates/evento-card.mjs   NUEVO — la tarjeta de función, ahora compartida
+  src/templates/layout.mjs        soporte de noindex
+  src/templates/evento.mjs        noindex en pasadas, descripción propia, año en el título
+  src/templates/reservas-list.mjs usa la tarjeta compartida
+  static/assets/css/reservas.css  tarjeta única centrada en las páginas de día
+  functions/reservas/[day].js     sólo cambia el comentario de arriba
+  data/eventos/*.json (4)         apuntan al flyer .jpg en vez del .png
+  data/flyers/*.jpg (5)           los flyers convertidos
 
-PASOS
-  git checkout main && git pull
-  git checkout -b badge-google-maps
-  (descomprimir el zip acá, pisando los tres archivos)
-  npm run build
-  git add -A
-  git commit -m "reservas: el 4,9 de Google arriba y al lado del boton"
-  git push -u origin badge-google-maps
+QUEDA UN PENDIENTE (opcional, sin apuro)
+Los 5 PNG viejos siguen en data/flyers/ y ya no los usa nadie. No rompen
+nada, sólo ocupan 7 MB en cada deploy. Se pueden borrar cuando quieras:
 
-PARA ACTUALIZAR LA NOTA MÁS ADELANTE
-Un solo lugar: la constante GOOGLE arriba de src/templates/layout.mjs.
-La usan el badge, el footer y el JSON-LD.
+  data/flyers/2026-05-22-sociedad-platense-de-stand-up.png
+  data/flyers/2026-07-20-sociedad-platense-de-stand-up.png
+  data/flyers/2026-08-14-sociedad-platense-de-stand-up.png
+  data/flyers/2026-08-20-el-rotativo-platense.png
+  data/flyers/2026-08-27-el-rotativo-platense.png
 
-  nota: '4,9'         lo que se ve en pantalla (con coma)
-  notaSchema: '4.9'   lo que va al JSON-LD (con punto, lo exige schema.org)
-  opiniones: 140      la cantidad de reseñas
+Si querés los borro yo desde GitHub una vez que subas esto — decime nomás.
+
+DESPUÉS DEL DEPLOY
+En Search Console conviene remandar el sitemap. Las dos URLs nuevas
+(/reservas/jueves/ y /reservas/viernes/) ya estaban declaradas, pero antes
+eran un redirect y ahora son páginas, así que Google tiene que volver a verlas.

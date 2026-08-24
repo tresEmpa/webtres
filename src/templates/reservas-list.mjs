@@ -1,6 +1,6 @@
 /** Listado de funciones — port de reservas/index.php */
 import { page, esc, GOOGLE, estrellaSVG } from './layout.mjs';
-import { fechaHumana, ucfirst } from '../lib/eventos.mjs';
+import { eventoCard } from './evento-card.mjs';
 
 const WA = '542215247488';
 
@@ -37,14 +37,6 @@ const CHAPA_GOOGLE = `
     <span class="gmaps-chapa__txt">${GOOGLE.opiniones} opiniones en Google Maps</span>
   </span>
 </a>`;
-
-/** Refuerzo dentro de la tarjeta: la tarjeta ya es un <a>, así que acá va un <span>. */
-const MICRO_GOOGLE = `
-        <span class="evento-card__gmaps">
-          <span class="gmaps-estrellas">${estrellaSVG(13)}</span>
-          <span class="evento-card__gmaps-nota">${GOOGLE.nota}</span>
-          <span>· ${GOOGLE.opiniones} opiniones en Google</span>
-        </span>`;
 
 const SEMAFORO_TOP = `
 <div class="horarios-card horarios-card--top" data-tep-estado="NORMAL SIN_FUNCION ULTIMA_HORA">
@@ -141,30 +133,7 @@ export function renderReservasList(eventos, year) {
   </div>
 </section>`;
   } else {
-    const cards = lista.map((ev) => {
-      const id = esc(ev.id);
-      const color = ev.color || (ev.dia_semana === 'viernes' ? 'rojo' : 'violeta');
-      const estado = ev.estado || 'activo';
-      const agotado = estado === 'agotado';
-      const programado = estado === 'programado';
-      let clases = `evento-card evento-card--${esc(color)}`;
-      if (agotado) clases += ' evento-card--agotado';
-      if (programado) clases += ' evento-card--programado';
-      const elenco = (ev.elenco && ev.elenco.length)
-        ? `<p class="evento-card__elenco">${esc(ev.elenco.join(' · '))}</p>` : '';
-      const cta = agotado ? 'Agotado' : programado ? 'Próximamente — ver más →' : 'Ver y reservar →';
-      return `
-      <a class="${clases}" href="/reservas/${id}/">
-        <span class="evento-card__dia-badge">
-          ${esc(ucfirst(ev.dia_semana))} · ${esc(ev.hora)}hs
-        </span>
-        <h2 class="evento-card__titulo">${esc(ev.nombre_show)}</h2>
-        <p class="evento-card__fecha">${esc(fechaHumana(ev.fecha))}</p>
-        ${elenco}
-        <span class="evento-card__cta">${cta}</span>
-${MICRO_GOOGLE}
-      </a>`;
-    }).join('\n');
+    const cards = lista.map((ev) => eventoCard(ev)).join('\n');
 
     cuerpo = `
 <section class="eventos-listado">

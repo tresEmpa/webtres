@@ -1,9 +1,17 @@
 /**
- * /reservas/jueves/  y  /reservas/viernes/   (Cloudflare Pages Function)
+ * /reservas/<algo>/   (Cloudflare Pages Function)
  *
- * Reemplaza reservas/jueves/index.php y reservas/viernes/index.php.
- * Atajo SEO: redirige (302) al próximo evento cargado de ese día de la semana.
- * Si no hay, va al listado general /reservas/.
+ * OJO: jueves y viernes YA NO PASAN POR ACÁ.
+ * Desde que el build genera /reservas/jueves/index.html y
+ * /reservas/viernes/index.html, Cloudflare Pages sirve el archivo estático y
+ * esta Function nunca corre para esos dos segmentos. Se hizo a propósito: el
+ * redirect 302 dejaba a esas URLs sin página propia, así que no podían
+ * posicionar y toda la autoridad iba a una URL con fecha que caduca en una
+ * semana. Ver src/templates/dia.mjs.
+ *
+ * Lo que sigue haciendo: cualquier otro segmento (/reservas/sabado/, un id mal
+ * escrito, un link viejo) cae acá y va al listado. Para jueves/viernes queda
+ * como red de seguridad si alguna vez faltara el archivo estático.
  *
  * Lee la agenda generada en el build (/data/agenda.json) vía ASSETS, así que
  * recalcula "el próximo" en cada visita según la fecha real.

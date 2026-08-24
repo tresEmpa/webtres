@@ -76,6 +76,46 @@ const HORARIOS_CARD = `
     </div>
   </div>`;
 
+/**
+ * Meta description propia de cada función.
+ *
+ * Antes salía tal cual de `descripcion`, que es una plantilla por tipo de show:
+ * nueve páginas de El Rotativo compartían dos descripciones entre todas. Acá se
+ * arma con lo único que sí cambia función a función — la fecha y el elenco — y
+ * se recorta cerca de los 155 caracteres, que es lo que muestra Google.
+ */
+function metaDescripcion(ev, fechaH) {
+  const partes = [];
+
+  partes.push(`${ucfirst(fechaH)}, ${ev.hora || '21:30'}.`);
+
+  const nombres = (ev.elenco || []).filter(Boolean);
+  if (nombres.length === 0) {
+    partes.push(`${ev.nombre_show} en Tres Empanadas.`);
+  } else {
+    const muestra = nombres.slice(0, 3);
+    let lista;
+    if (nombres.length > 3) {
+      // "A, B, C y más" — sin la "y" del penúltimo, que sonaría a lista cerrada.
+      lista = `${muestra.join(', ')} y más`;
+    } else if (muestra.length > 1) {
+      lista = `${muestra.slice(0, -1).join(', ')} y ${muestra[muestra.length - 1]}`;
+    } else {
+      lista = muestra[0];
+    }
+    partes.push(`${ev.nombre_show} con ${lista}.`);
+  }
+
+  const estado = ev.estado || 'activo';
+  if (estado === 'agotado') partes.push('Función agotada.');
+  else if (estado === 'cancelado') partes.push('Función cancelada.');
+  else partes.push('Reserva gratis, show a la gorra, en La Plata.');
+
+  const texto = partes.join(' ');
+  if (texto.length <= 158) return texto;
+  return `${texto.slice(0, 155).replace(/[\s,;]+\S*$/, '')}…`;
+}
+
 export function renderEvento(ev, lugar, year, now = new Date()) {
   const hoy = hoyISO(now);
   const esPasado = ev.fecha < hoy;
@@ -83,6 +123,8 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
   const color = ev.color || (ev.dia_semana === 'viernes' ? 'rojo' : 'violeta');
   const fechaH = fechaHumana(ev.fecha, false, now);
   const motivo = (ev.motivo_cancelacion || '').trim();
+
+  const fechaTitulo = fechaHumana(ev.fecha, true, now);
 
   const [isoStart, isoEnd] = eventoFechasISO(ev);
   const [schemaStatus, schemaAvail] = eventoSchemaEstado(estado);
@@ -140,9 +182,14 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
     ],
   };
 
-  const extraSchema =
-    `<script type="application/ld+json">${JSON.stringify(eventSchema, null, 2)}</script>` +
-    `<script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>`;
+  // Las funciones que ya pasaron no llevan schema Event. Antes seguían
+  // declarando "EventScheduled" meses después, que es sencillamente falso, y
+  // schema.org no tiene un estado "ya sucedió". Se va entero: el breadcrumb
+  // alcanza para una página que además está en noindex.
+  const extraSchema = (esPasado
+    ? ''
+    : `<script type="application/ld+json">${JSON.stringify(eventSchema, null, 2)}</script>`)
+    + `<script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>`;
 
   const heroDesc = ev.descripcion
     ? `<p class="evento-hero__desc">${esc(ev.descripcion)}</p>` : '';
@@ -153,7 +200,8 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
 <section class="evento-flyer">
   <img src="/data/flyers/${esc(ev.flyer)}"
        alt="Flyer de ${esc(ev.nombre_show)} — ${esc(fechaH)}"
-       loading="lazy">
+       ${ev.flyer_w && ev.flyer_h ? `width="${ev.flyer_w}" height="${ev.flyer_h}"` : ''}
+       loading="lazy" decoding="async">
 </section>` : '';
 
   // --- Bloque central según estado ---
@@ -459,8 +507,14 @@ ${trackScript}
 `;
 
   return page({
-    title: `${ev.nombre_show} — ${fechaH} | Tres Empanadas Comedia`,
-    description: (ev.descripcion || '') || 'Stand up en La Plata. Reservá gratis tu mesa.',
+    // El año va SIEMPRE en el title aunque no se muestre en la página: sin él,
+    // el 14 de mayo de 2027 generaría un título idéntico al de 2026.
+    title: `${ev.nombre_show} — ${fechaTitulo} | Tres Empanadas Comedia`,
+    description: metaDescripcion(ev, fechaH),
+    // Función pasada: la página sigue viva (hay links viejos dando vueltas en
+    // WhatsApp) pero sale del índice. Si no, se acumulan decenas de páginas
+    // huérfanas y casi idénticas compitiendo con las que sí importan.
+    noindex: esPasado,
     url: `https://tresempanadas.com.ar/reservas/${ev.id}/`,
     image: ev.flyer
       ? `https://tresempanadas.com.ar/data/flyers/${ev.flyer}`

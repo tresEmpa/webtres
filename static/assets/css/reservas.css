@@ -408,6 +408,14 @@
     grid-template-columns: 1fr 1fr;
     gap: var(--space-lg);
   }
+
+  /* En /reservas/jueves/ y /reservas/viernes/ casi siempre hay una sola
+     función cargada. Sin esto la tarjeta queda pegada a la izquierda con
+     medio ancho de página vacío al lado. */
+  .eventos-listado__grid:has(> .evento-card:only-child) {
+    grid-template-columns: minmax(0, 520px);
+    justify-content: center;
+  }
 }
 
 .evento-card {

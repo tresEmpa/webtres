@@ -175,7 +175,11 @@ const AVISO_VACACIONES = `
 /**
  * Envuelve el contenido de una página en el layout completo.
  * opts: { title, description, url, image, bodyClass, extraCss, extraSchema,
- *         currentPath, content, year }
+ *         currentPath, content, year, noindex }
+ *
+ * noindex: true saca la página del índice de Google pero deja pasar los enlaces
+ * ("noindex, follow"). Se usa en las funciones que ya pasaron: la página sigue
+ * viva para no romper links viejos, pero deja de competir consigo misma.
  */
 export function page(opts) {
   const title = opts.title ?? DEFAULT_TITLE;
@@ -196,6 +200,7 @@ export function page(opts) {
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}">
   <link rel="canonical" href="${esc(url)}">
+${opts.noindex ? '  <meta name="robots" content="noindex, follow">\n' : ''}
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">

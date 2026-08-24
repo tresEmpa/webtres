@@ -15,6 +15,7 @@ import { listarEventos, fechaHumana } from './src/lib/eventos.mjs';
 import { renderHome } from './src/templates/home.mjs';
 import { renderReservasList } from './src/templates/reservas-list.mjs';
 import { renderEvento } from './src/templates/evento.mjs';
+import { renderDia } from './src/templates/dia.mjs';
 import { renderCursos } from './src/templates/cursos.mjs';
 import { renderStandupLaPlata } from './src/templates/standup-la-plata.mjs';
 import { renderNotFound } from './src/templates/not-found.mjs';
@@ -72,6 +73,60 @@ async function loadEventos() {
     }
   }
   return out;
+}
+
+/**
+ * Alto y ancho de un PNG o JPEG, leídos del encabezado del archivo.
+ *
+ * Sirve para poner width/height en el <img> del flyer: sin eso el navegador no
+ * sabe cuánto espacio reservar y el contenido salta cuando la imagen carga.
+ * Se lee acá y no se instala nada — los encabezados son cuatro bytes.
+ */
+function dimensionesImagen(buf) {
+  // PNG: ancho y alto van fijos en el chunk IHDR.
+  if (buf.length > 24 && buf[0] === 0x89 && buf[1] === 0x50) {
+    return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) };
+  }
+  // JPEG: hay que caminar los segmentos hasta un SOF.
+  if (buf.length > 4 && buf[0] === 0xFF && buf[1] === 0xD8) {
+    let o = 2;
+    while (o + 9 < buf.length) {
+      if (buf[o] !== 0xFF) { o++; continue; }
+      const marca = buf[o + 1];
+      const esSOF = marca >= 0xC0 && marca <= 0xCF
+        && marca !== 0xC4 && marca !== 0xC8 && marca !== 0xCC;
+      if (esSOF) return { w: buf.readUInt16BE(o + 7), h: buf.readUInt16BE(o + 5) };
+      const largo = buf.readUInt16BE(o + 2);
+      if (largo < 2) break;
+      o += 2 + largo;
+    }
+  }
+  return null;
+}
+
+/** Le pega a cada evento el tamaño real de su flyer, si lo tiene. */
+async function medirFlyers(eventos) {
+  let pesados = 0;
+  for (const ev of eventos) {
+    if (!ev.flyer) continue;
+    try {
+      const buf = await fs.readFile(path.join(DATA, 'flyers', ev.flyer));
+      const d = dimensionesImagen(buf);
+      if (d) { ev.flyer_w = d.w; ev.flyer_h = d.h; }
+      if (buf.length > 600 * 1024) {
+        pesados++;
+        console.warn(`  ⚠ Flyer pesado (${Math.round(buf.length / 1024)} KB): ${ev.flyer}`);
+      }
+    } catch {
+      // El evento declara un flyer que no está en /data/flyers. Antes esto
+      // pintaba un <img> roto en la página; ahora simplemente no se muestra.
+      console.warn(`  ⚠ Flyer inexistente, la función va sin imagen: ${ev.flyer} (${ev.id})`);
+      ev.flyer = '';
+    }
+  }
+  if (pesados) {
+    console.warn(`  ⚠ ${pesados} flyer(s) arriba de 600 KB. Conviene guardarlos como JPG.`);
+  }
 }
 
 async function loadJSON(rel, fallback) {
@@ -160,6 +215,7 @@ async function main() {
   // 3) Datos
   const eventos = await loadEventos();
   const lugar = await loadJSON('lugar.json', {});
+  await medirFlyers(eventos);
   console.log(`  · ${eventos.length} eventos cargados`);
 
   // 4) Home
@@ -177,6 +233,16 @@ async function main() {
   // 6) Una página por evento (incluye pasados, para no romper links viejos)
   for (const ev of eventos) {
     await writeFile(`reservas/${ev.id}/index.html`, renderEvento(ev, lugar, YEAR, NOW));
+  }
+
+  // 6 bis) Páginas perennes de jueves y viernes.
+  // Antes eran un redirect 302 a la función de la semana, así que no tenían
+  // página propia y no podían posicionar por su cuenta. Ahora son estáticas, y
+  // Cloudflare Pages sirve el archivo antes que la Function, que queda sólo
+  // como reserva para cualquier otro segmento.
+  for (const dia of ['jueves', 'viernes']) {
+    const delDia = listado.filter((ev) => (ev.dia_semana || '').toLowerCase() === dia);
+    await writeFile(`reservas/${dia}/index.html`, renderDia(dia, delDia, YEAR, NOW));
   }
 
   // 7) Cursos
