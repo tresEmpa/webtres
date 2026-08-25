@@ -193,6 +193,9 @@ const HEADERS = `# Cabeceras de seguridad (equivalente a los Header set del .hta
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
 
+  Link: <https://tresempanadas.com.ar/sitemap.xml>; rel="sitemap"; type="application/xml"
+  Link: <https://tresempanadas.com.ar/llms.txt>; rel="alternate"; type="text/plain"; title="llms.txt"
+  
 # El admin no se indexa
 /cocina/*
   X-Robots-Tag: noindex, nofollow, noarchive
