@@ -4,7 +4,7 @@
     "descripcion": "Stand up de los jueves en Tres Empanadas. El line-up cambia cada semana: comediantes con años de escenario, nuevas voces y propuestas que rotan. Show a la gorra.",
     "hora": "21:30",
     "duracion_minutos": 90,
-    "estado": "activo",
+    "estado": "programado",
     "motivo_cancelacion": "",
     "plantilla": "rotativo-platense",
     "link_instagram": "",
@@ -17,7 +17,7 @@
         "Pablo Valenzuela (Invitado Especial)"
     ],
     "dia_semana": "jueves",
-    "actualizado": "2026-08-28T15:24:24.589Z",
+    "actualizado": "2026-08-28T15:24:52.889Z",
     "creado": "2026-08-28T15:24:24.589Z",
     "id": "2026-09-03-el-rotativo-platense"
 }
