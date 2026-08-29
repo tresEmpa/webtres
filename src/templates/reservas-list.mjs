@@ -159,8 +159,8 @@ const EXTRA = `
    Pegá acá las reseñas REALES (texto y nombre tal cual figuran en Google).
    Si el array queda vacío, el bloque no se renderiza y la página sigue igual. */
 const RESENAS = [
-  // { texto: 'Un lugar íntimo, muy cálido...', autor: 'Nombre A.' },
-  // { texto: 'Imperdible, nos reímos toda la noche.', autor: 'Nombre B.' },
+   { texto: 'Me cagué de risa, muy rica comida y se la pasa re bien', autor: 'Zoe T.' },
+   { texto: 'Olvidarse de los problemas con grandes risas..... Lindo plan.', autor: 'Martin D.' },
 ];
 
 const BLOQUE_RESENAS = RESENAS.length ? `
