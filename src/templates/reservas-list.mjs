@@ -38,6 +38,48 @@ const CHAPA_GOOGLE = `
   </span>
 </a>`;
 
+/* === CARRUSEL DE CABECERA ===
+   CSS puro (scroll-snap). Los puntitos son indicadores, no botones: se
+   actualizan con un IntersectionObserver de 5 líneas al final del archivo.
+   Sin JS igual funciona — se desliza con el dedo y el primer punto queda fijo. */
+const SLIDES = [
+  { img: 'cabecera-1-sala-llena',
+    alt: 'Público en una función de stand up en Tres Empanadas, La Plata' },
+  { img: 'cabecera-2-comediante',
+    alt: 'Comediante en el escenario de Tres Empanadas' },
+  { img: 'cabecera-3-escenario',
+    alt: 'Escenario de Tres Empanadas con el mural Mondrian y el logo' },
+];
+
+const CARRUSEL = `
+<section class="tep-carrusel" aria-label="Tres Empanadas por dentro">
+  <div class="tep-carrusel__pista">
+    ${SLIDES.map((s, i) => `
+    <figure class="tep-carrusel__slide">
+      <img src="/assets/img/${s.img}.webp" alt="${esc(s.alt)}"
+           width="900" height="450" decoding="async"
+           ${i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}>
+      ${i === 0 ? `
+      <figcaption class="tep-carrusel__overlay">
+        <strong>Reservá y vení</strong>
+        <span>Comedia, birra y más &middot; La Plata</span>
+      </figcaption>` : ''}
+    </figure>`).join('')}
+  </div>
+  <div class="tep-carrusel__dots" aria-hidden="true">
+    ${SLIDES.map((_, i) => `<span class="tep-carrusel__dot${i === 0 ? ' is-activo' : ''}"></span>`).join('')}
+  </div>
+</section>`;
+
+/* La respuesta a las tres preguntas del que cae desde un aviso:
+   cuánto sale, cómo se paga, cuándo hay. */
+const CLAIM = `
+<ul class="reservas-claim">
+  <li>Reservar es <strong>gratis</strong></li>
+  <li>El show es <strong>a la gorra</strong></li>
+  <li>Jueves y viernes <strong>21:30</strong></li>
+</ul>`;
+
 const SEMAFORO_TOP = `
 <div class="horarios-card horarios-card--top" data-tep-estado="NORMAL SIN_FUNCION ULTIMA_HORA">
   <h3>Horarios de la noche</h3>
@@ -87,6 +129,21 @@ const EXTRA = `
     Es la fachada violeta con las cortinas amarillas, no tiene pérdida.
   </p>
 
+  <div class="tep-galeria">
+    <figure class="tep-galeria__item">
+      <img src="/assets/img/lugar-salon.webp"
+           alt="Salón de Tres Empanadas con mesas y bancos de madera"
+           width="320" height="200" loading="lazy" decoding="async">
+      <figcaption>El lugar</figcaption>
+    </figure>
+    <figure class="tep-galeria__item">
+      <img src="/assets/img/lugar-fachada.webp"
+           alt="Fachada violeta de Tres Empanadas de noche, en 43 y 22"
+           width="320" height="200" loading="lazy" decoding="async">
+      <figcaption>Cómo llegar</figcaption>
+    </figure>
+  </div>
+
   <h3>Más info</h3>
   <p>🎭 Somos un <strong>microteatro</strong>, no un resto ni un bar gigante.</p>
   <p>✋ Se puede ver el show sin consumir.</p>
@@ -97,6 +154,30 @@ const EXTRA = `
     <a href="https://wa.me/542215247488?text=Hola%21%20Consulta%20por%20festejos" target="_blank" rel="noopener">Escribinos por WhatsApp</a>.
   </p>
 </section>`;
+
+/* === RESEÑAS DE GOOGLE ===
+   Pegá acá las reseñas REALES (texto y nombre tal cual figuran en Google).
+   Si el array queda vacío, el bloque no se renderiza y la página sigue igual. */
+const RESENAS = [
+  // { texto: 'Un lugar íntimo, muy cálido...', autor: 'Nombre A.' },
+  // { texto: 'Imperdible, nos reímos toda la noche.', autor: 'Nombre B.' },
+];
+
+const BLOQUE_RESENAS = RESENAS.length ? `
+<section class="tep-resenas" aria-labelledby="tep-resenas-tit">
+  <h3 id="tep-resenas-tit">Lo que dicen los que vinieron</h3>
+  <div class="tep-resenas__grid">
+    ${RESENAS.map((r) => `
+    <blockquote class="tep-resena">
+      <span class="gmaps-estrellas">${estrellaSVG(13).repeat(5)}</span>
+      <p>${esc(r.texto)}</p>
+      <cite>${esc(r.autor)}</cite>
+    </blockquote>`).join('')}
+  </div>
+  <a class="tep-resenas__link" href="${GOOGLE.url}" target="_blank" rel="noopener">
+    Ver las ${GOOGLE.opiniones} opiniones en Google &rarr;
+  </a>
+</section>` : '';
 
 export function renderReservasList(eventos, year) {
   const sinFunciones = eventos.length === 0;
@@ -144,11 +225,13 @@ export function renderReservasList(eventos, year) {
   }
 
   const content = `
+${CARRUSEL}
 <section class="reservas-hero">
   <div class="container">
     <h1>Reservar</h1>
     <p>Reservar es gratis y te asegura la mesa. Conviene — los lugares vuelan.</p>
     ${CHAPA_GOOGLE}
+    ${CLAIM}
   </div>
 </section>
 ${AVISO_ULTIMA_HORA}
@@ -156,7 +239,24 @@ ${AVISO_CERRADO}
 ${SEMAFORO_TOP}
 ${cuerpo}
 ${EXTRA}
+${BLOQUE_RESENAS}
 <script>
+(function () {
+  // Puntitos del carrusel: marca el activo segun que slide se ve.
+  var pista = document.querySelector('.tep-carrusel__pista');
+  var dots  = document.querySelectorAll('.tep-carrusel__dot');
+  if (pista && dots.length && 'IntersectionObserver' in window) {
+    var slides = pista.querySelectorAll('.tep-carrusel__slide');
+    var obs = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var i = [].indexOf.call(slides, e.target);
+        dots.forEach(function (d, j) { d.classList.toggle('is-activo', i === j); });
+      });
+    }, { root: pista, threshold: 0.6 });
+    slides.forEach(function (sl) { obs.observe(sl); });
+  }
+})();
 (function () {
   if (!window.TEP) return;
   var boton = document.getElementById('tep-wsp-ultima-hora');

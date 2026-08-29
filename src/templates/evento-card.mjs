@@ -17,6 +17,17 @@ const MICRO_GOOGLE = `
           <span>· ${GOOGLE.opiniones} opiniones en Google</span>
         </span>`;
 
+/**
+ * Placa fija por día de semana. A propósito NO usamos ev.flyer: el flyer real
+ * es una pieza cuadrada de Instagram y a este tamaño no se lee el nombre del
+ * show. Estas dos placas son tipográficas y se leen chiquitas.
+ * Un día distinto (un especial de sábado) simplemente va sin placa.
+ */
+const PLACAS = {
+  jueves:  { img: 'placa-jueves-rotativo',  alt: 'El Rotativo Platense' },
+  viernes: { img: 'placa-viernes-sociedad', alt: 'Sociedad Platense de Stand Up' },
+};
+
 export function eventoCard(ev, now = new Date()) {
   const id = esc(ev.id);
   const color = ev.color || (ev.dia_semana === 'viernes' ? 'rojo' : 'violeta');
@@ -35,14 +46,26 @@ export function eventoCard(ev, now = new Date()) {
     ? 'Agotado'
     : programado ? 'Próximamente — ver más →' : 'Ver y reservar →';
 
+  const placa = PLACAS[ev.dia_semana];
+  const imgPlaca = placa
+    ? `<img class="evento-card__placa" src="/assets/img/${placa.img}.webp"
+             alt="${esc(placa.alt)}" width="216" height="272"
+             loading="lazy" decoding="async">`
+    : '';
+
   return `
-      <a class="${clases}" href="/reservas/${id}/">
+      <a class="${clases}${placa ? ' evento-card--con-placa' : ''}" href="/reservas/${id}/">
         <span class="evento-card__dia-badge">
           ${esc(ucfirst(ev.dia_semana))} · ${esc(ev.hora)}hs
         </span>
-        <h2 class="evento-card__titulo">${esc(ev.nombre_show)}</h2>
-        <p class="evento-card__fecha">${esc(fechaHumana(ev.fecha, false, now))}</p>
-        ${elenco}
+        <div class="evento-card__cuerpo">
+          ${imgPlaca}
+          <div class="evento-card__texto">
+            <h2 class="evento-card__titulo">${esc(ev.nombre_show)}</h2>
+            <p class="evento-card__fecha">${esc(fechaHumana(ev.fecha, false, now))}</p>
+            ${elenco}
+          </div>
+        </div>
         <span class="evento-card__cta">${cta}</span>
 ${MICRO_GOOGLE}
       </a>`;
