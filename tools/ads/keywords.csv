@@ -1,0 +1,83 @@
+Campaign,Ad Group,Keyword,Criterion Type
+Search-2Busqueda controlada - Tres Empanadas,MARCA · Tres Empanadas,tres empanadas comedia,Phrase
+Search-2Busqueda controlada - Tres Empanadas,MARCA · Tres Empanadas,tres empanadas stand up,Phrase
+Search-2Busqueda controlada - Tres Empanadas,MARCA · Tres Empanadas,tres empanadas la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,MARCA · Tres Empanadas,[tres empanadas comedia],Exact
+Search-2Busqueda controlada - Tres Empanadas,MARCA · Tres Empanadas,[tres empanadas stand up],Exact
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,stand up la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,stand up en la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,show de stand up la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,comedia en vivo la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,stand up cartelera,Phrase
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,club de comedia la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,stand up a la gorra,Phrase
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,shows en la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,monologos la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,[stand up la plata],Exact
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,[stand up en la plata],Exact
+Search-2Busqueda controlada - Tres Empanadas,QH · Qué hacer en La Plata,que hacer en la plata hoy,Phrase
+Search-2Busqueda controlada - Tres Empanadas,QH · Qué hacer en La Plata,que hacer en la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,QH · Qué hacer en La Plata,salidas en la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,QH · Qué hacer en La Plata,planes en la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,QH · Qué hacer en La Plata,espectaculos la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,QH · Qué hacer en La Plata,eventos en la plata hoy,Phrase
+Search-2Busqueda controlada - Tres Empanadas,QH · Qué hacer en La Plata,que hacer esta noche en la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,QH · Qué hacer en La Plata,comedia en vivo hoy,Phrase
+Search-2Busqueda controlada - Tres Empanadas,QH · Qué hacer en La Plata,[que hacer en la plata hoy],Exact
+Search-2Busqueda controlada - Tres Empanadas,QH · Qué hacer en La Plata,[salidas en la plata],Exact
+Search-2Busqueda controlada - Tres Empanadas,JU · Jueves,stand up jueves la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,JU · Jueves,que hacer un jueves en la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,JU · Jueves,el rotativo platense,Phrase
+Search-2Busqueda controlada - Tres Empanadas,JU · Jueves,stand up jueves,Phrase
+Search-2Busqueda controlada - Tres Empanadas,JU · Jueves,[el rotativo platense],Exact
+Search-2Busqueda controlada - Tres Empanadas,VI · Viernes,stand up viernes la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,VI · Viernes,que hacer un viernes en la plata,Phrase
+Search-2Busqueda controlada - Tres Empanadas,VI · Viernes,sociedad platense de stand up,Phrase
+Search-2Busqueda controlada - Tres Empanadas,VI · Viernes,stand up viernes,Phrase
+Search-2Busqueda controlada - Tres Empanadas,VI · Viernes,[sociedad platense de stand up],Exact
+Search-2Busqueda controlada - Tres Empanadas,MARCA · Tres Empanadas,jueves,Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,MARCA · Tres Empanadas,viernes,Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,jueves,Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,SU · Stand Up La Plata,viernes,Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,QH · Qué hacer en La Plata,jueves,Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,QH · Qué hacer en La Plata,viernes,Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,buenos aires,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,caba,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,capital federal,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,palermo,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,calle corrientes,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,plaza serrano,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,paseo la plaza,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,santiago,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,cordoba,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,rosario,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,mar del plata,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,curso,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,cursos,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,taller,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,talleres,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,clases,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,online,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,netflix,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,youtube,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,cine,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,cines,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,pelicula,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,peliculas,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,coliseo podesta,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,teatro opera,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,teatro metro,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,teatro estudio,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,dardo rocha,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,islas malvinas,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,meridiano v,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,cinema rocha,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,cine paradiso,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,cinema san martin,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,taburete,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,cine victoria,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,estacion provincial,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,doble t,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,empleo,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,trabajo,Campaign Negative Broad
+Search-2Busqueda controlada - Tres Empanadas,,curriculum,Campaign Negative Broad
