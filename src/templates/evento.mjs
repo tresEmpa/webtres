@@ -476,6 +476,7 @@ function enviarReserva(e) {
   if (wspUltima) {
     wspUltima.addEventListener('click', function () {
       window.TEP_CONGELADO = true;
+      try { if (typeof gtag === 'function') gtag('event', 'conversion', { 'send_to': 'AW-11304999909/ZKLPCKvg_-wcEOW30o4q' }); } catch (_) {}
       TEP.track('Lead',        { content_name: show, content_category: 'reserva_ultima_hora' },
                 'generate_lead', { content_name: show, content_category: 'reserva_ultima_hora' });
     });
