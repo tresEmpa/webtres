@@ -376,7 +376,7 @@ function enviarReserva(e) {
 
   try {
     if (typeof gtag === 'function') {
-      gtag('event', 'conversion', { 'send_to': 'AW-11304999909/reserva_whatsapp' });
+      gtag('event', 'conversion', { 'send_to': 'AW-11304999909/ZKLPCKvg_-wcEOW30o4q' });
     }
   } catch (_) {}
   // Mismo evento estándar Lead que los otros caminos de reserva; lo que los
