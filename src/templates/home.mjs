@@ -179,7 +179,7 @@ export function renderHome(year) {
     <article class="show-card show-card--jueves">
       <span class="show-card__day">Jueves 21:30</span>
       <h3>El Rotativo Platense</h3>
-      <p class="show-card__sub">Cada semana con distintos comediantes invitados</p>
+      <p class="show-card__sub">Siempre con distintos comediantes invitados</p>
 
       ${semaforo('Horarios del jueves')}
 
