@@ -166,25 +166,68 @@ ${body}
 }
 
 const REDIRECTS = `# Redirects 301 heredados del .htaccess (URLs viejas de WordPress)
-# Cloudflare Pages los aplica automáticamente. Path-only.
+# Cloudflare Pages los aplica automaticamente. Path-only.
+# IMPORTANTE: Cloudflare NO normaliza la barra final, y todas las URLs viejas de
+# WordPress la llevaban. Por eso cada regla va duplicada: sin barra y con barra.
 
+# --- Cursos ---
+/curso-de-standup                            /cursos/   301
+/curso-de-standup/                           /cursos/   301
 /curso-de-standup-clases-y-talleres-2        /cursos/   301
+/curso-de-standup-clases-y-talleres-2/       /cursos/   301
 /curso-de-standup-clases-y-talleres          /cursos/   301
+/curso-de-standup-clases-y-talleres/         /cursos/   301
 /escuela-de-standup                          /cursos/   301
+/escuela-de-standup/                         /cursos/   301
+/category/curso-standup-online               /cursos/   301
+/category/curso-standup-online/              /cursos/   301
+/2024/06/30/introduccion-al-stand-up-comedy  /cursos/   301
+/2024/06/30/introduccion-al-stand-up-comedy/ /cursos/   301
+
+# --- Shows y reservas ---
 /show-standup-jueves                         /reservas/jueves/   301
-/jueves-de-stand-up-con-el-rotativo-platense /reservas/jueves/   301
-/sociedad-platense-de-stand-up-show-entradas /reservas/viernes/  301
-/shows-jueves-y-o-viernes                     /reservas/  301
+/show-standup-jueves/                        /reservas/jueves/   301
+/jueves-de-stand-up-con-el-rotativo-platense  /reservas/jueves/  301
+/jueves-de-stand-up-con-el-rotativo-platense/ /reservas/jueves/  301
+/sociedad-platense-de-stand-up-show-entradas  /reservas/viernes/ 301
+/sociedad-platense-de-stand-up-show-entradas/ /reservas/viernes/ 301
+/shows-jueves-y-o-viernes                    /reservas/  301
+/shows-jueves-y-o-viernes/                   /reservas/  301
+/shows-jueves-y-o-viernes-la-plata           /reservas/  301
+/shows-jueves-y-o-viernes-la-plata/          /reservas/  301
+/compra-de-entradas-para-show-stand-up-tres-empanadas-la_plata   /reservas/  301
+/compra-de-entradas-para-show-stand-up-tres-empanadas-la_plata/  /reservas/  301
 /categoria-producto/entradas                 /reservas/  301
+/categoria-producto/entradas/                /reservas/  301
 /categoria-standup/entradas                  /reservas/  301
+/categoria-standup/entradas/                 /reservas/  301
 /etiqueta-standup/entradas-shows             /reservas/  301
+/etiqueta-standup/entradas-shows/            /reservas/  301
+/producto/*                                  /reservas/  301
+
+# --- Carta ---
 /categoria-standup/cervezas-y-empanadas      /carta/     301
-/comedia/pinta-de-cerveza-artesanal-copia    /carta/     301
+/categoria-standup/cervezas-y-empanadas/     /carta/     301
+/comedia/*                                   /carta/     301
+/carta/carta-claude.html                     /carta/     301
+
+# --- Home ---
 /libros-de-stand-up-en-espanol               /   301
-/contacto-club-de-comedia-tres-empanadas-la-plata  /   301
+/libros-de-stand-up-en-espanol/              /   301
+/contacto-club-de-comedia-tres-empanadas-la-plata   /   301
+/contacto-club-de-comedia-tres-empanadas-la-plata/  /   301
+/standup-en-la-plata-club-de-comedia-tres-empanadas-shows-y-cursos   /   301
+/standup-en-la-plata-club-de-comedia-tres-empanadas-shows-y-cursos/  /   301
 /nueva        /   301
+/nueva/       /   301
 /sample-page  /   301
-/carta/carta-claude.html   /carta/   301
+/sample-page/ /   301
+/home         /   301
+/home/        /   301
+/ini          /   301
+/feed         /   301
+/feed/        /   301
+/author/*     /   301
 `;
 
 const HEADERS = `# Cabeceras de seguridad (equivalente a los Header set del .htaccess)
