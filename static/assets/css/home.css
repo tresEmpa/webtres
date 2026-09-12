@@ -610,23 +610,60 @@
    AGREGADOS: cabecera mobile + chapa Google + globo WhatsApp
    ══════════════════════════════════════════════════════════════════ */
 
-/* --- Cabecera visual (solo mobile/tablet; en desktop manda apertura__foto) --- */
-.apertura__cabecera {
-  margin: 0 calc(-1 * var(--space-md)) var(--space-xl);
-  border-radius: 0;
-  overflow: hidden;
+/* --- Hero full-bleed con claim encima (solo mobile; desktop usa el layout de siempre) --- */
+.apertura__hero {
+  position: relative;
+  margin: 0 calc(-1 * var(--space-md)) var(--space-lg);
   line-height: 0;
+  overflow: hidden;
 }
-.apertura__cabecera img {
+.apertura__hero img {
   width: 100%;
-  height: clamp(160px, 42vw, 240px);
+  height: clamp(200px, 56vw, 320px);
   object-fit: cover;
-  object-position: center 40%;
+  object-position: center 42%;
   display: block;
 }
+.apertura__hero-overlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 3rem var(--space-md) 1rem;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.72) 100%);
+  text-align: left;
+  line-height: 1.1;
+}
+.apertura__hero-overlay strong {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 8vw, 2.75rem);
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+}
+.apertura__hero-overlay span {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  color: #fff;
+  opacity: 0.95;
+}
 @media (min-width: 968px) {
-  /* En desktop la cabecera ancha estorba: vuelve la foto lateral rotada */
-  .apertura__cabecera { display: none; }
+  /* En desktop mando el diseño original: hero fuera, claim de texto adentro */
+  .apertura__hero { display: none; }
+}
+@media (max-width: 967px) {
+  /* En mobile el H1 de texto se oculta (el hero ya muestra el claim), pero
+     queda en el DOM para SEO/lectores. */
+  .apertura__claim {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0);
+    white-space: nowrap; border: 0;
+  }
 }
 
 /* --- Chapa de Google (copiada de reservas.css, prueba social con estrellas) --- */
