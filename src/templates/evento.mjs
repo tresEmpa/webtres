@@ -116,6 +116,80 @@ function metaDescripcion(ev, fechaH) {
   return `${texto.slice(0, 155).replace(/[\s,;]+\S*$/, '')}…`;
 }
 
+/**
+ * Globo de WhatsApp "humano" que cuelga del botón flotante en la página de una
+ * función. Aparece a los pocos segundos, con la carita del local y un texto que
+ * nombra el show. Si lo cierran, no vuelve en toda la sesión.
+ *
+ * Coherencia con el resto de la página (regla de Tres):
+ *  · Va marcado data-tep-estado="NORMAL": el mismo CSS que gobierna el formulario
+ *    lo esconde solo en ULTIMA_HORA, CERRADO y SIN_FUNCION. No compite con el
+ *    "¿Estás sobre la hora?" ni contradice el "ya cerramos".
+ *  · Sólo se genera para funciones de hoy o futuras (las pasadas ni lo incluyen).
+ *  · El texto dice "Hoy" si la función es hoy, "Este <día>" si es más adelante.
+ */
+function globoWsp(ev, fechaH, wa, now) {
+  const hoy = hoyISO(now);
+  const esHoy = ev.fecha === hoy;
+  const cuando = esHoy ? 'Hoy' : `Este ${ev.dia_semana}`;
+  const texto = `${cuando} ${ev.nombre_show} — ¿te reservo? 👋`;
+  const msgWa = `Hola! Quiero reservar para ${ev.nombre_show} (${fechaH}).`;
+  const href = `https://wa.me/${wa}?text=${encodeURIComponent(msgWa)}`;
+
+  return `
+  <div class="tep-globo" data-tep-estado="NORMAL" id="tep-globo" hidden>
+    <button class="tep-globo__cerrar" id="tep-globo-cerrar" aria-label="Cerrar" type="button">×</button>
+    <a class="tep-globo__link" href="${esc(href)}" target="_blank" rel="noopener" id="tep-globo-link">
+      <img class="tep-globo__cara" src="/assets/img/cara-checho.webp" alt="" width="44" height="44" loading="lazy">
+      <span class="tep-globo__texto">${esc(texto)}</span>
+    </a>
+  </div>
+  <script>
+  (function () {
+    var globo = document.getElementById('tep-globo');
+    if (!globo) return;
+
+    // Si ya lo cerró en esta sesión, no lo mostramos más.
+    try { if (sessionStorage.getItem('tep:globo-cerrado')) return; } catch (e) {}
+
+    // Aparece recién a los 5s, y sólo si en ese momento el estado sigue siendo
+    // NORMAL (si dieron las 20:00 mientras leía, el CSS ya lo ocultó y no
+    // tiene sentido animarlo).
+    var timer = setTimeout(function () {
+      if (window.TEP_ESTADO && window.TEP_ESTADO !== 'NORMAL') return;
+      globo.hidden = false;
+      // Fuerza el reflow antes de la clase, para que la transición corra.
+      void globo.offsetWidth;
+      globo.classList.add('tep-globo--visible');
+    }, 5000);
+
+    function cerrar() {
+      clearTimeout(timer);
+      globo.classList.remove('tep-globo--visible');
+      globo.hidden = true;
+      try { sessionStorage.setItem('tep:globo-cerrado', '1'); } catch (e) {}
+    }
+
+    var btnCerrar = document.getElementById('tep-globo-cerrar');
+    if (btnCerrar) btnCerrar.addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation(); cerrar();
+    });
+
+    // Click en el globo: es un empujón a reservar, así que dispara Lead
+    // (categoría propia), no el Contact del botón pelado. Sin preventDefault:
+    // el link abre WhatsApp en pestaña nueva y al evento le sobra tiempo.
+    var link = document.getElementById('tep-globo-link');
+    if (link) link.addEventListener('click', function () {
+      var show = ${JSON.stringify(ev.nombre_show)};
+      if (window.TEP) TEP.track('Lead',        { content_name: show, content_category: 'wsp_globo' },
+                                'generate_lead', { content_name: show, content_category: 'wsp_globo' });
+      // Cerrado tras el click: ya cumplió, no lo volvemos a mostrar.
+      try { sessionStorage.setItem('tep:globo-cerrado', '1'); } catch (e) {}
+    });
+  })();
+  </script>`;
+}
+
 export function renderEvento(ev, lugar, year, now = new Date()) {
   const hoy = hoyISO(now);
   const esPasado = ev.fecha < hoy;
@@ -329,6 +403,8 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
     <h3>⚠ No pudimos registrar tu reserva</h3>
     <p>Mandanos el WhatsApp igual y te confirmamos por ahí.</p>
   </div>
+
+  ${globoWsp(ev, fechaH, wa, now)}
 
   </div>`;
 
