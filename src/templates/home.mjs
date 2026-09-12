@@ -48,10 +48,26 @@ export function renderHome(year) {
 <section class="apertura">
   <div class="apertura__inner">
 
+    <!-- Cabecera visual (se ve en mobile; en desktop la reemplaza la foto lateral) -->
+    <figure class="apertura__cabecera" aria-hidden="true">
+      <img src="/assets/img/publico.jpg" alt=""
+           width="1000" height="750" fetchpriority="high">
+    </figure>
+
     <h1 class="apertura__claim">
       Vení a reír.
-      <em>Elegínos para pasarla bien.</em>
+      <em>El stand up de la ciudad.</em>
     </h1>
+
+    <!-- Chapa de Google: prueba social con estrellas y cantidad de opiniones -->
+    <a class="gmaps-chapa" href="https://share.google/dyTTJVXR25JTlU7kX"
+       target="_blank" rel="noopener" aria-label="4,9 estrellas con 140 opiniones en Google Maps">
+      <span class="gmaps-chapa__nota">4,9</span>
+      <span class="gmaps-chapa__lado">
+        <span class="gmaps-estrellas" aria-hidden="true">${'★'.repeat(5)}</span>
+        <span class="gmaps-chapa__txt">140 opiniones en Google Maps</span>
+      </span>
+    </a>
 
     <p class="apertura__intro">Somos esto:</p>
 
@@ -292,6 +308,42 @@ export function renderHome(year) {
     </a>
   </div>
 </section>
+
+<!-- ============= GLOBO WHATSAPP ============= -->
+<div class="tep-globo" id="tep-globo-home" hidden>
+  <button class="tep-globo__cerrar" id="tep-globo-home-cerrar" aria-label="Cerrar" type="button">×</button>
+  <a class="tep-globo__link" href="https://wa.me/5492215247488?text=${encodeURIComponent('Hola! Quiero reservar para una función.')}"
+     target="_blank" rel="noopener" id="tep-globo-home-link">
+    <img class="tep-globo__cara" src="/assets/img/cara-checho.webp" alt="" width="44" height="44" loading="lazy">
+    <span class="tep-globo__texto">¿Venís este finde? Reservá por acá 👋</span>
+  </a>
+</div>
+<script>
+(function () {
+  var globo = document.getElementById('tep-globo-home');
+  if (!globo) return;
+  try { if (sessionStorage.getItem('tep:globo-home-cerrado')) return; } catch (e) {}
+  var timer = setTimeout(function () {
+    globo.hidden = false;
+    void globo.offsetWidth;
+    globo.classList.add('tep-globo--visible');
+  }, 5000);
+  function cerrar() {
+    clearTimeout(timer);
+    globo.classList.remove('tep-globo--visible');
+    globo.hidden = true;
+    try { sessionStorage.setItem('tep:globo-home-cerrado', '1'); } catch (e) {}
+  }
+  var btn = document.getElementById('tep-globo-home-cerrar');
+  if (btn) btn.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); cerrar(); });
+  var link = document.getElementById('tep-globo-home-link');
+  if (link) link.addEventListener('click', function () {
+    if (window.TEP) TEP.track('Lead',        { content_category: 'wsp_globo_home' },
+                              'generate_lead', { content_category: 'wsp_globo_home' });
+    try { sessionStorage.setItem('tep:globo-home-cerrado', '1'); } catch (e) {}
+  });
+})();
+</script>
 `;
 
   return page({
