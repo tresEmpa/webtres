@@ -327,13 +327,29 @@ export function renderHome(year) {
   var globo = document.getElementById('tep-globo-home');
   if (!globo) return;
   try { if (sessionStorage.getItem('tep:globo-home-cerrado')) return; } catch (e) {}
-  var timer = setTimeout(function () {
+
+  var mostrado = false;
+  function mostrar() {
+    if (mostrado) return;
+    mostrado = true;
+    window.removeEventListener('scroll', alScrollear);
     globo.hidden = false;
     void globo.offsetWidth;
     globo.classList.add('tep-globo--visible');
-  }, 5000);
+  }
+
+  // Aparece cuando el visitante ya recorrió ~60% de la página: ya vio los shows,
+  // los horarios y la info, y el empujón a reservar cae en el momento justo.
+  function alScrollear() {
+    var alto = document.documentElement.scrollHeight - window.innerHeight;
+    if (alto <= 0) return;
+    var avance = window.scrollY / alto;
+    if (avance >= 0.6) mostrar();
+  }
+  window.addEventListener('scroll', alScrollear, { passive: true });
+
   function cerrar() {
-    clearTimeout(timer);
+    window.removeEventListener('scroll', alScrollear);
     globo.classList.remove('tep-globo--visible');
     globo.hidden = true;
     try { sessionStorage.setItem('tep:globo-home-cerrado', '1'); } catch (e) {}
