@@ -48,10 +48,14 @@ export function renderHome(year) {
 <section class="apertura">
   <div class="apertura__inner">
 
-    <!-- Cabecera visual (se ve en mobile; en desktop la reemplaza la foto lateral) -->
-    <figure class="apertura__cabecera" aria-hidden="true">
+    <!-- Cabecera visual full-bleed con el claim encima (mobile; en desktop se oculta) -->
+    <figure class="apertura__hero">
       <img src="/assets/img/publico.jpg" alt=""
            width="1000" height="750" fetchpriority="high">
+      <figcaption class="apertura__hero-overlay">
+        <strong>Vení a reír.</strong>
+        <span>El stand up de la ciudad.</span>
+      </figcaption>
     </figure>
 
     <h1 class="apertura__claim">
@@ -315,7 +319,7 @@ export function renderHome(year) {
   <a class="tep-globo__link" href="https://wa.me/5492215247488?text=${encodeURIComponent('Hola! Quiero reservar para una función.')}"
      target="_blank" rel="noopener" id="tep-globo-home-link">
     <img class="tep-globo__cara" src="/assets/img/cara-checho.webp" alt="" width="44" height="44" loading="lazy">
-    <span class="tep-globo__texto">¿Venís este finde? Reservá por acá 👋</span>
+    <span class="tep-globo__texto">Hola! Me encantaría que vengas. Reservá por acá 👋</span>
   </a>
 </div>
 <script>
