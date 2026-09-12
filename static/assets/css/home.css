@@ -617,6 +617,13 @@
   line-height: 0;
   overflow: hidden;
 }
+/* En mobile el hero sube pegado al header: se come el padding-top de .apertura */
+@media (max-width: 967px) {
+  .apertura { padding-top: 0; }
+  .apertura__hero {
+    margin-top: calc(-1 * var(--space-md));
+  }
+}
 .apertura__hero img {
   width: 100%;
   height: clamp(200px, 56vw, 320px);
