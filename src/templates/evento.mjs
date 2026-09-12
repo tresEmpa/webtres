@@ -118,30 +118,59 @@ function metaDescripcion(ev, fechaH) {
 
 /**
  * Globo de WhatsApp "humano" que cuelga del botón flotante en la página de una
- * función. Aparece a los pocos segundos, con la carita del local y un texto que
- * nombra el show. Si lo cierran, no vuelve en toda la sesión.
+ * función. Aparece a los pocos segundos, con la carita del local. Si lo cierran,
+ * no vuelve en toda la sesión.
  *
- * Coherencia con el resto de la página (regla de Tres):
- *  · Va marcado data-tep-estado="NORMAL": el mismo CSS que gobierna el formulario
- *    lo esconde solo en ULTIMA_HORA, CERRADO y SIN_FUNCION. No compite con el
- *    "¿Estás sobre la hora?" ni contradice el "ya cerramos".
- *  · Sólo se genera para funciones de hoy o futuras (las pasadas ni lo incluyen).
- *  · El texto dice "Hoy" si la función es hoy, "Este <día>" si es más adelante.
+ * Coherencia con el resto de la página (regla de Tres): el globo acompaña al
+ * formulario. Dos mensajes, según en qué momento entra el visitante:
+ *
+ *  · NORMAL / SIN_FUNCION (cualquier día antes del show, hasta las 20 del día):
+ *    empuja a reservar. "Hoy / Este viernes / Viernes 25 de septiembre <show>
+ *    — ¿te reservo?". Link con el mensaje de reserva.
+ *
+ *  · ULTIMA_HORA (día del show, 20–22h): ya no se reserva anticipado; el que
+ *    duda quiere saber si todavía llega. "¿Llegás para hoy? Escribime". Link con
+ *    el mismo mensaje que el bloque grande "¿Estás sobre la hora?", para que el
+ *    hilo sea coherente. No repite el texto del bloque, lo complementa.
+ *
+ *  · CERRADO (después de 22h): NO aparece. Diría "escribime" cuando la página ya
+ *    dice "por hoy cerramos" — contradicción. Se calla.
+ *
+ * Las pasadas ni lo incluyen (el globo se genera dentro del bloque con formulario).
  */
 function globoWsp(ev, fechaH, wa, now) {
   const hoy = hoyISO(now);
   const esHoy = ev.fecha === hoy;
-  const cuando = esHoy ? 'Hoy' : `Este ${ev.dia_semana}`;
-  const texto = `${cuando} ${ev.nombre_show} — ¿te reservo? 👋`;
-  const msgWa = `Hola! Quiero reservar para ${ev.nombre_show} (${fechaH}).`;
-  const href = `https://wa.me/${wa}?text=${encodeURIComponent(msgWa)}`;
+  // Días entre hoy y la función (sobre fechas ISO, sin líos de zona horaria).
+  const diasFalta = Math.round(
+    (Date.parse(ev.fecha + 'T00:00:00Z') - Date.parse(hoy + 'T00:00:00Z')) / 86400000
+  );
+  // "Hoy" si es hoy; "Este <día>" si cae dentro de esta semana; con fecha si
+  // falta más (así "Este viernes" nunca miente en un link a 3 semanas vista).
+  let cuando;
+  if (esHoy) cuando = 'Hoy';
+  else if (diasFalta <= 7) cuando = `Este ${ev.dia_semana}`;
+  else cuando = ucfirst(fechaHumana(ev.fecha)); // ej. "Viernes 18 de septiembre"
+
+  // Texto y mensaje de reserva anticipada (NORMAL / SIN_FUNCION).
+  const textoReserva = `${cuando} ${ev.nombre_show} — ¿te reservo? 👋`;
+  const msgReserva = `Hola! Quiero reservar para ${ev.nombre_show} (${fechaH}).`;
+  // Texto y mensaje de última hora (ULTIMA_HORA). Mismo mensaje que el bloque
+  // "¿Estás sobre la hora?" para que el chat que le abre sea el mismo hilo.
+  const textoUltima = `¿Llegás para hoy? Escribime 👋`;
+  const msgUltima = `Hola! Estoy sobre la hora para ${ev.nombre_show} de hoy. ¿Quedan lugares?`;
+
+  const hrefReserva = `https://wa.me/${wa}?text=${encodeURIComponent(msgReserva)}`;
+  const hrefUltima = `https://wa.me/${wa}?text=${encodeURIComponent(msgUltima)}`;
 
   return `
-  <div class="tep-globo" data-tep-estado="NORMAL" id="tep-globo" hidden>
+  <div class="tep-globo" data-tep-estado="NORMAL SIN_FUNCION ULTIMA_HORA" id="tep-globo" hidden
+       data-href-reserva="${esc(hrefReserva)}" data-texto-reserva="${esc(textoReserva)}"
+       data-href-ultima="${esc(hrefUltima)}" data-texto-ultima="${esc(textoUltima)}">
     <button class="tep-globo__cerrar" id="tep-globo-cerrar" aria-label="Cerrar" type="button">×</button>
-    <a class="tep-globo__link" href="${esc(href)}" target="_blank" rel="noopener" id="tep-globo-link">
+    <a class="tep-globo__link" href="${esc(hrefReserva)}" target="_blank" rel="noopener" id="tep-globo-link">
       <img class="tep-globo__cara" src="/assets/img/cara-checho.webp" alt="" width="44" height="44" loading="lazy">
-      <span class="tep-globo__texto">${esc(texto)}</span>
+      <span class="tep-globo__texto" id="tep-globo-texto">${esc(textoReserva)}</span>
     </a>
   </div>
   <script>
@@ -152,16 +181,43 @@ function globoWsp(ev, fechaH, wa, now) {
     // Si ya lo cerró en esta sesión, no lo mostramos más.
     try { if (sessionStorage.getItem('tep:globo-cerrado')) return; } catch (e) {}
 
-    // Aparece recién a los 5s, y sólo si en ese momento el estado sigue siendo
-    // NORMAL (si dieron las 20:00 mientras leía, el CSS ya lo ocultó y no
-    // tiene sentido animarlo).
+    var link  = document.getElementById('tep-globo-link');
+    var texto = document.getElementById('tep-globo-texto');
+    var modo = null; // 'reserva' | 'ultima', para saber qué medir en el click.
+
+    // Ajusta texto y link del globo al estado actual. En CERRADO no hay modo:
+    // el CSS ya lo escondió, no tocamos nada.
+    function ajustar() {
+      var e = window.TEP_ESTADO;
+      if (e === 'ULTIMA_HORA') {
+        modo = 'ultima';
+        texto.textContent = globo.getAttribute('data-texto-ultima');
+        link.href = globo.getAttribute('data-href-ultima');
+      } else if (e === 'CERRADO') {
+        modo = null;
+      } else {
+        modo = 'reserva';
+        texto.textContent = globo.getAttribute('data-texto-reserva');
+        link.href = globo.getAttribute('data-href-reserva');
+      }
+    }
+
+    // Aparece a los 5s, salvo que el reloj ya esté en CERRADO (ahí no hay globo).
     var timer = setTimeout(function () {
-      if (window.TEP_ESTADO && window.TEP_ESTADO !== 'NORMAL') return;
+      if (window.TEP_ESTADO === 'CERRADO') return;
+      ajustar();
       globo.hidden = false;
-      // Fuerza el reflow antes de la clase, para que la transición corra.
-      void globo.offsetWidth;
+      void globo.offsetWidth; // fuerza el reflow para que corra la transición
       globo.classList.add('tep-globo--visible');
     }, 5000);
+
+    // Si el reloj cruza las 20:00 con la pestaña abierta, el texto se actualiza
+    // solo (mismo intervalo con el que TEP recalcula el estado).
+    setInterval(function () {
+      if (globo.hidden) return;
+      if (window.TEP_ESTADO === 'CERRADO') { cerrar(); return; }
+      ajustar();
+    }, 30000);
 
     function cerrar() {
       clearTimeout(timer);
@@ -175,15 +231,14 @@ function globoWsp(ev, fechaH, wa, now) {
       e.preventDefault(); e.stopPropagation(); cerrar();
     });
 
-    // Click en el globo: es un empujón a reservar, así que dispara Lead
-    // (categoría propia), no el Contact del botón pelado. Sin preventDefault:
-    // el link abre WhatsApp en pestaña nueva y al evento le sobra tiempo.
-    var link = document.getElementById('tep-globo-link');
+    // Click: dispara Lead con categoría según el modo, para medir reserva
+    // anticipada y última hora por separado. Sin preventDefault: el link abre
+    // WhatsApp en pestaña nueva y al evento le sobra tiempo.
     if (link) link.addEventListener('click', function () {
       var show = ${JSON.stringify(ev.nombre_show)};
-      if (window.TEP) TEP.track('Lead',        { content_name: show, content_category: 'wsp_globo' },
-                                'generate_lead', { content_name: show, content_category: 'wsp_globo' });
-      // Cerrado tras el click: ya cumplió, no lo volvemos a mostrar.
+      var cat = modo === 'ultima' ? 'wsp_globo_ultima_hora' : 'wsp_globo';
+      if (window.TEP) TEP.track('Lead',        { content_name: show, content_category: cat },
+                                'generate_lead', { content_name: show, content_category: cat });
       try { sessionStorage.setItem('tep:globo-cerrado', '1'); } catch (e) {}
     });
   })();
