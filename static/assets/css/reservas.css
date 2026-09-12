@@ -1128,3 +1128,79 @@
     padding-right: var(--space-md);
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   Globo de WhatsApp "humano" en la página de función (evento.mjs).
+   Cuelga sobre el botón flotante (.whatsapp-float, 56px, bottom/right
+   24px — 16px en mobile). El globo se apoya justo encima.
+   ══════════════════════════════════════════════════════════════════ */
+.tep-globo {
+  position: fixed;
+  right: 24px;
+  bottom: 92px;               /* 24 (botón) + 56 (alto) + 12 de aire */
+  z-index: 98;                /* un peldaño debajo del botón (99) */
+  max-width: min(320px, calc(100vw - 48px));
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  transform-origin: bottom right;
+  transition: opacity .28s ease, transform .28s ease;
+  pointer-events: none;
+}
+.tep-globo--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.tep-globo__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  color: var(--rojo-tinto, #6E1F18);
+  text-decoration: none;
+  padding: 10px 34px 10px 10px;   /* derecha holgada por la X */
+  border-radius: 16px;
+  border-bottom-right-radius: 4px; /* "pico" apuntando al botón */
+  box-shadow: 0 6px 22px rgba(0,0,0,0.18);
+  font-family: var(--font-base, sans-serif);
+  font-size: 0.92rem;
+  line-height: 1.3;
+}
+.tep-globo__cara {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--crema, #F7EFE0);
+}
+.tep-globo__texto { font-weight: 600; }
+.tep-globo__texto strong { color: inherit; }
+.tep-globo__cerrar {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: #999;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.tep-globo__cerrar:hover { color: #555; }
+
+@media (max-width: 768px) {
+  .tep-globo {
+    right: 16px;
+    bottom: 84px;             /* 16 + 56 + 12 */
+  }
+}
+
+/* Respeta a quien pidió menos movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  .tep-globo { transition: opacity .2s ease; transform: none; }
+  .tep-globo--visible { transform: none; }
+}
