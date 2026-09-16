@@ -1,7 +1,7 @@
 /** Página individual de evento — port de reservas/evento.php */
 import { page, esc } from './layout.mjs';
 import {
-  fechaHumana, ucfirst, eventoFechasISO, eventoSchemaEstado, hoyISO,
+  fechaHumana, ucfirst, eventoFechasISO, eventoSchemaEstado, hoyISO, reservasAbren,
 } from '../lib/eventos.mjs';
 
 const EXTRA = (lugar) => `
@@ -109,6 +109,10 @@ function metaDescripcion(ev, fechaH) {
   const estado = ev.estado || 'activo';
   if (estado === 'agotado') partes.push('Función agotada.');
   else if (estado === 'cancelado') partes.push('Función cancelada.');
+  // Una fecha programada todavía no toma reservas. Prometer "reservá gratis"
+  // en el snippet de Google y después mostrar "las reservas se abren la semana
+  // del show" es la misma contradicción que arreglamos en el schema.
+  else if (estado === 'programado') partes.push('Fecha confirmada. Reservas desde la semana del show.');
   else partes.push('Reserva gratis, show a la gorra, en La Plata.');
 
   const texto = partes.join(' ');
@@ -260,10 +264,17 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
 
   const wa = esc(lugar.whatsapp || '542215247488');
 
+  // Cuándo se abren las reservas de ESTA función (lunes de su semana). Para
+  // una función ya activa las reservas están abiertas, así que la fecha nunca
+  // puede quedar en el futuro.
+  const abren = reservasAbren(ev.fecha) || hoy;
+  const validFrom = estado === 'programado' ? abren : (abren < hoy ? abren : hoy);
+
   const eventSchema = {
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: ev.nombre_show,
+    url: `https://tresempanadas.com.ar/reservas/${ev.id}/`,
     description: ev.descripcion || '',
     startDate: isoStart,
     endDate: isoEnd,
@@ -293,7 +304,7 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
       priceCurrency: 'ARS',
       availability: schemaAvail,
       url: `https://tresempanadas.com.ar/reservas/${ev.id}/`,
-      validFrom: `${hoy}T00:00:00-03:00`,
+      validFrom: `${validFrom}T00:00:00-03:00`,
     },
     typicalAgeRange: '18+',
     image: ev.flyer
