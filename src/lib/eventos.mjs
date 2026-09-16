@@ -143,13 +143,40 @@ export function eventoFechasISO(ev) {
   return [`${fmt(base)}-03:00`, `${fmt(end)}-03:00`];
 }
 
-/** Mapea estado interno a [eventStatus, availability] de Schema.org. */
+/**
+ * Fecha en que se abren las reservas de una función: el lunes de la semana
+ * del show.
+ *
+ * Es lo que anuncia la página de una función programada ("las reservas se
+ * abren la semana del show"), y es lo que corresponde declarar en
+ * `offers.validFrom`, que en Schema.org significa "cuándo salen a la venta"
+ * — no "cuándo se generó la página".
+ */
+export function reservasAbren(fechaIso) {
+  const d = parseFecha(fechaIso);
+  if (!d) return null;
+  const dow = d.getUTCDay();               // 0 = domingo
+  const restar = dow === 0 ? 6 : dow - 1;  // retrocede hasta el lunes
+  d.setUTCDate(d.getUTCDate() - restar);
+  return d.toISOString().slice(0, 10);
+}
+
+/**
+ * Mapea estado interno a [eventStatus, availability] de Schema.org.
+ *
+ * 'programado' es una fecha confirmada cuyas reservas todavía no abrieron.
+ * Antes caía en el default y declaraba InStock, contradiciendo a la propia
+ * página, que dice que las reservas se abren la semana del show. PreOrder es
+ * exactamente ese estado: el evento existe, las entradas todavía no.
+ */
 export function eventoSchemaEstado(estado) {
   switch (estado) {
     case 'cancelado':
       return ['https://schema.org/EventCancelled', 'https://schema.org/SoldOut'];
     case 'agotado':
       return ['https://schema.org/EventScheduled', 'https://schema.org/SoldOut'];
+    case 'programado':
+      return ['https://schema.org/EventScheduled', 'https://schema.org/PreOrder'];
     default:
       return ['https://schema.org/EventScheduled', 'https://schema.org/InStock'];
   }
