@@ -148,11 +148,20 @@ function sitemap(eventosUpcoming) {
     { loc: `${base}/cursos/`, freq: 'monthly', pri: '0.8' },
     { loc: `${base}/carta/`, freq: 'monthly', pri: '0.3' },
   ];
+  // changefreq 'daily' era mentira para una función a cinco semanas, y Google
+  // le da poca bola igual. Lo que sí usa es lastmod, y cada evento ya trae su
+  // fecha de actualización en el JSON.
   for (const ev of eventosUpcoming) {
-    urls.push({ loc: `${base}/reservas/${ev.id}/`, freq: 'daily', pri: '0.7' });
+    urls.push({
+      loc: `${base}/reservas/${ev.id}/`,
+      freq: 'weekly',
+      pri: '0.7',
+      lastmod: String(ev.actualizado || '').slice(0, 10) || null,
+    });
   }
   const body = urls.map((u) => `  <url>
-    <loc>${u.loc}</loc>
+    <loc>${u.loc}</loc>${u.lastmod ? `
+    <lastmod>${u.lastmod}</lastmod>` : ''}
     <changefreq>${u.freq}</changefreq>
     <priority>${u.pri}</priority>
   </url>`).join('\n\n');
