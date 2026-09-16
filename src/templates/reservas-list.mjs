@@ -27,14 +27,14 @@ const AVISO_CERRADO = `
   <p>Mirá las próximas funciones y reservá para la que te quede mejor.</p>
 </section>`;
 
-/** La prueba social, arriba de todo: 4,9 sobre 140 opiniones. */
+/** La prueba social, arriba de todo, sin una cantidad que quede desactualizada. */
 const CHAPA_GOOGLE = `
 <a class="gmaps-chapa" href="${GOOGLE.url}" target="_blank" rel="noopener"
-   aria-label="${GOOGLE.nota} estrellas sobre ${GOOGLE.opiniones} opiniones en Google Maps. Se abre en una pestaña nueva.">
+   aria-label="${GOOGLE.nota} estrellas en Google Maps. Se abre en una pestaña nueva.">
   <span class="gmaps-chapa__nota">${GOOGLE.nota}</span>
   <span class="gmaps-chapa__lado">
     <span class="gmaps-estrellas">${estrellaSVG(18).repeat(5)}</span>
-    <span class="gmaps-chapa__txt">${GOOGLE.opiniones} opiniones en Google Maps</span>
+    <span class="gmaps-chapa__txt">Opiniones en Google Maps</span>
   </span>
 </a>`;
 
@@ -175,7 +175,7 @@ const BLOQUE_RESENAS = RESENAS.length ? `
     </blockquote>`).join('')}
   </div>
   <a class="tep-resenas__link" href="${GOOGLE.url}" target="_blank" rel="noopener">
-    Ver las ${GOOGLE.opiniones} opiniones en Google &rarr;
+    Ver opiniones en Google &rarr;
   </a>
 </section>` : '';
 

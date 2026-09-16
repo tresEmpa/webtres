@@ -63,13 +63,13 @@ export function renderHome(year) {
       <em>El stand up de la ciudad.</em>
     </h1>
 
-    <!-- Chapa de Google: prueba social con estrellas y cantidad de opiniones -->
+    <!-- Chapa de Google: prueba social sin una cantidad que quede desactualizada -->
     <a class="gmaps-chapa" href="https://share.google/dyTTJVXR25JTlU7kX"
-       target="_blank" rel="noopener" aria-label="4,9 estrellas con 140 opiniones en Google Maps">
+       target="_blank" rel="noopener" aria-label="4,9 estrellas en Google Maps">
       <span class="gmaps-chapa__nota">4,9</span>
       <span class="gmaps-chapa__lado">
         <span class="gmaps-estrellas" aria-hidden="true">${'★'.repeat(5)}</span>
-        <span class="gmaps-chapa__txt">140 opiniones en Google Maps</span>
+        <span class="gmaps-chapa__txt">Opiniones en Google Maps</span>
       </span>
     </a>
 
