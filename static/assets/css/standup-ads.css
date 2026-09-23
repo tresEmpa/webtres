@@ -221,3 +221,49 @@
     flex-direction: column;
   }
 }
+
+/* ── Contenido de fondo ────────────────────────────────────────────────
+   Va al final de la landing: no le saca espacio a la conversión y le da a
+   la página el cuerpo que necesita para competir en orgánico. */
+
+.ads-fondo {
+  padding: clamp(4rem, 7vw, 6rem) 0;
+  background: var(--crema-papel);
+}
+
+.ads-fondo h2 {
+  margin-bottom: var(--space-lg);
+}
+
+.ads-fondo__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.ads-fondo article {
+  padding: var(--space-lg);
+  background: var(--crema);
+  border-top: 4px solid var(--dorado);
+}
+
+.ads-fondo h3 {
+  margin-bottom: var(--space-sm);
+}
+
+.ads-fondo p {
+  margin-bottom: var(--space-sm);
+}
+
+.ads-fondo p:last-child {
+  margin-bottom: 0;
+}
+
+.ads-fondo a {
+  color: var(--rojo);
+  text-decoration: underline;
+}
+
+.ads-fondo a:hover {
+  color: var(--rojo-oscuro);
+}
