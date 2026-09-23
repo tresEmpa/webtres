@@ -92,6 +92,99 @@ export function renderStandupLaPlata(year) {
     <a class="btn btn-primary" href="${WHATSAPP}" target="_blank" rel="noopener">Reservá tu lugar</a>
   </div>
 </section>
+
+<!-- ── CONTENIDO DE FONDO ────────────────────────────────────────────────
+     Va deliberadamente al final, después de los dos CTA. Arriba manda la
+     conversión del anuncio; acá abajo está el cuerpo que la página necesita
+     para existir en orgánico, más los enlaces internos que la sacan de
+     huérfana. La navegación de la cabecera sigue recortada (adsSafe). -->
+<section class="ads-fondo" id="como-es">
+  <div class="container">
+
+    <p class="ads-kicker">Antes de venir</p>
+    <h2>Cómo es una noche de stand up acá</h2>
+
+    <div class="ads-fondo__grid">
+
+      <article>
+        <h3>Los ciclos</h3>
+        <p>
+          Los <a href="/reservas/viernes/">viernes</a> toca <strong>Sociedad Platense de Stand Up</strong>,
+          con Checho Falco y Julián Dorati. Es el clásico de la casa.
+        </p>
+        <p>
+          Muchos <a href="/reservas/jueves/">jueves</a> va <strong>El Rotativo Platense</strong>: ahí el
+          line-up cambia cada semana, con comediantes de años de escenario y voces nuevas que rotan.
+        </p>
+        <p>
+          Las fechas confirmadas están siempre en la <a href="/reservas/">cartelera</a>.
+        </p>
+      </article>
+
+      <article>
+        <h3>Horarios</h3>
+        <p>
+          La sala abre <strong>21:00</strong> y el show arranca <strong>21:30</strong>.
+          Dura alrededor de 90 minutos.
+        </p>
+        <p>
+          Las reservas se sostienen hasta las <strong>21:45</strong>. Después de las
+          <strong>22:01</strong> no se entra más: la sala es chica y abrir la puerta con el show
+          empezado le arruina la función a todos.
+        </p>
+      </article>
+
+      <article>
+        <h3>Cuánto sale</h3>
+        <p>
+          <strong>La reserva es gratis y el show es a la gorra.</strong> Al final aportás lo que
+          puedas y lo que te haya parecido que valió. Efectivo, tarjeta, QR o transferencia.
+        </p>
+        <p>
+          Se puede ver el show sin consumir nada.
+        </p>
+      </article>
+
+      <article>
+        <h3>Para comer y tomar</h3>
+        <p>
+          Hay <strong>empanadas</strong>, cervezas artesanales tiradas, latas y opciones sin
+          alcohol. Está todo en <a href="/carta/">la carta</a>.
+        </p>
+        <p>
+          No tenemos menú sin TACC, pero podés traer tu propia comida.
+        </p>
+      </article>
+
+      <article>
+        <h3>Cómo llegar</h3>
+        <p>
+          <strong>Calle 43 N° 1349, esquina 22</strong>, en el casco de La Plata.
+          Es la fachada violeta con las cortinas amarillas: no tiene pérdida.
+        </p>
+        <p>
+          Somos un <strong>microteatro</strong>, no un resto ni un bar grande. Entran pocas mesas,
+          y por eso conviene reservar.
+        </p>
+      </article>
+
+      <article>
+        <h3>Algunas cosas más</h3>
+        <p>
+          El humor y el ambiente son <strong>para adultos</strong>.
+        </p>
+        <p>
+          Se puede venir solo, y pasa seguido: la sala es chica y el clima se arma rápido.
+        </p>
+        <p>
+          ¿Querés hacer stand up vos? Los jueves desde las 18:00 hay
+          <a href="/cursos/">taller libre</a>.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
 `;
 
   return page({

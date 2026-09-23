@@ -123,6 +123,7 @@ export function renderHome(year) {
         <strong>Calle 43 N° 1349</strong><br>
         Esquina 22 · La Plata
       </p>
+      <p><a href="/stand-up-la-plata/">Cómo es una noche de stand up en La Plata →</a></p>
     </div>
 
   </div>

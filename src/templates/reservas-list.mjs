@@ -128,6 +128,10 @@ const EXTRA = `
     Calle 43 N° 1349, esquina 22 — La Plata.
     Es la fachada violeta con las cortinas amarillas, no tiene pérdida.
   </p>
+  <p>
+    🎭 ¿Primera vez? Te contamos <a href="/stand-up-la-plata/">cómo es una noche de stand up
+    en La Plata</a>: horarios, cuánto sale y qué esperar.
+  </p>
 
   <div class="tep-galeria">
     <figure class="tep-galeria__item">
