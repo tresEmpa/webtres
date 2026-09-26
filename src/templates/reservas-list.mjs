@@ -143,7 +143,7 @@ const EXTRA = `
     <figure class="tep-galeria__item">
       <img src="/assets/img/lugar-fachada.webp"
            alt="Fachada violeta de Tres Empanadas de noche, en 43 y 22"
-           width="320" height="200" loading="lazy" decoding="async">
+           width="1400" height="876" loading="lazy" decoding="async">
       <figcaption>Cómo llegar</figcaption>
     </figure>
   </div>

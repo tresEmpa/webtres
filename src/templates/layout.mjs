@@ -122,11 +122,13 @@ function navLink(href, path, currentPath, label) {
 }
 
 function renderNav(currentPath, opts = {}) {
+  // adsSafe: landing informativa. Sin CTA de reserva — la página existe para
+  // dar información, no para convertir. Ver src/templates/standup-la-plata.mjs.
   if (opts.adsSafe) {
     return `
         <a href="/">Inicio</a>
-        <a href="#donde">Dónde</a>
-        <a href="https://wa.me/5492215247488?text=Hola%2C%20quiero%20reservar%20lugar%20para%20stand%20up" class="site-nav__cta" target="_blank" rel="noopener">Reservar</a>`;
+        <a href="#como-es">Cómo es</a>
+        <a href="#donde">Dónde</a>`;
   }
 
   return `
