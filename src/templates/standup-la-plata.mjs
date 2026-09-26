@@ -203,7 +203,7 @@ export function renderStandupLaPlata(year) {
       <article>
         <h3>A qué hora llegar</h3>
         <p>
-          La sala abre a las <strong>21:00</strong>. Convienevenir tempranito.
+          La sala abre a las <strong>21:00</strong>. Conviene venir tempranito.
         </p>
         ${semaforo('Horarios de llegada')}
         <p>
