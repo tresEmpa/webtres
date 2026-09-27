@@ -5,6 +5,15 @@
  *  no aparece la palabra "gratis" ni nada que Google pueda leer como venta de
  *  entradas (el clasificador venía marcando la campaña por la landing anterior).
  *  Si alguien quiere venir, tiene los datos de contacto en el pie.
+ *
+ *  OJO al redactar: el filtro automático de Google no lee negaciones. Escribir
+ *  "no se venden entradas" le deja igual la frase "venden entradas" en una
+ *  landing de anuncio. Por eso se dice "no hay ticketera ni cobro anticipado",
+ *  que significa lo mismo y no usa ninguna de las palabras marcadas.
+ *
+ *  Los únicos enlaces internos permitidos acá son /carta/ y /cursos/: no tienen
+ *  nada que ver con entradas y le devuelven algo de valor SEO a la página.
+ *  Nada de /reservas/ ni sus derivados.
  */
 import { page } from './layout.mjs';
 
@@ -24,7 +33,7 @@ function semaforo(aria) {
         <div class="semaforo__row semaforo__row--naranja">
           <span class="semaforo__dot" aria-hidden="true"></span>
           <span class="semaforo__hora">21:45</span>
-          <span class="semaforo__label">Vencen reservas</span>
+          <span class="semaforo__label">Último ingreso</span>
         </div>
         <div class="semaforo__row semaforo__row--rojo">
           <span class="semaforo__dot" aria-hidden="true"></span>
@@ -86,8 +95,8 @@ const SCHEMA = `<script type="application/ld+json">
   "mainEntity": [
     {"@type":"Question","name":"¿Dónde hay stand up en La Plata?","acceptedAnswer":{"@type":"Answer","text":"En Tres Empanadas Comedia, Calle 43 N° 1349 esquina 22, en el casco de La Plata. Es la fachada violeta con cortinas amarillas."}},
     {"@type":"Question","name":"¿Qué días hay función?","acceptedAnswer":{"@type":"Answer","text":"Todos los viernes con la Sociedad Platense de Stand Up y muchos jueves con El Rotativo Platense. Alguna vez, un martes."}},
-    {"@type":"Question","name":"¿A qué hora conviene llegar?","acceptedAnswer":{"@type":"Answer","text":"La sala abre 21:00 y conviene llegar temprano. A las 21:45 vencen las reservas y después de las 22:01 no se entra más, porque la sala es chica."}},
-    {"@type":"Question","name":"¿Cuánto cuesta?","acceptedAnswer":{"@type":"Answer","text":"No se venden entradas. El show es a la gorra: al final cada uno aporta lo que le parezca. Se puede ver el show sin consumir nada."}},
+    {"@type":"Question","name":"¿A qué hora conviene llegar?","acceptedAnswer":{"@type":"Answer","text":"La sala abre 21:00 y conviene llegar temprano. El ingreso cierra 22:01, porque la sala es chica y abrir la puerta con el show empezado corta la función."}},
+    {"@type":"Question","name":"¿Cuánto cuesta?","acceptedAnswer":{"@type":"Answer","text":"No hay ticketera ni cobro anticipado. El show es a la gorra: al final cada uno aporta lo que le parezca. Se puede ver el show sin consumir nada."}},
     {"@type":"Question","name":"¿Pueden ir menores?","acceptedAnswer":{"@type":"Answer","text":"No. El humor y el ambiente son para adultos."}}
   ]
 }
@@ -215,8 +224,8 @@ export function renderStandupLaPlata(year) {
       <article>
         <h3>Cuánto sale</h3>
         <p>
-          <strong>No se venden entradas.</strong> El show es a la gorra: al final
-          aportás lo que puedas y lo que te haya parecido que valió.
+          <strong>No hay ticketera ni cobro anticipado.</strong> El show es a la
+          gorra: al final aportás lo que puedas y lo que te haya parecido que valió.
         </p>
         <p>
           Se puede ver el show sin consumir nada.
@@ -227,7 +236,7 @@ export function renderStandupLaPlata(year) {
         <h3>Para comer y tomar</h3>
         <p>
           Hay <strong>empanadas</strong>, snacks, cervezas artesanales tiradas, latas
-          y opciones sin alcohol.
+          y opciones sin alcohol. Está todo en <a href="/carta/">la carta</a>.
         </p>
         <p>
           No tenemos menú sin TACC, pero podés traer tu propia comida. Sin drama.
@@ -244,7 +253,8 @@ export function renderStandupLaPlata(year) {
           rápido.
         </p>
         <p>
-          Los jueves desde las 18:00 hay taller libre de stand up.
+          Los jueves desde las 18:00 hay
+          <a href="/cursos/">taller libre de stand up</a>.
         </p>
       </article>
 
