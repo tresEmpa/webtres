@@ -11,9 +11,9 @@
  *  landing de anuncio. Por eso se dice "no hay ticketera ni cobro anticipado",
  *  que significa lo mismo y no usa ninguna de las palabras marcadas.
  *
- *  Los únicos enlaces internos permitidos acá son /carta/ y /cursos/: no tienen
- *  nada que ver con entradas y le devuelven algo de valor SEO a la página.
- *  Nada de /reservas/ ni sus derivados.
+ *  El único enlace interno permitido acá es /cursos/. Nada de /reservas/ ni sus
+ *  derivados, y tampoco /carta/: la página muestra precios y esta landing no
+ *  habla de plata (decisión de Tres, 27/9).
  */
 import { page } from './layout.mjs';
 
@@ -236,7 +236,7 @@ export function renderStandupLaPlata(year) {
         <h3>Para comer y tomar</h3>
         <p>
           Hay <strong>empanadas</strong>, snacks, cervezas artesanales tiradas, latas
-          y opciones sin alcohol. Está todo en <a href="/carta/">la carta</a>.
+          y opciones sin alcohol.
         </p>
         <p>
           No tenemos menú sin TACC, pero podés traer tu propia comida. Sin drama.
