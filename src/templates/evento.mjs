@@ -590,8 +590,6 @@ function enviarReserva(e) {
   var evId = ${JSON.stringify(ev.id)};
 
   // Vio la función.
-  TEP.track('ViewContent', { content_name: show, content_category: 'funcion' },
-            'view_item',    { content_name: show, content_category: 'funcion' });
 
   // Consultó por WhatsApp estando sobre la hora. Mismo Lead, otra categoría.
   // Sin preventDefault: el link abre en pestaña nueva y la página no se
