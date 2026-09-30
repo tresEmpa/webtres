@@ -516,11 +516,6 @@ function enviarReserva(e) {
   msg += \`Personas: \${personasText}\\n\`;
   if (mensaje) msg += \`\\n\${mensaje}\`;
 
-  try {
-    if (typeof gtag === 'function') {
-      gtag('event', 'conversion', { 'send_to': 'AW-11304999909/ZKLPCKvg_-wcEOW30o4q' });
-    }
-  } catch (_) {}
   // Mismo evento estándar Lead que los otros caminos de reserva; lo que los
   // distingue es content_category.
   try {
@@ -598,19 +593,6 @@ function enviarReserva(e) {
   TEP.track('ViewContent', { content_name: show, content_category: 'funcion' },
             'view_item',    { content_name: show, content_category: 'funcion' });
 
-  // Empezó a completar el formulario: primer foco en cualquier campo, una sola
-  // vez por sesión y por función.
-  var form = document.getElementById('reserva-form');
-  if (form) {
-    var arrancoCheckout = function () {
-      TEP.unaVez('checkout:' + evId, function () {
-        TEP.track('InitiateCheckout', { content_name: show },
-                  'begin_checkout',   { content_name: show });
-      });
-    };
-    form.addEventListener('focusin', arrancoCheckout, { once: true });
-  }
-
   // Consultó por WhatsApp estando sobre la hora. Mismo Lead, otra categoría.
   // Sin preventDefault: el link abre en pestaña nueva y la página no se
   // descarga, así que al evento le sobra tiempo para salir.
@@ -618,7 +600,6 @@ function enviarReserva(e) {
   if (wspUltima) {
     wspUltima.addEventListener('click', function () {
       window.TEP_CONGELADO = true;
-      try { if (typeof gtag === 'function') gtag('event', 'conversion', { 'send_to': 'AW-11304999909/ZKLPCKvg_-wcEOW30o4q' }); } catch (_) {}
       TEP.track('Lead',        { content_name: show, content_category: 'reserva_ultima_hora' },
                 'generate_lead', { content_name: show, content_category: 'reserva_ultima_hora' });
     });
