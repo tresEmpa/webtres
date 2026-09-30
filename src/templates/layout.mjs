@@ -109,6 +109,11 @@ const TRACKING = `
   'https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', '546014447181846');
   fbq('track', 'PageView');
+  fbq('track', 'ViewContent', {
+    content_name: document.title || 'Tres Empanadas Comedia',
+    content_type: 'product_group',
+    content_category: 'shows'
+  });
   </script>
   <noscript>
     <img height="1" width="1" style="display:none"
