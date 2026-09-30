@@ -111,7 +111,7 @@ const TRACKING = `
   fbq('track', 'PageView');
   fbq('track', 'ViewContent', {
     content_name: document.title || 'Tres Empanadas Comedia',
-    content_type: 'product_group',
+    content_type: 'show',
     content_category: 'shows'
   });
   </script>

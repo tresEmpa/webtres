@@ -298,14 +298,8 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
       name: 'Tres Empanadas Comedia',
       url: 'https://tresempanadas.com.ar',
     },
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'ARS',
-      availability: schemaAvail,
-      url: `https://tresempanadas.com.ar/reservas/${ev.id}/`,
-      validFrom: `${validFrom}T00:00:00-03:00`,
-    },
+    // Sin `offers`: el show es a la gorra y no se venden entradas. Un Offer
+    // (aunque sea price 0) le señala a Google Ads "venta de entradas".
     typicalAgeRange: '18+',
     image: ev.flyer
       ? `https://tresempanadas.com.ar/data/flyers/${ev.flyer}`
