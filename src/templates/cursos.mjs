@@ -71,6 +71,20 @@ const estilos = `
 .cursos-opcion__estado { display: inline-block; font-family: var(--font-display); font-weight: 800; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; background: var(--dorado); color: var(--rojo-tinto); padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
 .cursos-opcion__datos { font-family: var(--font-display); color: var(--rojo-tinto); margin: 6px 0; }
 .cursos-opcion p { margin: 6px 0; }
+.alt-wrap { margin: 1.2rem 0; }
+.alt-titulo { font-weight: 800; text-transform: uppercase; letter-spacing: .06em; font-size: .85rem; color: var(--rojo); margin: 0 0 .5rem; }
+.alt-tabla { width: 100%; border-collapse: collapse; background: var(--crema-papel); border: 1px solid var(--gris-suave); border-radius: 10px; overflow: hidden; font-size: .95rem; line-height: 1.4; text-align: left; }
+.alt-tabla th, .alt-tabla td { padding: .7rem .8rem; border-bottom: 1px solid var(--gris-suave); vertical-align: top; }
+.alt-tabla thead th { background: var(--rojo); color: #fff; font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; }
+.alt-tabla tbody th { color: var(--rojo); font-weight: 800; white-space: nowrap; }
+.alt-tabla tbody tr:last-child th, .alt-tabla tbody tr:last-child td { border-bottom: 0; }
+.alt-tabla a { color: var(--rojo); font-weight: 700; white-space: nowrap; }
+@media (max-width: 640px) {
+.alt-tabla thead { display: none; }
+.alt-tabla, .alt-tabla tbody, .alt-tabla tr, .alt-tabla th, .alt-tabla td { display: block; width: 100%; }
+.alt-tabla tr { border-bottom: 1px solid var(--gris-suave); padding: .4rem 0; }
+.alt-tabla th, .alt-tabla td { border: 0; padding: .25rem .8rem; }
+}
 .cursos-hero-foto { margin: var(--space-md) auto 0; max-width: 760px; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--gris-suave); box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
 .cursos-hero-foto img { display: block; width: 100%; height: auto; }
 .curso-nuevo { border: 2px solid var(--dorado); background: var(--crema); text-align: center; }
@@ -190,30 +204,16 @@ const waProxima = `https://wa.me/${wa}?text=` + encodeURIComponent('Hola! Quiero
 const tresOpciones = `
 <section class="cursos-bloque" id="opciones">
 <h2>Tres formas de aprender stand up</h2>
-<p>Elegí la que te quede cómoda. Se pueden combinar y se complementan.</p>
-<div class="cursos-opciones">
-
-<article class="cursos-opcion" id="presencial">
-<span class="cursos-opcion__estado">${CURSO_REGULAR_ABIERTO ? 'Inscripción abierta' : 'En marcha · sin cupos'}</span>
-<h3>1 · Curso presencial</h3>
-<p class="cursos-opcion__datos">Jueves 18 a 19:30 hs · 16 clases, de agosto a noviembre · ${precioCurso} por mes</p>
-<p>Clases semanales con arranque y horario fijo, 2 open mics para probar tu material y una muestra final arriba del escenario. ${CURSO_REGULAR_ABIERTO ? '' : 'La edición 2026 ya está en marcha. Escribinos y te avisamos cuando abra la próxima.'}</p>
-${CURSO_REGULAR_ABIERTO ? '' : `<p><a class="btn-whatsapp" href="${waProxima}" target="_blank" rel="noopener">Avisame de la próxima edición →</a></p>`}
-</article>
-
-<article class="cursos-opcion" id="online">
-<h3>2 · Curso online (teoría)</h3>
-<p class="cursos-opcion__datos">Gratis · a tu ritmo · sin horarios</p>
-<p>Las notas de <a href="https://aprendestandup.com.ar/notas/" target="_blank" rel="noopener">Aprende Stand Up</a>: qué es el stand up, cómo se construye un chiste, remates, manejo del escenario y más.</p>
-</article>
-
-<article class="cursos-opcion" id="online-practica">
-<h3>3 · Online + práctica de los jueves</h3>
-<p class="cursos-opcion__datos">Teoría gratis + espacio abierto desde las ${PRACTICA_HORA} hs · a la gorra</p>
-<p>Leés la teoría online y venís un jueves a trabajar tu material en el club. Avisá por WhatsApp qué jueves venís.</p>
-<p><a class="btn-whatsapp" href="${waEspacio}" target="_blank" rel="noopener">Coordinar tu jueves →</a></p>
-</article>
-
+<div class="alt-wrap">
+<p class="alt-titulo">Un curso, tres alternativas</p>
+<table class="alt-tabla">
+<thead><tr><th scope="col">Alternativa</th><th scope="col">Cómo es</th><th scope="col">Qué hacés</th></tr></thead>
+<tbody>
+<tr id="presencial"><th scope="row">Presencial</th><td>Ya empezó: jueves de 18 a 19:30, de agosto a noviembre. $35.000 por mes.</td><td><strong>Esperá el próximo.</strong> <a href="${waProxima}" target="_blank" rel="noopener">Avisame cuando abra →</a></td></tr>
+<tr id="online-practica"><th scope="row">Online + práctica</th><td>La teoría online y practicás en el club los jueves desde las 19:30. A la gorra.</td><td><strong>Avisá que venís el próximo jueves.</strong> <a href="${waEspacio}" target="_blank" rel="noopener">Avisar por WhatsApp →</a></td></tr>
+<tr id="online"><th scope="row">100% online</th><td>Gratis, a tu ritmo y por tu cuenta, sin horarios.</td><td><strong>Arrancá ya mismo</strong> y después ves cómo seguís. <a href="https://aprendestandup.com.ar/notas/" target="_blank" rel="noopener">Empezar ahora →</a></td></tr>
+</tbody>
+</table>
 </div>
 </section>`;
 
