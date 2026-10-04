@@ -3,7 +3,8 @@
   "include": [
     "/reservas/registrar",
     "/cocina",
-    "/cocina/*"
+    "/cocina/*",
+    "/api/*"
   ],
   "exclude": []
 }

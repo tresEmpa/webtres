@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carta — Tres Empanadas Comedia</title>
+<meta name="description" content="Carta digital de Tres Empanadas Comedia: empanadas, cervezas artesanales tiradas, latas y opciones sin alcohol. Pedí desde la mesa.">
+<!-- PRUEBAS: sacar este noindex y poner canonical /carta/ al hacer el cambio final -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#B33227">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap">
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11304999909"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-11304999909');</script>
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','546014447181846');fbq('track','PageView');</script>
+<style>
+:root{--rojo:#B33227;--rojo2:#8E2A20;--tinto:#6E1F18;--crema:#F1E8D2;--papel:#ECE0C2;--dorado:#D9B76A;--negro:#1A1614;--tx:#3D352F;--verde:#2f7d4f;--fd:'Bricolage Grotesque',system-ui,sans-serif;--fb:'Fraunces',Georgia,serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--fb);background:var(--rojo);color:var(--crema);line-height:1.5;padding-bottom:120px;-webkit-font-smoothing:antialiased}
+header{text-align:center;padding:1.6rem 1rem 1rem}
+header h1{font-family:var(--fd);font-size:1.8rem;font-weight:800;line-height:1.05}
+header p{font-style:italic;color:var(--dorado)}
+main{max-width:640px;margin:0 auto;padding:0 14px}
+button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:12px 16px;min-height:46px}
+.cat{font-family:var(--fd);font-weight:800;font-size:1.15rem;color:var(--dorado);margin:1.4rem 0 .5rem;text-transform:uppercase;letter-spacing:.06em}
+.item{display:flex;align-items:center;gap:10px;background:var(--papel);color:var(--tx);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.item.no{opacity:.55}
+.item .n{flex:1}.item .n b{font-family:var(--fd);display:block;color:var(--negro)}
+.item .p{font-size:.95rem}.item .q{font-size:.8rem;color:var(--rojo2);font-weight:600}
+.stp{display:flex;align-items:center;gap:8px}.stp b{min-width:24px;text-align:center;font-family:var(--fd);font-size:1.15rem}
+.stp button{width:44px;padding:0;background:var(--rojo);color:#fff;font-size:1.3rem}
+.stp button:disabled{background:#bbb}
+.agot{font-family:var(--fd);font-weight:700;color:var(--rojo2)}
+.banner{background:var(--tinto);padding:12px 14px;border-radius:12px;margin:10px 0;text-align:center}
+.mesa{display:flex;gap:10px;align-items:center;margin:10px 0}
+.mesa input{flex:1;font:inherit;padding:12px;border-radius:12px;border:2px solid var(--dorado);background:var(--crema);color:var(--negro);font-size:1.1rem}
+#barra{position:fixed;left:0;right:0;bottom:0;background:var(--negro);padding:10px 14px calc(10px + env(safe-area-inset-bottom));z-index:5}
+#barra button{width:100%;max-width:640px;display:block;margin:0 auto;background:var(--dorado);color:var(--negro);font-family:var(--fd);font-weight:800;font-size:1.05rem}
+#barra button:disabled{background:#6a6258;color:#aaa}
+.sheet{position:fixed;inset:0;background:#000b;z-index:10;display:flex;align-items:flex-end;justify-content:center}
+.sheet>div{background:var(--crema);color:var(--tx);width:100%;max-width:640px;border-radius:20px 20px 0 0;padding:18px;max-height:92vh;overflow:auto}
+.sheet h2{font-family:var(--fd);color:var(--negro);margin-bottom:8px}
+.l{display:flex;justify-content:space-between;padding:4px 0}
+.tot{border-top:2px solid var(--tx);margin-top:8px;padding-top:8px;font-family:var(--fd);font-weight:800;font-size:1.2rem}
+.ped{background:var(--papel);color:var(--tx);border-radius:14px;padding:12px;margin-bottom:10px}
+.est{display:inline-block;font-family:var(--fd);font-weight:700;font-size:.8rem;padding:2px 10px;border-radius:99px;background:#d8cba8;color:var(--negro)}
+.est.parcial{background:#f0d27a}.est.servido{background:#b8e0c4}.est.anulado{background:#e8b3ae}
+.prim{background:var(--rojo);color:#fff;font-family:var(--fd);font-weight:800;width:100%}
+.sec{background:transparent;border:2px solid var(--tx);color:var(--tx);width:100%;margin-top:8px}
+.alias{font-family:var(--fd);font-size:1.7rem;font-weight:800;color:var(--rojo);text-align:center;margin:8px 0;word-break:break-all}
+.gracias{text-align:center;padding:18px}
+.gracias a{display:inline-block;background:var(--dorado);color:var(--negro);font-family:var(--fd);font-weight:800;border-radius:12px;padding:14px 18px;text-decoration:none;margin-top:12px}
+.err{color:#ffd9d4;background:var(--tinto);padding:10px;border-radius:10px;margin:8px 0}
+</style>
+</head>
+<body>
+<header><h1>Tres Empanadas Comedia</h1><p>Pedí desde tu mesa</p></header>
+<main id="app"></main>
+<div id="barra"></div>
+<script>
+'use strict';
+const ALIAS = 'Comedia123';
+const RESENA = 'https://g.page/r/CcRc7MWoc9jTEBM/review';
+const L = { // localStorage con tolerancia a fallas (navegadores internos de redes sociales)
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return mem[k] ?? d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { mem[k] = v; } },
+};
+const mem = {};
+const S = {
+  menu: [], abierta: true, cargo: false, carro: {}, mesa: L.get('tep_mesa', ''),
+  dev: L.get('tep_dev', null), pedidos: L.get('tep_pedidos', []), estado: null, cuenta: null,
+  pendiente: L.get('tep_pendiente', null), msg: '', pagando: false, enviando: false, avisado: L.get('tep_avisado', false),
+};
+if (!S.dev) { S.dev = (crypto.randomUUID ? crypto.randomUUID() : 'd' + Date.now() + Math.random().toString(36).slice(2)); L.set('tep_dev', S.dev); }
+// La sesión dura la noche: se descartan pedidos de hace más de 14 horas.
+S.pedidos = S.pedidos.filter((p) => Date.now() - p.t < 14 * 3600e3);
+L.set('tep_pedidos', S.pedidos);
+
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === 'class') e.className = v; else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) e.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(c));
+  return e;
+}
+const $$ = (n) => '$ ' + n.toLocaleString('es-AR');
+const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 14) + '000');
+const total = () => S.menu.reduce((s, p) => s + (S.carro[p.id] || 0) * p.precio, 0);
+const unidades = () => Object.values(S.carro).reduce((a, b) => a + b, 0);
+
+async function cargarMenu() {
+  try {
+    const r = await (await fetch('/api/menu', { cache: 'no-store' })).json();
+    if (!r.ok) return;
+    S.menu = r.productos; S.abierta = r.abierta; S.cargo = true;
+    for (const p of S.menu) { // si algo se agotó, sale del pedido
+      if (!p.disponible) delete S.carro[p.id];
+      else if (p.quedan != null && (S.carro[p.id] || 0) > p.quedan) S.carro[p.id] = p.quedan;
+    }
+  } catch (e) {}
+  if (!S.sheet) draw();
+}
+
+async function cargarEstado() {
+  if (!S.pedidos.length || !S.mesa) return;
+  try {
+    const q = new URLSearchParams({ mesa: S.mesa, ids: S.pedidos.map((p) => p.id).join(',') });
+    const r = await (await fetch('/api/pedido?' + q, { cache: 'no-store' })).json();
+    if (r.ok) { S.estado = r.pedidos; S.cuenta = r.cuenta; }
+  } catch (e) {}
+  if (!S.sheet) draw();
+}
+
+// ---- envío: un solo id por intento; si falla la red se reintenta con el MISMO id ----
+async function enviar() {
+  if (S.enviando) return;
+  S.enviando = true; S.msg = '';
+  if (!S.pendiente) {
+    S.pendiente = { id: uuid(), mesa: S.mesa, items: Object.entries(S.carro).filter(([, n]) => n > 0).map(([producto_id, cantidad]) => ({ producto_id, cantidad })) };
+    L.set('tep_pendiente', S.pendiente);
+  }
+  drawSheet();
+  const intento = async (n) => {
+    try {
+      const r = await fetch('/api/pedido', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...S.pendiente, dispositivo: S.dev }) });
+      const j = await r.json();
+      if (j.ok) return j;
+      return j; // error definitivo del servidor
+    } catch (e) {
+      if (n >= 6) return { ok: false, error: 'red' };
+      await new Promise((res) => setTimeout(res, 800 * (n + 1)));
+      return intento(n + 1);
+    }
+  };
+  const j = await intento(0);
+  S.enviando = false;
+  if (j.ok) {
+    S.pedidos.push({ id: S.pendiente.id, mesa: S.pendiente.mesa, t: Date.now() }); L.set('tep_pedidos', S.pedidos);
+    S.pendiente = null; L.set('tep_pendiente', null); S.carro = {}; S.sheet = null; S.msg = '';
+    drawSheet(); await cargarEstado(); draw();
+    return;
+  }
+  if (j.error === 'red') { S.msg = 'No hay conexión. Tu pedido NO se perdió: tocá "Reintentar" cuando vuelva internet y no se va a duplicar.'; }
+  else {
+    S.pendiente = null; L.set('tep_pendiente', null); // el servidor lo rechazó: se puede armar otro
+    if (j.error === 'sin_stock') { S.msg = 'Se acabó: ' + (j.detalle || []).map((d) => d.nombre).join(', ') + '. Sacalo del pedido.'; await cargarMenu(); }
+    else if (j.error === 'cerrado') S.msg = 'La barra todavía no está tomando pedidos.';
+    else if (j.error === 'demasiados') S.msg = 'Demasiados pedidos desde este celular. Acercate a la barra.';
+    else S.msg = 'No se pudo enviar el pedido. Probá de nuevo o acercate a la barra.';
+  }
+  drawSheet();
+}
+
+// ---- vistas ----
+function draw() {
+  const y = window.scrollY;
+  const app = document.getElementById('app'); app.replaceChildren();
+  if (!S.cargo) { app.append(h('div', { class: 'banner' }, 'Cargando la carta…')); }
+  else {
+    if (!S.abierta) app.append(h('div', { class: 'banner' }, 'La barra todavía no abrió. Cuando abra vas a poder pedir desde acá.'));
+    app.append(vistaMisPedidos());
+    app.append(h('div', { class: 'mesa' }, h('label', { for: 'mesa' }, 'Mesa'),
+      h('input', { id: 'mesa', inputmode: 'text', maxlength: 20, placeholder: 'Número de mesa', value: S.mesa, oninput: (e) => { S.mesa = e.target.value.trim(); L.set('tep_mesa', S.mesa); pintarBarra(); } })));
+    const cats = [...new Set(S.menu.map((p) => p.categoria))];
+    for (const c of cats) {
+      app.append(h('div', { class: 'cat' }, c));
+      for (const p of S.menu.filter((x) => x.categoria === c)) app.append(fila(p));
+    }
+  }
+  pintarBarra();
+  window.scrollTo(0, y);
+}
+
+function fila(p) {
+  const n = S.carro[p.id] || 0;
+  const tope = p.quedan != null ? Math.min(12, p.quedan) : 12;
+  const poco = p.quedan != null && p.quedan > 0 && p.quedan <= 6;
+  return h('div', { class: 'item' + (p.disponible ? '' : ' no') },
+    h('div', { class: 'n' }, h('b', {}, p.nombre), h('span', { class: 'p' }, $$(p.precio)), poco && h('div', { class: 'q' }, p.quedan === 1 ? 'Queda 1' : 'Quedan ' + p.quedan)),
+    p.disponible ? h('div', { class: 'stp' },
+      h('button', { disabled: n === 0 || !S.abierta, onclick: () => { S.carro[p.id] = n - 1; draw(); } }, '−'), h('b', {}, n),
+      h('button', { disabled: n >= tope || !S.abierta, onclick: () => { S.carro[p.id] = n + 1; draw(); } }, '+')) : h('span', { class: 'agot' }, 'Agotado'));
+}
+
+function pintarBarra() {
+  const b = document.getElementById('barra'); b.replaceChildren();
+  const u = unidades();
+  if (S.pendiente) { b.append(h('button', { onclick: () => { S.sheet = 'confirmar'; drawSheet(); } }, 'Reintentar el pedido en curso')); return; }
+  if (!u) { b.style.display = 'none'; return; }
+  b.style.display = '';
+  b.append(h('button', { disabled: !S.abierta, onclick: () => { if (!S.mesa) { document.getElementById('mesa').focus(); S.msg = ''; alert('Poné tu número de mesa primero.'); return; } S.sheet = 'confirmar'; drawSheet(); } },
+    `Revisar pedido · ${u} ${u === 1 ? 'producto' : 'productos'} · ${$$(total())}`));
+}
+
+function drawSheet() {
+  document.querySelector('.sheet')?.remove();
+  if (!S.sheet) return;
+  let cont;
+  if (S.sheet === 'confirmar') {
+    const items = S.pendiente ? S.pendiente.items : Object.entries(S.carro).filter(([, n]) => n > 0).map(([producto_id, cantidad]) => ({ producto_id, cantidad }));
+    const nom = (id) => S.menu.find((p) => p.id === id) || { nombre: id, precio: 0 };
+    const t = items.reduce((s, i) => s + nom(i.producto_id).precio * i.cantidad, 0);
+    cont = h('div', {}, h('h2', {}, 'Tu pedido · Mesa ' + (S.pendiente ? S.pendiente.mesa : S.mesa)),
+      items.map((i) => h('div', { class: 'l' }, h('span', {}, i.cantidad + '× ' + nom(i.producto_id).nombre), h('span', {}, $$(nom(i.producto_id).precio * i.cantidad)))),
+      h('div', { class: 'l tot' }, h('span', {}, 'Total'), h('span', {}, $$(t))),
+      h('p', { style: 'font-size:.85rem;margin-top:8px' }, 'Se te cobra solo lo que te entregamos.'),
+      S.msg && h('div', { class: 'err' }, S.msg),
+      h('button', { class: 'prim', style: 'margin-top:10px', disabled: S.enviando, onclick: enviar }, S.enviando ? 'Enviando…' : S.pendiente ? 'Reintentar' : 'Enviar pedido'),
+      !S.enviando && !S.pendiente && h('button', { class: 'sec', onclick: () => { S.sheet = null; S.msg = ''; drawSheet(); draw(); } }, 'Volver y cambiar'));
+  } else if (S.sheet === 'pagar') cont = vistaPagar();
+  document.body.append(h('div', { class: 'sheet' }, cont));
+}
+
+function textoEstado(e) { return { recibido: 'Recibido', parcial: 'En camino (parte entregada)', servido: 'Entregado', anulado: 'Anulado' }[e] || e; }
+
+function vistaMisPedidos() {
+  const w = h('div', {});
+  if (!S.estado || !S.estado.length) return w;
+  if (S.cuenta && S.cuenta.pagada_en) {
+    w.append(h('div', { class: 'ped gracias' }, h('h2', { style: 'font-family:var(--fd);color:var(--negro)' }, '¡Gracias por la noche!'),
+      h('p', {}, 'Esperamos que la hayas pasado genial. Si podés, contanos cómo te fue:'), h('a', { href: RESENA, target: '_blank', rel: 'noopener' }, '⭐ Dejanos tu reseña en Google')));
+  }
+  w.append(h('div', { class: 'cat' }, 'Tus pedidos'));
+  for (const p of S.estado) {
+    w.append(h('div', { class: 'ped' }, h('div', { class: 'l' }, h('b', {}, 'Mesa ' + p.mesa), h('span', { class: 'est ' + p.estado }, textoEstado(p.estado))),
+      p.renglones.map((r) => h('div', { class: 'l' }, h('span', {}, r.cantidad + '× ' + r.nombre), h('span', {}, r.entregadas + '/' + r.cantidad + ' entregado')))));
+  }
+  if (S.cuenta) {
+    const c = S.cuenta;
+    w.append(h('div', { class: 'ped' }, h('div', { class: 'l tot', style: 'border:0;margin:0;padding:0' }, h('span', {}, 'Cuenta de la mesa'), h('span', {}, $$(c.total))),
+      h('div', { style: 'font-size:.85rem' }, 'Incluye solo lo que ya te entregamos.' + (c.pendientes ? ' Te falta recibir ' + c.pendientes + ' (no se cobra hasta entregarlo).' : '')),
+      !c.pagada_en && c.total > 0 && h('button', { class: 'prim', style: 'margin-top:10px', onclick: () => { S.sheet = 'pagar'; drawSheet(); } }, 'Pagar')));
+  }
+  return w;
+}
+
+function vistaPagar() {
+  const c = S.cuenta;
+  const copiar = async () => { try { await navigator.clipboard.writeText(ALIAS); alert('Alias copiado'); } catch (e) { alert('Alias: ' + ALIAS); } };
+  const avisar = async () => {
+    try { await fetch('/api/aviso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mesa: S.mesa }) }); } catch (e) {}
+    S.avisado = true; L.set('tep_avisado', true); drawSheet();
+  };
+  return h('div', {}, h('h2', {}, 'Pagar · Mesa ' + S.mesa), h('div', { class: 'l tot' }, h('span', {}, 'Total'), h('span', {}, $$(c.total))),
+    h('p', { style: 'margin-top:10px' }, h('b', {}, 'Transferencia'), ' al alias:'), h('div', { class: 'alias' }, ALIAS),
+    h('button', { class: 'sec', onclick: copiar }, 'Copiar alias'),
+    S.avisado ? h('div', { class: 'banner', style: 'color:var(--crema);margin-top:12px' }, 'Gracias. Mostrale el comprobante a quien te atienda y confirmamos el pago.')
+      : h('button', { class: 'prim', style: 'margin-top:10px', onclick: avisar }, 'Ya transferí'),
+    h('p', { style: 'margin-top:12px;font-size:.9rem' }, 'También podés pagar en efectivo en la barra.'),
+    h('button', { class: 'sec', onclick: () => { S.sheet = null; drawSheet(); draw(); } }, 'Cerrar'));
+}
+
+// ---- arranque ----
+(async () => {
+  draw();
+  await cargarMenu(); await cargarEstado();
+  if (S.pendiente) { S.sheet = 'confirmar'; drawSheet(); }
+  setInterval(() => { if (document.visibilityState === 'visible') { cargarMenu(); cargarEstado(); } }, 6000);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { cargarMenu(); cargarEstado(); } });
+})();
+</script>
+</body>
+</html>

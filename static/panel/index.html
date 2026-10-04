@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#111111">
+<title>Panel · Tres Empanadas</title>
+<style>
+:root{--bg:#111;--card:#1c1c1e;--card2:#26262a;--tx:#f2f2f2;--mut:#9a9aa2;--ok:#2fbf71;--warn:#f0b429;--bad:#e5484d;--acc:#ff8a3d;--r:14px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 system-ui,sans-serif;padding-bottom:84px}
+button{font:inherit;color:inherit;background:var(--card2);border:0;border-radius:10px;padding:12px 14px;min-height:46px;cursor:pointer}
+button.pri{background:var(--acc);color:#111;font-weight:700}
+button.ok{background:var(--ok);color:#06210f;font-weight:700}
+button.bad{background:var(--bad);color:#fff}
+button.ghost{background:transparent;border:1px solid #3a3a3f}
+button:disabled{opacity:.4}
+input{font:inherit;color:inherit;background:var(--card2);border:1px solid #3a3a3f;border-radius:10px;padding:12px;width:100%}
+header{position:sticky;top:0;z-index:5;background:#111e;backdrop-filter:blur(8px);padding:10px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #2a2a2e}
+header .t{font-weight:700;flex:1;min-width:120px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--ok);display:inline-block;margin-right:6px}
+.dot.off{background:var(--bad)}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#161618;border-top:1px solid #2a2a2e;padding-bottom:env(safe-area-inset-bottom);z-index:6}
+nav button{flex:1;border-radius:0;background:transparent;padding:14px 4px;color:var(--mut);position:relative}
+nav button.on{color:var(--acc);font-weight:700}
+nav .n{position:absolute;top:6px;right:18%;background:var(--bad);color:#fff;border-radius:9px;font-size:12px;padding:0 6px}
+main{padding:12px;max-width:760px;margin:0 auto}
+.card{background:var(--card);border-radius:var(--r);padding:12px;margin-bottom:12px}
+.card.late{outline:3px solid var(--bad);animation:pul 1s infinite}
+.card.nuevo{outline:2px solid var(--acc)}
+@keyframes pul{50%{outline-color:transparent}}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.mut{color:var(--mut);font-size:14px}
+.big{font-size:22px;font-weight:800}
+.linea{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;background:var(--card2);margin:6px 0;width:100%;text-align:left}
+.linea.hecho{opacity:.45;text-decoration:line-through}
+.linea .q{font-weight:800;min-width:34px}
+.chip{font-size:12px;padding:2px 8px;border-radius:9px;background:#333;color:#ddd}
+.chip.ok{background:#1d5b3a}.chip.warn{background:#6b5310}.chip.bad{background:#6b1d20}
+.sw{display:flex;gap:6px}
+.sw button{flex:1}.sw .on{background:var(--acc);color:#111;font-weight:700}
+.grid{display:grid;gap:8px}
+.modal{position:fixed;inset:0;background:#000c;z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.modal>div{background:var(--card);width:100%;max-width:760px;border-radius:18px 18px 0 0;padding:14px;max-height:90vh;overflow:auto}
+.login{max-width:340px;margin:18vh auto;padding:16px}.login input{margin:8px 0}
+.stp{display:flex;align-items:center;gap:8px}.stp b{min-width:34px;text-align:center;font-size:20px}
+.aviso{background:#3a2f0b;color:#ffd978;padding:10px;border-radius:10px;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+'use strict';
+const $app = document.getElementById('app');
+const S = { ok: false, est: null, tab: 'pedidos', visto: new Set(), primera: true, sonido: false, conectado: true, modal: null, parcial: new Set() };
+let actx = null, wake = null;
+
+// ---------- utilidades ----------
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === 'class') e.className = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) e.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(c));
+  return e;
+}
+const $$ = (n) => '$ ' + n.toLocaleString('es-AR');
+const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 12) + '0000');
+const hora = (iso) => new Date(iso).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+const edadMin = (iso) => Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+
+async function api(path, body) {
+  const opt = body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Panel': '1' }, body: JSON.stringify(body) };
+  const r = await fetch(path, opt);
+  if (r.status === 401) { S.ok = false; draw(); throw new Error('sesion'); }
+  return r.json();
+}
+const accion = async (b) => {
+  const r = await api('/api/panel/accion', b);
+  if (!r.ok) alert('No se pudo: ' + r.error);
+  await refrescar();
+  return r;
+};
+
+// ---------- sonido y pantalla ----------
+function beep(n = 2) {
+  if (!S.sonido || !actx) return;
+  for (let i = 0; i < n; i++) {
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.frequency.value = 880; o.connect(g); g.connect(actx.destination);
+    const t = actx.currentTime + i * 0.28;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.5, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+    o.start(t); o.stop(t + 0.25);
+  }
+  if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+}
+async function activarSonido() {
+  actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+  await actx.resume();
+  S.sonido = true;
+  try { if (navigator.wakeLock) wake = await navigator.wakeLock.request('screen'); } catch (e) {}
+  beep(1); draw();
+}
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible') {
+    if (S.sonido && navigator.wakeLock) { try { wake = await navigator.wakeLock.request('screen'); } catch (e) {} }
+    refrescar();
+  }
+});
+
+// ---------- datos ----------
+async function refrescar() {
+  try {
+    const r = await api('/api/panel/estado');
+    if (!r.ok) throw new Error('x');
+    S.conectado = true;
+    const ped = r.pedidos || [];
+    const nuevos = ped.filter((p) => !S.visto.has(p.id) && p.origen === 'cliente' && !p.anulado_en);
+    ped.forEach((p) => S.visto.add(p.id));
+    if (!S.primera && nuevos.length) { beep(3); S.nuevos = new Set(nuevos.map((p) => p.id)); setTimeout(() => { S.nuevos = null; draw(); }, 15000); }
+    S.primera = false;
+    S.est = r; S.ok = true;
+  } catch (e) { if (e.message !== 'sesion') S.conectado = false; }
+  if (!S.modal) draw();
+}
+setInterval(() => { if (S.ok && document.visibilityState === 'visible') refrescar(); }, 4000);
+// Alarma repetida mientras haya pedidos sin atender mucho tiempo
+setInterval(() => {
+  if (!S.est) return;
+  const tarde = (S.est.pedidos || []).some((p) => !p.anulado_en && p.renglones.every((r) => r.entregadas === 0) && edadMin(p.creado_en) >= 5);
+  if (tarde) beep(2);
+}, 25000);
+
+// ---------- vistas ----------
+function draw() {
+  const y = window.scrollY;
+  $app.replaceChildren();
+  if (!S.ok) { $app.append(vistaLogin()); return; }
+  const e = S.est;
+  const pendientes = e && e.jornada ? e.pedidos.filter((p) => p.estado === 'recibido' || p.estado === 'parcial').length : 0;
+  $app.append(
+    h('header', {},
+      h('div', { class: 't' }, h('span', { class: 'dot' + (S.conectado ? '' : ' off') }), e && e.jornada ? 'Jornada abierta' : 'Cerrado'),
+      !S.sonido && h('button', { class: 'pri', onclick: activarSonido }, '🔔 Activar sonido'),
+      h('button', { class: 'ghost', onclick: () => (S.modal = 'pedido', S.carro = {}, modalPedido()) }, '+ Pedido'),
+      e && e.jornada ? h('button', { class: 'ghost', onclick: cerrarJornada }, 'Cerrar noche') : h('button', { class: 'pri', onclick: () => accion({ tipo: 'abrir_jornada' }) }, 'Abrir noche'),
+    ),
+    h('main', {}, !S.conectado && h('div', { class: 'aviso' }, '⚠ Sin conexión. Reintentando…'),
+      S.tab === 'pedidos' ? vistaPedidos() : S.tab === 'cuentas' ? vistaCuentas() : S.tab === 'stock' ? vistaStock() : vistaCarta()),
+    h('nav', {}, ...[['pedidos', 'Pedidos'], ['cuentas', 'Cuentas'], ['stock', 'Stock'], ['carta', 'Carta']].map(([k, t]) =>
+      h('button', { class: S.tab === k ? 'on' : '', onclick: () => { S.tab = k; draw(); } }, t, k === 'pedidos' && pendientes ? h('span', { class: 'n' }, pendientes) : null))),
+  );
+  window.scrollTo(0, y);
+}
+
+function vistaLogin() {
+  const u = h('input', { placeholder: 'Usuario', autocomplete: 'username' });
+  const c = h('input', { type: 'password', placeholder: 'Clave', autocomplete: 'current-password' });
+  const msg = h('div', { class: 'mut' });
+  const go = async () => {
+    const r = await fetch('/api/panel/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ usuario: u.value, clave: c.value }) });
+    const j = await r.json();
+    if (j.ok) { S.ok = true; S.primera = true; await refrescar(); draw(); } else msg.textContent = 'Usuario o clave incorrectos';
+  };
+  c.addEventListener('keydown', (ev) => ev.key === 'Enter' && go());
+  return h('div', { class: 'login' }, h('h2', {}, 'Panel de barra'), u, c, h('button', { class: 'pri', style: 'width:100%', onclick: go }, 'Entrar'), msg);
+}
+
+function vistaPedidos() {
+  const e = S.est;
+  if (!e.jornada) return h('div', { class: 'card' }, h('div', { class: 'big' }, 'La noche está cerrada'), h('p', { class: 'mut' }, 'Cargá el stock en la pestaña Stock y tocá "Abrir noche". Hasta entonces la carta no recibe pedidos.'));
+  const abiertos = e.pedidos.filter((p) => p.estado === 'recibido' || p.estado === 'parcial').reverse();
+  const cerrados = e.pedidos.filter((p) => p.estado === 'servido' || p.estado === 'anulado').reverse().slice(0, 15);
+  return h('div', {},
+    !abiertos.length && h('div', { class: 'card mut' }, 'No hay pedidos pendientes.'),
+    abiertos.map(tarjeta), cerrados.length && h('h4', { class: 'mut' }, 'Anteriores'), cerrados.map(tarjeta));
+}
+
+function tarjeta(p) {
+  const min = edadMin(p.creado_en);
+  const sinTocar = p.renglones.every((r) => r.entregadas === 0);
+  const late = !p.anulado_en && p.estado !== 'servido' && sinTocar && min >= 5;
+  const cls = 'card' + (late ? ' late' : '') + (S.nuevos && S.nuevos.has(p.id) ? ' nuevo' : '');
+  const chipCls = p.estado === 'servido' ? 'ok' : p.estado === 'parcial' ? 'warn' : p.estado === 'anulado' ? 'bad' : '';
+  const activo = !p.anulado_en && p.estado !== 'servido';
+  return h('div', { class: cls },
+    h('div', { class: 'row' }, h('div', { class: 'big' }, 'Mesa ' + p.mesa), h('div', { class: 'mut' }, hora(p.creado_en) + ' · ' + (min < 1 ? 'recién' : min + ' min') + (p.origen === 'barra' ? ' · barra' : ''))),
+    h('div', { class: 'mut' }, h('span', { class: 'chip ' + chipCls }, p.estado.toUpperCase())),
+    p.renglones.map((r) => {
+      const hecho = r.entregadas === r.cantidad;
+      const parcial = S.parcial.has(r.id);
+      return h('div', {},
+        h('button', { class: 'linea' + (hecho ? ' hecho' : ''), disabled: !!p.anulado_en,
+          onclick: () => accion({ tipo: 'fijar_entregadas', renglon_id: r.id, entregadas: hecho ? 0 : r.cantidad }) },
+          h('span', { class: 'q' }, r.cantidad + '×'), h('span', { style: 'flex:1' }, r.nombre),
+          h('span', { class: 'chip ' + (hecho ? 'ok' : r.entregadas ? 'warn' : '') }, r.entregadas + '/' + r.cantidad)),
+        r.cantidad > 1 && activo && h('div', { class: 'mut', style: 'margin:-2px 0 4px 6px' },
+          h('a', { href: '#', style: 'color:var(--mut)', onclick: (ev) => { ev.preventDefault(); parcial ? S.parcial.delete(r.id) : S.parcial.add(r.id); draw(); } }, parcial ? 'ocultar' : 'entregar parte')),
+        parcial && h('div', { class: 'stp', style: 'margin:0 0 8px 6px' },
+          h('button', { onclick: () => r.entregadas > 0 && accion({ tipo: 'fijar_entregadas', renglon_id: r.id, entregadas: r.entregadas - 1 }) }, '−'),
+          h('b', {}, r.entregadas),
+          h('button', { onclick: () => r.entregadas < r.cantidad && accion({ tipo: 'fijar_entregadas', renglon_id: r.id, entregadas: r.entregadas + 1 }) }, '+')));
+    }),
+    activo && h('div', { class: 'row', style: 'margin-top:8px' },
+      h('button', { class: 'ok', style: 'flex:1', onclick: () => accion({ tipo: 'entregar_todo', pedido_id: p.id }) }, 'Entregar todo'),
+      h('button', { class: 'ghost', onclick: () => confirm('¿Anular el pedido de la mesa ' + p.mesa + '? Lo no entregado vuelve al stock.') && accion({ tipo: 'anular', pedido_id: p.id }) }, 'Anular')));
+}
+
+function vistaCuentas() {
+  const e = S.est;
+  if (!e.jornada) return h('div', { class: 'card mut' }, 'No hay noche abierta.');
+  const cs = [...e.cuentas].sort((a, b) => (a.pagada_en ? 1 : 0) - (b.pagada_en ? 1 : 0) || String(a.mesa).localeCompare(String(b.mesa), 'es', { numeric: true }));
+  return h('div', {}, !cs.length && h('div', { class: 'card mut' }, 'Todavía no hay mesas.'),
+    cs.map((c) => h('button', { class: 'card', style: 'width:100%;text-align:left;display:block', onclick: () => modalCuenta(c.mesa) },
+      h('div', { class: 'row' }, h('div', { class: 'big' }, 'Mesa ' + c.mesa), h('div', { class: 'big' }, $$(c.entregado))),
+      h('div', { class: 'mut' }, c.pagada_en ? h('span', { class: 'chip ok' }, 'PAGÓ · ' + (c.medio || '')) : '', ' ', c.aviso_transf && !c.pagada_en ? h('span', { class: 'chip warn' }, 'dice que transfirió') : '', ' ', c.pendientes ? h('span', { class: 'chip warn' }, c.pendientes + ' sin entregar') : ''))));
+}
+
+async function modalCuenta(mesa) {
+  const r = await api('/api/panel/accion', { tipo: 'cuenta', mesa });
+  if (!r.ok) return;
+  const c = r.cuenta;
+  const cerrar = () => { S.modal = null; document.querySelector('.modal')?.remove(); refrescar(); };
+  const pagar = async (medio) => {
+    if (c.pendientes && !confirm('Hay ' + c.pendientes + ' unidades SIN ENTREGAR (no están en el total). ¿Marcar como pagada igual?')) return;
+    await api('/api/panel/accion', { tipo: 'pagar', mesa, medio }); cerrar();
+  };
+  S.modal = 'cuenta';
+  document.body.append(h('div', { class: 'modal', onclick: (ev) => ev.target.classList.contains('modal') && cerrar() }, h('div', {},
+    h('div', { class: 'row' }, h('div', { class: 'big' }, 'Mesa ' + mesa), h('button', { class: 'ghost', onclick: cerrar }, 'Cerrar')),
+    c.lineas.filter((l) => l.entregadas > 0).map((l) => h('div', { class: 'row', style: 'padding:6px 0' }, h('span', {}, l.entregadas + '× ' + l.nombre), h('span', {}, $$(l.entregadas * l.precio)))),
+    h('div', { class: 'row big', style: 'padding:10px 0;border-top:1px solid #333' }, h('span', {}, 'Total'), h('span', {}, $$(c.total))),
+    c.pendientes > 0 && h('div', { class: 'aviso' }, c.pendientes + ' unidades todavía sin entregar: no se cobran.'),
+    c.pagada_en ? h('div', { class: 'chip ok' }, 'Pagada · ' + (c.medio || '')) :
+      h('div', { class: 'grid', style: 'grid-template-columns:1fr 1fr' }, ['efectivo', 'transferencia', 'qr', 'tarjeta'].map((m) => h('button', { class: m === 'efectivo' || m === 'transferencia' ? 'ok' : '', onclick: () => pagar(m) }, 'PAGÓ · ' + m))))));
+}
+
+function vistaStock() {
+  const e = S.est;
+  const grupos = {};
+  e.productos.filter((p) => p.activo).forEach((p) => (grupos[p.categoria] = grupos[p.categoria] || []).push(p));
+  return h('div', {}, e.jornada ? null : h('div', { class: 'aviso' }, 'Cargá acá lo que tenés antes de abrir la noche.'),
+    Object.entries(grupos).map(([cat, ps]) => h('div', {}, h('h4', { class: 'mut' }, cat), ps.map(filaStock))));
+}
+
+function filaStock(p) {
+  if (p.control === 'ninguno') return h('div', { class: 'card row' }, h('span', {}, p.nombre), h('span', { class: 'mut' }, 'sin control'));
+  const manual = p.modo === 'manual';
+  const modoSw = p.control === 'cantidad' && h('div', { class: 'sw', style: 'margin-top:8px' },
+    h('button', { class: !manual ? 'on' : '', onclick: () => accion({ tipo: 'producto', producto_id: p.id, modo: 'auto' }) }, 'Automático'),
+    h('button', { class: manual ? 'on' : '', onclick: () => accion({ tipo: 'producto', producto_id: p.id, modo: 'manual' }) }, 'Manual'));
+  let cuerpo;
+  if (p.control === 'hayno' || manual) {
+    cuerpo = h('div', { class: 'sw', style: 'margin-top:8px' },
+      h('button', { class: p.disponible ? 'on' : '', onclick: () => accion({ tipo: 'producto', producto_id: p.id, disponible: 1 }) }, 'HAY'),
+      h('button', { class: !p.disponible ? 'on' : '', onclick: () => accion({ tipo: 'producto', producto_id: p.id, disponible: 0 }) }, 'NO HAY'));
+  } else {
+    const inp = h('input', { type: 'number', inputmode: 'numeric', min: 0, value: p.stock, style: 'width:90px;text-align:center' });
+    cuerpo = h('div', { class: 'stp', style: 'margin-top:8px' },
+      h('button', { onclick: () => p.stock > 0 && accion({ tipo: 'fijar_stock', producto_id: p.id, stock: p.stock - 1 }) }, '−'),
+      h('b', {}, p.stock),
+      h('button', { onclick: () => accion({ tipo: 'fijar_stock', producto_id: p.id, stock: p.stock + 1 }) }, '+'),
+      h('span', { style: 'flex:1' }), inp,
+      h('button', { class: 'pri', onclick: () => accion({ tipo: 'fijar_stock', producto_id: p.id, stock: parseInt(inp.value, 10), motivo: 'carga' }) }, 'Fijar'));
+  }
+  return h('div', { class: 'card' },
+    h('div', { class: 'row' }, h('b', {}, p.nombre), manual && h('span', { class: 'chip warn' }, 'MANUAL')), cuerpo, modoSw);
+}
+
+function vistaCarta() {
+  return h('div', {}, h('p', { class: 'mut' }, 'Lo que está oculto no aparece en la carta de los clientes.'),
+    S.est.productos.map((p) => {
+      const inp = h('input', { type: 'number', inputmode: 'numeric', value: p.precio, style: 'width:110px' });
+      return h('div', { class: 'card' }, h('div', { class: 'row' }, h('b', {}, p.nombre),
+        h('button', { class: p.activo ? 'ok' : 'ghost', onclick: () => accion({ tipo: 'producto', producto_id: p.id, activo: p.activo ? 0 : 1 }) }, p.activo ? 'Visible' : 'Oculto')),
+        h('div', { class: 'row', style: 'margin-top:8px' }, h('span', { class: 'mut' }, 'Precio'), inp,
+          h('button', { onclick: () => accion({ tipo: 'producto', producto_id: p.id, precio: parseInt(inp.value, 10) }) }, 'Guardar')));
+    }));
+}
+
+function modalPedido() {
+  const e = S.est;
+  const mesa = h('input', { placeholder: 'Mesa', inputmode: 'text' });
+  const cerrar = () => { S.modal = null; document.querySelector('.modal')?.remove(); draw(); };
+  const cuerpo = h('div', {});
+  const pintar = () => {
+    cuerpo.replaceChildren(...e.productos.filter((p) => p.activo).map((p) => h('div', { class: 'row', style: 'padding:6px 0' }, h('span', {}, p.nombre),
+      h('div', { class: 'stp' }, h('button', { onclick: () => { S.carro[p.id] = Math.max(0, (S.carro[p.id] || 0) - 1); pintar(); } }, '−'), h('b', {}, S.carro[p.id] || 0),
+        h('button', { onclick: () => { S.carro[p.id] = Math.min(12, (S.carro[p.id] || 0) + 1); pintar(); } }, '+')))));
+  };
+  pintar();
+  const id = uuid(); // un solo id por pantalla: tocar dos veces no duplica
+  document.body.append(h('div', { class: 'modal' }, h('div', {}, h('div', { class: 'row' }, h('div', { class: 'big' }, 'Pedido de barra'), h('button', { class: 'ghost', onclick: cerrar }, 'Cancelar')), mesa, cuerpo,
+    h('button', { class: 'pri', style: 'width:100%;margin-top:10px', onclick: async () => {
+      const items = Object.entries(S.carro).filter(([, n]) => n > 0).map(([producto_id, cantidad]) => ({ producto_id, cantidad }));
+      if (!mesa.value.trim() || !items.length) return alert('Falta la mesa o los productos.');
+      const r = await api('/api/panel/accion', { tipo: 'pedido_barra', pedido: { id, mesa: mesa.value.trim(), items } });
+      if (!r.ok) return alert(r.error === 'sin_stock' ? 'Sin stock: ' + r.detalle.map((d) => d.nombre).join(', ') : 'No se pudo: ' + r.error);
+      cerrar(); refrescar();
+    } }, 'Cargar pedido'))));
+}
+
+async function cerrarJornada() {
+  const e = S.est;
+  const pend = e.pedidos.filter((p) => p.estado === 'recibido' || p.estado === 'parcial').length;
+  const sinPagar = e.cuentas.filter((c) => !c.pagada_en && c.entregado > 0).length;
+  const t = 'Vas a cerrar la noche.' + (pend ? `\n• ${pend} pedidos sin terminar.` : '') + (sinPagar ? `\n• ${sinPagar} cuentas sin marcar como pagadas.` : '') + '\n\nSe va a descargar el resumen. ¿Cerrar?';
+  if (!confirm(t)) return;
+  const r = await fetch('/api/panel/csv'); const b = await r.blob();
+  const a = h('a', { href: URL.createObjectURL(b), download: 'jornada-' + e.jornada.id + '.csv' }); document.body.append(a); a.click(); a.remove();
+  await accion({ tipo: 'cerrar_jornada' });
+}
+
+(async () => { try { await refrescar(); } catch (e) {} draw(); })();
+</script>
+</body>
+</html>

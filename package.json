@@ -7,7 +7,8 @@
   "scripts": {
     "build": "node build.mjs",
     "preview": "node build.mjs && npx wrangler pages dev dist",
-    "hash": "node tools/hash-password.mjs"
+    "hash": "node tools/hash-password.mjs",
+    "test": "node --test --test-force-exit tests/core.test.mjs"
   },
   "engines": {
     "node": ">=18"

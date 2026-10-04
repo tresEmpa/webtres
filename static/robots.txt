@@ -3,5 +3,8 @@ Allow: /
 
 # Panel de administración (privado, sin contenido indexable)
 Disallow: /cocina/
+Disallow: /panel/
+Disallow: /carta-nueva/
+Disallow: /api/
 
 Sitemap: https://tresempanadas.com.ar/sitemap.xml
