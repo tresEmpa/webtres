@@ -233,10 +233,10 @@ export function renderHome(year) {
 </style>
 <section class="curso-banner">
   <div class="curso-banner__inner">
-    <span class="curso-banner__badge">🔥 Cupos limitados · Arranca jueves 13/8</span>
+    <span class="curso-banner__badge">Presencial, online o con práctica</span>
     <h2>¿Y si el próximo en el escenario sos vos?</h2>
-    <p>Curso de stand up en La Plata: aprendé a escribir, probá tu material y subite al escenario. Cuota $35.000 por mes.</p>
-    <a href="/cursos/#inscripcion" class="curso-banner__btn">Anotarme al curso →</a>
+    <p>Curso de stand up en La Plata: aprendé a escribir, probá tu material y subite al escenario. Elegí entre el curso presencial, el online gratis o el online con práctica los jueves.</p>
+    <a href="/cursos/#opciones" class="curso-banner__btn">Ver los cursos →</a>
   </div>
 </section>
 

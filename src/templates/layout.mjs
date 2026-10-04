@@ -243,7 +243,7 @@ ${opts.content || ''}
           Calle 43 N° 1349, esquina 22<br>
           La Plata, Buenos Aires<br>
           <a href="https://wa.me/5492215247488">WhatsApp 221 524-7488</a><br>
-          <a href="mailto:info@tresempanadas.com.ar">info@tresempanadas.com.ar</a>
+          <!--email_off--><a href="mailto:info@tresempanadas.com.ar">info@tresempanadas.com.ar</a><!--/email_off-->
         </p>
         <p style="margin-top: var(--space-md);">
           Funciones jueves y viernes — 21:30hs

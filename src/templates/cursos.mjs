@@ -19,14 +19,15 @@ import { page, esc } from './layout.mjs';
  */
 const CURSO_REGULAR_ABIERTO = false;
 const CURSO_FECHA = 'el jueves 13 de agosto'; // usado sólo cuando el curso está abierto
+const PRACTICA_HORA = '19:30'; // inicio del espacio abierto / práctica de los jueves
 const CURSO_PRECIO = '$35.000';               // cuota mensual del curso regular
 
 const COURSE_SCHEMA = `<script type="application/ld+json">
 {
 "@context": "https://schema.org",
 "@type": "Course",
-"name": "Espacio abierto de Stand Up en La Plata — Los jueves",
-"description": "Espacio abierto para trabajar tu stand up los jueves en Tres Empanadas Comedia (La Plata): traés tu material o tus dudas y lo trabajamos con vos. La teoría, gratis y online, en aprendestandup.com.ar.",
+"name": "Curso de stand up en La Plata: presencial, online y práctica de los jueves",
+"description": "Tres formas de aprender stand up con Checho Falco: curso presencial en Tres Empanadas Comedia (jueves 18 a 19:30), curso online gratis en aprendestandup.com.ar, u online más práctica abierta los jueves desde las 19:30.",
 "sameAs": "https://aprendestandup.com.ar",
 "provider": {
 "@type": "Organization",
@@ -47,13 +48,11 @@ const COURSE_SCHEMA = `<script type="application/ld+json">
 },
 "courseMode": ["onsite", "online"],
 "inLanguage": "es",
-"isAccessibleForFree": true,
-"offers": {
-"@type": "Offer",
-"category": "Gorra / Contribución voluntaria",
-"priceCurrency": "ARS",
-"price": "0"
-},
+"offers": [
+{ "@type": "Offer", "name": "Curso presencial (jueves 18 a 19:30)", "category": "Paid", "priceCurrency": "ARS", "price": "35000", "url": "https://tresempanadas.com.ar/cursos/" },
+{ "@type": "Offer", "name": "Curso online (teoría)", "category": "Free", "priceCurrency": "ARS", "price": "0", "url": "https://aprendestandup.com.ar/notas/" },
+{ "@type": "Offer", "name": "Online + práctica los jueves desde las 19:30", "category": "Gorra / Contribución voluntaria", "priceCurrency": "ARS", "price": "0", "url": "https://aprendestandup.com.ar/los-jueves/" }
+],
 "url": "https://tresempanadas.com.ar/cursos/"
 }
 </script>`;
@@ -66,6 +65,12 @@ const precioCurso = CURSO_PRECIO;
 // ── Estilos (se usan tanto para el espacio abierto como para el curso) ──
 const estilos = `
 <style>
+.cursos-opciones { display: grid; gap: var(--space-md); margin-top: var(--space-md); }
+.cursos-opcion { background: var(--crema-papel); border: 1px solid var(--gris-suave); border-radius: var(--radius-lg); padding: var(--space-md); text-align: left; }
+.cursos-opcion h3 { font-family: var(--font-display); color: var(--rojo); text-transform: uppercase; letter-spacing: 0.04em; font-size: 1rem; margin: 0 0 4px; }
+.cursos-opcion__estado { display: inline-block; font-family: var(--font-display); font-weight: 800; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; background: var(--dorado); color: var(--rojo-tinto); padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
+.cursos-opcion__datos { font-family: var(--font-display); color: var(--rojo-tinto); margin: 6px 0; }
+.cursos-opcion p { margin: 6px 0; }
 .cursos-hero-foto { margin: var(--space-md) auto 0; max-width: 760px; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--gris-suave); box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
 .cursos-hero-foto img { display: block; width: 100%; height: auto; }
 .curso-nuevo { border: 2px solid var(--dorado); background: var(--crema); text-align: center; }
@@ -179,6 +184,39 @@ return false;
 // ── CTA principal: coordinar el jueves por WhatsApp (espacio abierto) ──
 const waEspacio = `https://wa.me/${wa}?text=` + encodeURIComponent('Hola! Quiero coordinar para venir un jueves al espacio abierto de stand up. Ya leí algo de aprendestandup.com.ar.');
 
+const waProxima = `https://wa.me/${wa}?text=` + encodeURIComponent('Hola! Quiero que me avisen cuando se abra la próxima edición del curso presencial de stand up.');
+
+// ── LAS TRES OPCIONES (misma redacción en tresempanadas, aprendestandup y nochesdestandup) ──
+const tresOpciones = `
+<section class="cursos-bloque" id="opciones">
+<h2>Tres formas de aprender stand up</h2>
+<p>Elegí la que te quede cómoda. Se pueden combinar y se complementan.</p>
+<div class="cursos-opciones">
+
+<article class="cursos-opcion" id="presencial">
+<span class="cursos-opcion__estado">${CURSO_REGULAR_ABIERTO ? 'Inscripción abierta' : 'En marcha · sin cupos'}</span>
+<h3>1 · Curso presencial</h3>
+<p class="cursos-opcion__datos">Jueves 18 a 19:30 hs · 16 clases, de agosto a noviembre · ${precioCurso} por mes</p>
+<p>Clases semanales con arranque y horario fijo, 2 open mics para probar tu material y una muestra final arriba del escenario. ${CURSO_REGULAR_ABIERTO ? '' : 'La edición 2026 ya está en marcha. Escribinos y te avisamos cuando abra la próxima.'}</p>
+${CURSO_REGULAR_ABIERTO ? '' : `<p><a class="btn-whatsapp" href="${waProxima}" target="_blank" rel="noopener">Avisame de la próxima edición →</a></p>`}
+</article>
+
+<article class="cursos-opcion" id="online">
+<h3>2 · Curso online (teoría)</h3>
+<p class="cursos-opcion__datos">Gratis · a tu ritmo · sin horarios</p>
+<p>Las notas de <a href="https://aprendestandup.com.ar/notas/" target="_blank" rel="noopener">Aprende Stand Up</a>: qué es el stand up, cómo se construye un chiste, remates, manejo del escenario y más.</p>
+</article>
+
+<article class="cursos-opcion" id="online-practica">
+<h3>3 · Online + práctica de los jueves</h3>
+<p class="cursos-opcion__datos">Teoría gratis + espacio abierto desde las ${PRACTICA_HORA} hs · a la gorra</p>
+<p>Leés la teoría online y venís un jueves a trabajar tu material en el club. Avisá por WhatsApp qué jueves venís.</p>
+<p><a class="btn-whatsapp" href="${waEspacio}" target="_blank" rel="noopener">Coordinar tu jueves →</a></p>
+</article>
+
+</div>
+</section>`;
+
 // ── HERO (cambia según el flag) ──
 const hero = CURSO_REGULAR_ABIERTO
 ? `
@@ -191,13 +229,13 @@ const hero = CURSO_REGULAR_ABIERTO
 : `
 <section class="cursos-hero">
 <div class="container-narrow">
-<h1>El espacio abierto de los jueves</h1>
-<p>Un lugar para trabajar tu stand up, todas las semanas. Traés tu material —o tus dudas— y lo trabajamos con vos. Vengas con una idea a medias o con cinco minutos listos, hay un lugar.</p>
-<p style="margin-top:.6rem;">La teoría la tenés gratis en <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a> · Los jueves en el club · A la gorra</p>
+<h1>Curso de stand up en La Plata</h1>
+<p>Tres formas de aprender con Checho Falco: curso presencial, online gratis, u online con práctica los jueves en el club. Vengas con una idea a medias o con cinco minutos listos, hay un lugar.</p>
+<p style="margin-top:.6rem;">Teoría gratis en <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a> · Práctica los jueves desde las ${PRACTICA_HORA} · Tres Empanadas Comedia</p>
 <div class="cursos-hero-foto">
 <img src="/assets/img/espacio-jueves.webp" width="1200" height="1070" loading="eager" alt="Tres comediantes en el escenario de Tres Empanadas Comedia frente al público, mural Mondrian de fondo">
 </div>
-<p style="margin-top:var(--space-md);"><a class="btn-whatsapp" href="${waEspacio}" target="_blank" rel="noopener">Coordinar tu jueves por WhatsApp →</a></p>
+<p style="margin-top:var(--space-md);"><a class="btn-whatsapp" href="#opciones">Ver las tres opciones →</a></p>
 </div>
 </section>`;
 
@@ -205,7 +243,7 @@ const hero = CURSO_REGULAR_ABIERTO
 const mencionCursoRegular = `
 <section class="cursos-bloque">
 <h2>Curso regular</h2>
-<p>Además del espacio abierto, cada tanto hacemos un <strong>curso regular</strong>: con arranque y horario fijo, clases semanales y una estructura de principio a fin. Por ahora no hay uno abierto.</p>
+<p>Cada tanto abrimos una edición del <strong>curso presencial</strong>: arranque y horario fijo, clases semanales y una estructura de principio a fin. La de 2026 está en marcha y sin cupos; para la próxima, escribinos por WhatsApp.</p>
 </section>`;
 
 const content = `
@@ -216,6 +254,8 @@ ${hero}
 ${estilos}
 
 ${CURSO_REGULAR_ABIERTO ? bloqueCursoRegular : ''}
+
+${tresOpciones}
 
 <section class="cursos-bloque">
 <h2>Cómo funciona</h2>
@@ -247,8 +287,12 @@ La leés a tu ritmo, sin horarios ni fechas.
 <section class="cursos-bloque">
 <h2>Los jueves en el club</h2>
 <div class="cursos-horario">
-<span>Espacio abierto</span>
-<span class="cursos-horario__hora">20 hs</span>
+<span>Curso presencial (edición en marcha)</span>
+<span class="cursos-horario__hora">18 a 19:30 hs</span>
+</div>
+<div class="cursos-horario">
+<span>Espacio abierto / práctica</span>
+<span class="cursos-horario__hora">${PRACTICA_HORA} hs</span>
 </div>
 <div class="cursos-horario">
 <span>El Rotativo Platense (show)</span>
@@ -276,7 +320,7 @@ ${CURSO_REGULAR_ABIERTO ? '' : mencionCursoRegular}
 
 <section class="cursos-bloque cursos-bloque--cta">
 <h2>¿Te sumás?</h2>
-<p>El espacio abierto es todos los jueves a las 20. Avisá por WhatsApp qué jueves venís y lo coordinamos, así te esperamos.</p>
+<p>El espacio abierto es todos los jueves desde las ${PRACTICA_HORA}. Avisá por WhatsApp qué jueves venís y lo coordinamos, así te esperamos.</p>
 <a class="btn-whatsapp" href="${waEspacio}" target="_blank" rel="noopener">Coordinar por WhatsApp →</a>
 </section>
 
@@ -289,8 +333,8 @@ title: 'Curso de Stand Up en La Plata | Tres Empanadas Comedia',
 description: 'Curso de stand up en La Plata en Tres Empanadas Comedia. Práctica presencial los jueves y show El Rotativo Platense. Anotate.',
 }
 : {
-title: 'Espacio abierto de Stand Up en La Plata — Los jueves | Tres Empanadas Comedia',
-description: 'Un espacio abierto para trabajar tu stand up en La Plata, todos los jueves. Traés tu material o tus dudas y lo trabajamos con vos. La teoría, gratis en Aprende Stand Up.',
+title: 'Curso de Stand Up en La Plata: presencial, online y práctica',
+description: 'Curso de stand up en La Plata: presencial los jueves, online gratis o online con práctica desde las 19:30 en Tres Empanadas Comedia. Elegí cómo empezar.',
 };
 
 return page({
