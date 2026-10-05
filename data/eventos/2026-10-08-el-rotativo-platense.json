@@ -1,0 +1,24 @@
+{
+    "fecha": "2026-10-08",
+    "nombre_show": "El Rotativo Platense",
+    "descripcion": "Stand up de los jueves en Tres Empanadas. El line-up cambia cada semana: comediantes con años de escenario, nuevas voces y propuestas que rotan. Show a la gorra.",
+    "hora": "21:30",
+    "duracion_minutos": 90,
+    "estado": "activo",
+    "motivo_cancelacion": "",
+    "plantilla": "rotativo-platense",
+    "link_instagram": "",
+    "notas_internas": "",
+    "color": "violeta",
+    "flyer": "2026-10-08-el-rotativo-platense.png",
+    "elenco": [
+        "Con Ema Chanta",
+        "Lili Bayarres",
+        "Eze Lapera",
+        "Rubén Vaena"
+    ],
+    "dia_semana": "jueves",
+    "actualizado": "2026-10-05T12:38:18.145Z",
+    "creado": "2026-10-05T12:38:18.145Z",
+    "id": "2026-10-08-el-rotativo-platense"
+}
