@@ -226,15 +226,15 @@ async function modalCuenta(mesa) {
   const c = r.cuenta;
   const cerrar = () => { S.modal = null; document.querySelector('.modal')?.remove(); refrescar(); };
   const pagar = async (medio) => {
-    if (c.pendientes && !confirm('Hay ' + c.pendientes + ' unidades SIN ENTREGAR (no están en el total). ¿Marcar como pagada igual?')) return;
+    if (c.pendientes && !confirm('Hay ' + c.pendientes + ' unidades SIN ENTREGAR (están en el total). ¿Marcar como pagada igual?')) return;
     await api('/api/panel/accion', { tipo: 'pagar', mesa, medio }); cerrar();
   };
   S.modal = 'cuenta';
   document.body.append(h('div', { class: 'modal', onclick: (ev) => ev.target.classList.contains('modal') && cerrar() }, h('div', {},
     h('div', { class: 'row' }, h('div', { class: 'big' }, 'Mesa ' + mesa), h('button', { class: 'ghost', onclick: cerrar }, 'Cerrar')),
-    c.lineas.filter((l) => l.entregadas > 0).map((l) => h('div', { class: 'row', style: 'padding:6px 0' }, h('span', {}, l.entregadas + '× ' + l.nombre), h('span', {}, $$(l.entregadas * l.precio)))),
+    c.lineas.filter((l) => l.cobrar > 0).map((l) => h('div', { class: 'row', style: 'padding:6px 0' }, h('span', {}, l.cobrar + '× ' + l.nombre + (l.pendientes > 0 && l.cobrar > l.entregadas ? '  (' + (l.cobrar - l.entregadas) + ' sin entregar)' : '')), h('span', {}, $$(l.cobrar * l.precio)))),
     h('div', { class: 'row big', style: 'padding:10px 0;border-top:1px solid #333' }, h('span', {}, 'Total'), h('span', {}, $$(c.total))),
-    c.pendientes > 0 && h('div', { class: 'aviso' }, c.pendientes + ' unidades todavía sin entregar: no se cobran.'),
+    c.pendientes > 0 && h('div', { class: 'aviso' }, c.pendientes + ' unidades todavía sin entregar (están en el total).'),
     c.pagada_en ? h('div', { class: 'chip ok' }, 'Pagada · ' + (c.medio || '')) :
       h('div', { class: 'grid', style: 'grid-template-columns:1fr 1fr' }, ['efectivo', 'transferencia', 'qr', 'tarjeta'].map((m) => h('button', { class: m === 'efectivo' || m === 'transferencia' ? 'ok' : '', onclick: () => pagar(m) }, 'PAGÓ · ' + m))))));
 }

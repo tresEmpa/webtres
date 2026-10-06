@@ -64,17 +64,17 @@ test('modo manual: no descuenta ni bloquea por cantidad', async () => {
   await db.prepare("UPDATE productos SET modo='auto' WHERE id='empanada-calabaza'").run();
 });
 
-test('cuenta suma solo lo entregado; pendiente no se cobra', async () => {
+test('cuenta suma todo lo pedido (lo anulado no entregado no se cobra)', async () => {
   const j = await core.jornadaAbierta(db);
   await core.fijarStock(db, 'empanada-jamon-queso', 10, 'carga');
   const { pedido } = await core.crearPedido(db, { id: randomUUID(), mesa: 'M5', items: [{ producto_id: 'agua', cantidad: 1 }, { producto_id: 'empanada-jamon-queso', cantidad: 3 }] });
   let c = await core.cuentaDeMesa(db, j.id, 'M5');
-  assert.equal(c.total, 0); assert.equal(c.pendientes, 4);
+  assert.equal(c.total, 3500 + 3 * 3000); assert.equal(c.pendientes, 4);
   await core.fijarEntregadas(db, pedido.renglones[0].id, 1);
   await core.fijarEntregadas(db, pedido.renglones[1].id, 2);
   await core.fijarEntregadas(db, pedido.renglones[1].id, 2); // repetir no duplica
   c = await core.cuentaDeMesa(db, j.id, 'M5');
-  assert.equal(c.total, 3500 + 2 * 3000); assert.equal(c.pendientes, 1);
+  assert.equal(c.total, 3500 + 3 * 3000); assert.equal(c.pendientes, 1);
   assert.equal((await core.obtenerPedido(db, pedido.id)).estado, 'parcial');
   await core.entregarTodo(db, pedido.id);
   assert.equal((await core.obtenerPedido(db, pedido.id)).estado, 'servido');

@@ -233,7 +233,8 @@ export async function anularPedido(db, pedidoId) {
 /** La cuenta suma SOLO lo entregado. Lo pendiente se informa aparte y no se cobra. */
 export async function cuentaDeMesa(db, jornadaId, mesa) {
   const { results } = await db
-    .prepare(`SELECT r.nombre, r.precio, SUM(r.entregadas) AS entregadas, SUM(r.cantidad - r.entregadas) AS pendientes
+    .prepare(`SELECT r.nombre, r.precio, SUM(r.entregadas) AS entregadas, SUM(r.cantidad - r.entregadas) AS pendientes,
+                     SUM(CASE WHEN p.anulado_en IS NULL THEN r.cantidad ELSE r.entregadas END) AS cobrar
               FROM renglones r JOIN pedidos p ON p.id = r.pedido_id
               WHERE p.jornada_id = ? AND p.mesa = ? AND (p.anulado_en IS NULL OR r.entregadas > 0)
               GROUP BY r.producto_id, r.precio ORDER BY r.nombre`)
@@ -246,7 +247,7 @@ export async function cuentaDeMesa(db, jornadaId, mesa) {
   const { results: pend } = await db
     .prepare(`SELECT COALESCE(SUM(r.cantidad - r.entregadas),0) AS n FROM renglones r JOIN pedidos p ON p.id = r.pedido_id
               WHERE p.jornada_id = ? AND p.mesa = ? AND p.anulado_en IS NULL`).bind(jornadaId, mesa).all();
-  const total = lineas.reduce((s, l) => s + l.entregadas * l.precio, 0);
+  const total = lineas.reduce((s, l) => s + l.cobrar * l.precio, 0);
   const c = await db.prepare('SELECT * FROM cuentas WHERE jornada_id = ? AND mesa = ?').bind(jornadaId, mesa).first();
   return { mesa, lineas, total, pendientes: pend[0].n, pagada_en: c?.pagada_en ?? null, medio: c?.medio ?? null };
 }

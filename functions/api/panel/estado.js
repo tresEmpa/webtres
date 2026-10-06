@@ -17,7 +17,7 @@ export async function onRequestGet({ request, env }) {
       for (const p of pedidos) {
         const c = porMesa.get(p.mesa) || { mesa: p.mesa, entregado: 0, pendientes: 0, pagada_en: null, medio: null, aviso_transf: null };
         for (const r of p.renglones) {
-          c.entregado += r.entregadas * r.precio;
+          c.entregado += (p.anulado_en ? r.entregadas : r.cantidad) * r.precio;
           if (!p.anulado_en) c.pendientes += r.cantidad - r.entregadas;
         }
         porMesa.set(p.mesa, c);

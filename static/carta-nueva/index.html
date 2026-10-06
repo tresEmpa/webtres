@@ -202,7 +202,7 @@ function pintarBarra() {
   if (!u) { b.style.display = 'none'; return; }
   b.style.display = '';
   b.append(h('button', { disabled: !S.abierta, onclick: () => { if (!S.mesa) { document.getElementById('mesa').focus(); S.msg = ''; alert('Poné tu número de mesa primero.'); return; } S.sheet = 'confirmar'; drawSheet(); } },
-    `Revisar pedido · ${u} ${u === 1 ? 'producto' : 'productos'} · ${$$(total())}`));
+    `Hacer pedido · ${u} ${u === 1 ? 'producto' : 'productos'} · ${$$(total())}`));
 }
 
 function drawSheet() {
@@ -216,7 +216,6 @@ function drawSheet() {
     cont = h('div', {}, h('h2', {}, 'Tu pedido · Mesa ' + (S.pendiente ? S.pendiente.mesa : S.mesa)),
       items.map((i) => h('div', { class: 'l' }, h('span', {}, i.cantidad + '× ' + nom(i.producto_id).nombre), h('span', {}, $$(nom(i.producto_id).precio * i.cantidad)))),
       h('div', { class: 'l tot' }, h('span', {}, 'Total'), h('span', {}, $$(t))),
-      h('p', { style: 'font-size:.85rem;margin-top:8px' }, 'Se te cobra solo lo que te entregamos.'),
       S.msg && h('div', { class: 'err' }, S.msg),
       h('button', { class: 'prim', style: 'margin-top:10px', disabled: S.enviando, onclick: enviar }, S.enviando ? 'Enviando…' : S.pendiente ? 'Reintentar' : 'Enviar pedido'),
       !S.enviando && !S.pendiente && h('button', { class: 'sec', onclick: () => { S.sheet = null; S.msg = ''; drawSheet(); draw(); } }, 'Volver y cambiar'));
@@ -235,14 +234,13 @@ function vistaMisPedidos() {
   }
   w.append(h('div', { class: 'cat' }, 'Tus pedidos'));
   for (const p of S.estado) {
-    w.append(h('div', { class: 'ped' }, h('div', { class: 'l' }, h('b', {}, 'Mesa ' + p.mesa), h('span', { class: 'est ' + p.estado }, textoEstado(p.estado))),
-      p.renglones.map((r) => h('div', { class: 'l' }, h('span', {}, r.cantidad + '× ' + r.nombre), h('span', {}, r.entregadas + '/' + r.cantidad + ' entregado')))));
+    w.append(h('div', { class: 'ped' }, h('div', { class: 'l' }, h('b', {}, 'Mesa ' + p.mesa), p.estado === 'anulado' ? h('span', { class: 'est anulado' }, 'Anulado') : h('span', { class: 'est recibido' }, 'Recibido')),
+      p.renglones.map((r) => h('div', { class: 'l' }, h('span', {}, r.cantidad + '× ' + r.nombre), h('span', {}, '')))));
   }
   if (S.cuenta) {
     const c = S.cuenta;
     w.append(h('div', { class: 'ped' }, h('div', { class: 'l tot', style: 'border:0;margin:0;padding:0' }, h('span', {}, 'Cuenta de la mesa'), h('span', {}, $$(c.total))),
-      h('div', { style: 'font-size:.85rem' }, 'Incluye solo lo que ya te entregamos.' + (c.pendientes ? ' Te falta recibir ' + c.pendientes + ' (no se cobra hasta entregarlo).' : '')),
-      !c.pagada_en && c.total > 0 && h('button', { class: 'prim', style: 'margin-top:10px', onclick: () => { S.sheet = 'pagar'; drawSheet(); } }, 'Pagar')));
+            !c.pagada_en && c.total > 0 && h('button', { class: 'prim', style: 'margin-top:10px', onclick: () => { S.sheet = 'pagar'; drawSheet(); } }, 'Pagar')));
   }
   return w;
 }
