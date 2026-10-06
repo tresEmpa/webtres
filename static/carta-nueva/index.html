@@ -149,6 +149,7 @@ async function enviar() {
   else {
     S.pendiente = null; L.set('tep_pendiente', null); // el servidor lo rechazó: se puede armar otro
     if (j.error === 'sin_stock') { S.msg = 'Se acabó: ' + (j.detalle || []).map((d) => d.nombre).join(', ') + '. Sacalo del pedido.'; await cargarMenu(); }
+    else if (j.error === 'nombre_ocupado') S.msg = 'Ya hay alguien pidiendo con ese nombre. Agregale la inicial del apellido (ej: Juan P.) y probá de nuevo.';
     else if (j.error === 'cerrado') S.msg = 'La barra todavía no está tomando pedidos.';
     else if (j.error === 'demasiados') S.msg = 'Demasiados pedidos desde este celular. Acercate a la barra.';
     else S.msg = 'No se pudo enviar el pedido. Probá de nuevo o acercate a la barra.';

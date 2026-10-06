@@ -99,6 +99,14 @@ export async function crearPedido(db, entrada, { origen = 'cliente', dispositivo
   const jornada = await jornadaAbierta(db);
   if (!jornada) throw new ErrorPedido('cerrado');
 
+  // Mismo nombre desde otro celular = otra persona: se pide que lo diferencie.
+  if (origen === 'cliente' && dispositivo) {
+    const choque = await db.prepare(
+      'SELECT 1 FROM pedidos WHERE jornada_id = ? AND mesa = ? AND dispositivo IS NOT NULL AND dispositivo != ? LIMIT 1',
+    ).bind(jornada.id, mesa, dispositivo).first();
+    if (choque) throw new ErrorPedido('nombre_ocupado');
+  }
+
   const ids = items.map((i) => i.producto_id);
   const { results: prods } = await db
     .prepare(`SELECT * FROM productos WHERE id IN (${ids.map(() => '?').join(',')})`)
