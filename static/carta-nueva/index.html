@@ -166,10 +166,11 @@ function draw() {
     app.append(vistaMisPedidos());
     app.append(h('div', { class: 'mesa' }, h('label', { for: 'mesa' }, 'Mesa'),
       h('input', { id: 'mesa', inputmode: 'text', maxlength: 20, placeholder: 'Número de mesa', value: S.mesa, oninput: (e) => { S.mesa = e.target.value.trim(); L.set('tep_mesa', S.mesa); pintarBarra(); } })));
-    const cats = [...new Set(S.menu.map((p) => p.categoria))];
+    const vis = S.menu.filter((p) => p.disponible);
+    const cats = [...new Set(vis.map((p) => p.categoria))];
     for (const c of cats) {
       app.append(h('div', { class: 'cat' }, c));
-      for (const p of S.menu.filter((x) => x.categoria === c)) app.append(fila(p));
+      for (const p of vis.filter((x) => x.categoria === c)) app.append(fila(p));
     }
   }
   pintarBarra();
