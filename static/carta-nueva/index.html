@@ -189,7 +189,7 @@ function fila(p) {
   const tope = p.quedan != null ? Math.min(99, p.quedan) : 99;
   const poco = p.quedan != null && p.quedan > 0 && p.quedan <= 6;
   return h('div', { class: 'item' + (p.disponible ? '' : ' no') },
-    h('div', { class: 'n' }, h('b', {}, p.nombre), h('span', { class: 'p' }, $$(p.precio)), poco && h('div', { class: 'q' }, p.quedan === 1 ? 'Queda 1' : 'Quedan ' + p.quedan)),
+    h('div', { class: 'n' }, h('b', {}, p.nombre), h('span', { class: 'p' }, $$(p.precio)), (p.quedan != null && n >= p.quedan && n > 0) ? h('div', { class: 'q', style: 'color:#b00020;font-weight:700' }, 'No hay más: pediste todas las que quedan (' + p.quedan + ')') : poco && h('div', { class: 'q' }, p.quedan === 1 ? 'Queda 1' : 'Quedan ' + p.quedan)),
     p.disponible ? h('div', { class: 'stp' },
       h('button', { disabled: n === 0 || !S.abierta, onclick: () => { S.carro[p.id] = n - 1; draw(); } }, '−'), numIn(n, tope, (v) => { S.carro[p.id] = v; draw(); }),
       h('button', { disabled: n >= tope || !S.abierta, onclick: () => { S.carro[p.id] = n + 1; draw(); } }, '+')) : h('span', { class: 'agot' }, 'Agotado'));
