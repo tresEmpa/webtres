@@ -142,7 +142,7 @@ async function enviar() {
   if (j.ok) {
     S.pedidos.push({ id: S.pendiente.id, mesa: S.pendiente.mesa, t: Date.now() }); L.set('tep_pedidos', S.pedidos);
     S.pendiente = null; L.set('tep_pendiente', null); S.carro = {}; S.sheet = null; S.msg = '';
-    drawSheet(); await cargarEstado(); draw();
+    S.recien = true; drawSheet(); await cargarEstado(); draw(); window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
   if (j.error === 'red') { S.msg = 'No hay conexión. Tu pedido NO se perdió: tocá "Reintentar" cuando vuelva internet y no se va a duplicar.'; }
@@ -227,6 +227,8 @@ function textoEstado(e) { return { recibido: 'Recibido', parcial: 'En camino (pa
 
 function vistaMisPedidos() {
   const w = h('div', {});
+  if (S.recien && unidades() > 0) S.recien = false;
+  if (S.recien) w.append(h('div', { class: 'banner', style: 'background:var(--dorado);color:var(--negro);font-weight:700;font-size:1.1rem' }, '✅ ¡Pedido hecho! Ya lo recibimos.'));
   if (!S.estado || !S.estado.length) return w;
   if (S.cuenta && S.cuenta.pagada_en) {
     w.append(h('div', { class: 'ped gracias' }, h('h2', { style: 'font-family:var(--fd);color:var(--negro)' }, '¡Gracias por la noche!'),
