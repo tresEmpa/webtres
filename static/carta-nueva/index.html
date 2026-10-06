@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carta — Tres Empanadas Comedia</title>
-<meta name="description" content="Carta digital de Tres Empanadas Comedia: empanadas, cervezas artesanales tiradas, latas y opciones sin alcohol. Pedí desde la mesa.">
+<meta name="description" content="Carta digital de Tres Empanadas Comedia: empanadas, cervezas artesanales tiradas, latas y opciones sin alcohol. Pedí desde tu lugar.">
 <!-- PRUEBAS: sacar este noindex y poner canonical /carta/ al hacer el cambio final -->
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -164,8 +164,8 @@ function draw() {
   else {
     if (!S.abierta) app.append(h('div', { class: 'banner' }, 'La barra todavía no abrió. Cuando abra vas a poder pedir desde acá.'));
     app.append(vistaMisPedidos());
-    app.append(h('div', { class: 'mesa' }, h('label', { for: 'mesa' }, 'Mesa'),
-      h('input', { id: 'mesa', inputmode: 'text', maxlength: 20, placeholder: 'Número de mesa', value: S.mesa, oninput: (e) => { S.mesa = e.target.value.trim(); L.set('tep_mesa', S.mesa); pintarBarra(); } })));
+    app.append(h('div', { class: 'mesa' }, h('label', { for: 'mesa' }, 'Tu nombre'),
+      h('input', { id: 'mesa', inputmode: 'text', maxlength: 20, placeholder: 'Nombre (ej: Juan)', value: S.mesa, oninput: (e) => { S.mesa = e.target.value.trim(); L.set('tep_mesa', S.mesa); pintarBarra(); } })));
     const vis = S.menu.filter((p) => p.disponible);
     const cats = [...new Set(vis.map((p) => p.categoria))];
     for (const c of cats) {
@@ -201,7 +201,7 @@ function pintarBarra() {
   if (S.pendiente) { b.append(h('button', { onclick: () => { S.sheet = 'confirmar'; drawSheet(); } }, 'Reintentar el pedido en curso')); return; }
   if (!u) { b.style.display = 'none'; return; }
   b.style.display = '';
-  b.append(h('button', { disabled: !S.abierta, onclick: () => { if (!S.mesa) { document.getElementById('mesa').focus(); S.msg = ''; alert('Poné tu número de mesa primero.'); return; } S.sheet = 'confirmar'; drawSheet(); } },
+  b.append(h('button', { disabled: !S.abierta, onclick: () => { if (!S.mesa) { document.getElementById('mesa').focus(); S.msg = ''; alert('Poné tu nombre primero.'); return; } S.sheet = 'confirmar'; drawSheet(); } },
     `Hacer pedido · ${u} ${u === 1 ? 'producto' : 'productos'} · ${$$(total())}`));
 }
 
@@ -213,7 +213,7 @@ function drawSheet() {
     const items = S.pendiente ? S.pendiente.items : Object.entries(S.carro).filter(([, n]) => n > 0).map(([producto_id, cantidad]) => ({ producto_id, cantidad }));
     const nom = (id) => S.menu.find((p) => p.id === id) || { nombre: id, precio: 0 };
     const t = items.reduce((s, i) => s + nom(i.producto_id).precio * i.cantidad, 0);
-    cont = h('div', {}, h('h2', {}, 'Tu pedido · Mesa ' + (S.pendiente ? S.pendiente.mesa : S.mesa)),
+    cont = h('div', {}, h('h2', {}, 'Tu pedido · ' + (S.pendiente ? S.pendiente.mesa : S.mesa)),
       items.map((i) => h('div', { class: 'l' }, h('span', {}, i.cantidad + '× ' + nom(i.producto_id).nombre), h('span', {}, $$(nom(i.producto_id).precio * i.cantidad)))),
       h('div', { class: 'l tot' }, h('span', {}, 'Total'), h('span', {}, $$(t))),
       S.msg && h('div', { class: 'err' }, S.msg),
@@ -236,12 +236,12 @@ function vistaMisPedidos() {
   }
   w.append(h('div', { class: 'cat' }, 'Tus pedidos'));
   for (const p of S.estado) {
-    w.append(h('div', { class: 'ped' }, h('div', { class: 'l' }, h('b', {}, 'Mesa ' + p.mesa), p.estado === 'anulado' ? h('span', { class: 'est anulado' }, 'Anulado') : h('span', { class: 'est recibido' }, 'Recibido')),
+    w.append(h('div', { class: 'ped' }, h('div', { class: 'l' }, h('b', {}, p.mesa), p.estado === 'anulado' ? h('span', { class: 'est anulado' }, 'Anulado') : h('span', { class: 'est recibido' }, 'Recibido')),
       p.renglones.map((r) => h('div', { class: 'l' }, h('span', {}, r.cantidad + '× ' + r.nombre), h('span', {}, '')))));
   }
   if (S.cuenta) {
     const c = S.cuenta;
-    w.append(h('div', { class: 'ped' }, h('div', { class: 'l tot', style: 'border:0;margin:0;padding:0' }, h('span', {}, 'Cuenta de la mesa'), h('span', {}, $$(c.total))),
+    w.append(h('div', { class: 'ped' }, h('div', { class: 'l tot', style: 'border:0;margin:0;padding:0' }, h('span', {}, 'Tu cuenta'), h('span', {}, $$(c.total))),
       c.pagado > 0 && h('div', { class: 'l' }, h('span', {}, 'Ya pagaste'), h('span', {}, $$(c.pagado))),
       c.pagado > 0 && c.saldo > 0 && h('div', { class: 'l tot' }, h('span', {}, 'Falta pagar'), h('span', {}, $$(c.saldo))),
             c.saldo > 0 && h('button', { class: 'prim', style: 'margin-top:10px', onclick: () => { S.sheet = 'pagar'; drawSheet(); } }, 'Pagar')));
@@ -256,7 +256,7 @@ function vistaPagar() {
     try { await fetch('/api/aviso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mesa: S.mesa }) }); } catch (e) {}
     S.avisado = true; L.set('tep_avisado', true); drawSheet();
   };
-  return h('div', {}, h('h2', {}, 'Pagar · Mesa ' + S.mesa), h('div', { class: 'l tot' }, h('span', {}, c.pagado > 0 ? 'Falta pagar' : 'Total'), h('span', {}, $$(c.saldo))),
+  return h('div', {}, h('h2', {}, 'Pagar · ' + S.mesa), h('div', { class: 'l tot' }, h('span', {}, c.pagado > 0 ? 'Falta pagar' : 'Total'), h('span', {}, $$(c.saldo))),
     h('p', { style: 'margin-top:10px' }, h('b', {}, 'Transferencia'), ' al alias:'), h('div', { class: 'alias' }, ALIAS),
     h('button', { class: 'sec', onclick: copiar }, 'Copiar alias'),
     S.avisado ? h('div', { class: 'banner', style: 'color:var(--crema);margin-top:12px' }, 'Gracias. Mostrale el comprobante a quien te atienda y confirmamos el pago.')

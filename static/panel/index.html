@@ -188,7 +188,7 @@ function tarjeta(p) {
   const chipCls = p.estado === 'servido' ? 'ok' : p.estado === 'parcial' ? 'warn' : p.estado === 'anulado' ? 'bad' : '';
   const activo = !p.anulado_en && p.estado !== 'servido';
   return h('div', { class: cls },
-    h('div', { class: 'row' }, h('div', { class: 'big' }, 'Mesa ' + p.mesa), h('div', { class: 'mut' }, hora(p.creado_en) + ' · ' + (min < 1 ? 'recién' : min + ' min') + (p.origen === 'barra' ? ' · barra' : ''))),
+    h('div', { class: 'row' }, h('div', { class: 'big' }, p.mesa), h('div', { class: 'mut' }, hora(p.creado_en) + ' · ' + (min < 1 ? 'recién' : min + ' min') + (p.origen === 'barra' ? ' · barra' : ''))),
     h('div', { class: 'mut' }, h('span', { class: 'chip ' + chipCls }, p.estado.toUpperCase())),
     p.renglones.map((r) => {
       const hecho = r.entregadas === r.cantidad;
@@ -207,16 +207,16 @@ function tarjeta(p) {
     }),
     activo && h('div', { class: 'row', style: 'margin-top:8px' },
       h('button', { class: 'ok', style: 'flex:1', onclick: () => accion({ tipo: 'entregar_todo', pedido_id: p.id }) }, 'Entregar todo'),
-      h('button', { class: 'ghost', onclick: () => confirm('¿Anular el pedido de la mesa ' + p.mesa + '? Lo no entregado vuelve al stock.') && accion({ tipo: 'anular', pedido_id: p.id }) }, 'Anular')));
+      h('button', { class: 'ghost', onclick: () => confirm('¿Anular el pedido de ' + p.mesa + '? Lo no entregado vuelve al stock.') && accion({ tipo: 'anular', pedido_id: p.id }) }, 'Anular')));
 }
 
 function vistaCuentas() {
   const e = S.est;
   if (!e.jornada) return h('div', { class: 'card mut' }, 'No hay noche abierta.');
   const cs = [...e.cuentas].sort((a, b) => (a.pagada_en ? 1 : 0) - (b.pagada_en ? 1 : 0) || String(a.mesa).localeCompare(String(b.mesa), 'es', { numeric: true }));
-  return h('div', {}, !cs.length && h('div', { class: 'card mut' }, 'Todavía no hay mesas.'),
+  return h('div', {}, !cs.length && h('div', { class: 'card mut' }, 'Todavía no hay cuentas.'),
     cs.map((c) => h('button', { class: 'card', style: 'width:100%;text-align:left;display:block', onclick: () => modalCuenta(c.mesa) },
-      h('div', { class: 'row' }, h('div', { class: 'big' }, 'Mesa ' + c.mesa), h('div', { class: 'big' }, $$(c.pagado > 0 ? c.saldo : c.entregado))),
+      h('div', { class: 'row' }, h('div', { class: 'big' }, c.mesa), h('div', { class: 'big' }, $$(c.pagado > 0 ? c.saldo : c.entregado))),
       h('div', { class: 'mut' }, c.pagada_en ? h('span', { class: 'chip ok' }, 'PAGÓ · ' + (c.medio || '')) : c.pagado > 0 ? h('span', { class: 'chip warn' }, 'PAGÓ ' + $$(c.pagado) + ' · DEBE ' + $$(c.saldo)) : '', ' ', c.aviso_transf && !c.pagada_en ? h('span', { class: 'chip warn' }, 'dice que transfirió') : '', ' ', c.pendientes ? h('span', { class: 'chip warn' }, c.pendientes + ' sin entregar') : ''))));
 }
 
@@ -231,7 +231,7 @@ async function modalCuenta(mesa) {
   };
   S.modal = 'cuenta';
   document.body.append(h('div', { class: 'modal', onclick: (ev) => ev.target.classList.contains('modal') && cerrar() }, h('div', {},
-    h('div', { class: 'row' }, h('div', { class: 'big' }, 'Mesa ' + mesa), h('button', { class: 'ghost', onclick: cerrar }, 'Cerrar')),
+    h('div', { class: 'row' }, h('div', { class: 'big' }, mesa), h('button', { class: 'ghost', onclick: cerrar }, 'Cerrar')),
     c.lineas.filter((l) => l.cobrar > 0).map((l) => h('div', { class: 'row', style: 'padding:6px 0' }, h('span', {}, l.cobrar + '× ' + l.nombre + (l.pendientes > 0 && l.cobrar > l.entregadas ? '  (' + (l.cobrar - l.entregadas) + ' sin entregar)' : '')), h('span', {}, $$(l.cobrar * l.precio)))),
     h('div', { class: 'row big', style: 'padding:10px 0;border-top:1px solid #333' }, h('span', {}, 'Total pedido'), h('span', {}, $$(c.total))),
     c.pagado > 0 && h('div', { class: 'row', style: 'padding:4px 0' }, h('span', {}, 'Ya pagó'), h('span', {}, $$(c.pagado))),
@@ -286,7 +286,7 @@ function vistaCarta() {
 
 function modalPedido() {
   const e = S.est;
-  const mesa = h('input', { placeholder: 'Mesa', inputmode: 'text' });
+  const mesa = h('input', { placeholder: 'Nombre', inputmode: 'text' });
   const cerrar = () => { S.modal = null; document.querySelector('.modal')?.remove(); draw(); };
   const cuerpo = h('div', {});
   const pintar = () => {
@@ -299,7 +299,7 @@ function modalPedido() {
   document.body.append(h('div', { class: 'modal' }, h('div', {}, h('div', { class: 'row' }, h('div', { class: 'big' }, 'Pedido de barra'), h('button', { class: 'ghost', onclick: cerrar }, 'Cancelar')), mesa, cuerpo,
     h('button', { class: 'pri', style: 'width:100%;margin-top:10px', onclick: async () => {
       const items = Object.entries(S.carro).filter(([, n]) => n > 0).map(([producto_id, cantidad]) => ({ producto_id, cantidad }));
-      if (!mesa.value.trim() || !items.length) return alert('Falta la mesa o los productos.');
+      if (!mesa.value.trim() || !items.length) return alert('Falta el nombre o los productos.');
       const r = await api('/api/panel/accion', { tipo: 'pedido_barra', pedido: { id, mesa: mesa.value.trim(), items } });
       if (!r.ok) return alert(r.error === 'sin_stock' ? 'Sin stock: ' + r.detalle.map((d) => d.nombre).join(', ') : 'No se pudo: ' + r.error);
       cerrar(); refrescar();

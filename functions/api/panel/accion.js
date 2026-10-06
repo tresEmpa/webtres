@@ -1,6 +1,6 @@
 import {
   abrirJornada, cerrarJornada, entregarTodo, fijarEntregadas, anularPedido, pagarCuenta,
-  fijarStock, crearPedido, jornadaAbierta, cuentaDeMesa, ErrorPedido,
+  fijarStock, crearPedido, jornadaAbierta, cuentaDeMesa, normMesa, ErrorPedido,
 } from '../../_pedidos/core.js';
 import { json, errorJson, exigirPanel } from '../../_pedidos/http.js';
 
@@ -22,12 +22,12 @@ export async function onRequestPost({ request, env }) {
         const j = await jornadaAbierta(db);
         if (!j) throw new ErrorPedido('cerrado');
         const medio = MEDIOS.includes(b.medio) ? b.medio : null;
-        return json({ ok: true, cuenta: await pagarCuenta(db, j.id, String(b.mesa), medio) });
+        return json({ ok: true, cuenta: await pagarCuenta(db, j.id, normMesa(b.mesa), medio) });
       }
       case 'cuenta': {
         const j = await jornadaAbierta(db);
         if (!j) throw new ErrorPedido('cerrado');
-        return json({ ok: true, cuenta: await cuentaDeMesa(db, j.id, String(b.mesa)) });
+        return json({ ok: true, cuenta: await cuentaDeMesa(db, j.id, normMesa(b.mesa)) });
       }
       case 'fijar_stock': await fijarStock(db, String(b.producto_id), Number(b.stock), b.motivo === 'carga' ? 'carga' : 'ajuste'); break;
       case 'producto': {

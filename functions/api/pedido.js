@@ -1,4 +1,4 @@
-import { crearPedido, obtenerPedido, cuentaDeMesa, jornadaAbierta } from '../_pedidos/core.js';
+import { normMesa, crearPedido, obtenerPedido, cuentaDeMesa, jornadaAbierta } from '../_pedidos/core.js';
 import { json, errorJson } from '../_pedidos/http.js';
 
 const MAX_PEDIDOS_POR_DISPOSITIVO = 15;
@@ -26,7 +26,7 @@ export async function onRequestPost({ request, env }) {
 export async function onRequestGet({ request, env }) {
   try {
     const url = new URL(request.url);
-    const mesa = (url.searchParams.get('mesa') || '').trim();
+    const mesa = normMesa(url.searchParams.get('mesa'));
     const ids = (url.searchParams.get('ids') || '').split(',').filter(Boolean).slice(0, 30);
     const j = await jornadaAbierta(env.DB);
     const pedidos = [];

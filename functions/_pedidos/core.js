@@ -7,6 +7,10 @@
  * Anti-sobreventa: guardia en el lote + CHECK (stock >= 0) en la base.
  */
 
+/** Nombre/mesa normalizado: sin espacios de más y con mayúscula inicial ("juan  perez" = "Juan Perez"). */
+export const normMesa = (m) => String(m ?? '').trim().replace(/\s+/g, ' ').slice(0, 20).toLowerCase()
+  .replace(/(^|\s)(\p{L})/gu, (_, s, c) => s + c.toUpperCase());
+
 export const TOPE_POR_RENGLON = 99;
 export const TOPE_RENGLONES = 20;
 const RE_ID = /^[A-Za-z0-9-]{16,64}$/;
@@ -70,7 +74,7 @@ function vistaProducto(p) {
 function validar(entrada) {
   const { id, mesa, items } = entrada || {};
   if (typeof id !== 'string' || !RE_ID.test(id)) throw new ErrorPedido('id_invalido');
-  const m = typeof mesa === 'string' ? mesa.trim() : '';
+  const m = typeof mesa === 'string' ? normMesa(mesa) : '';
   if (!m || m.length > 20) throw new ErrorPedido('mesa_invalida');
   if (!Array.isArray(items) || items.length === 0 || items.length > TOPE_RENGLONES)
     throw new ErrorPedido('items_invalidos');
