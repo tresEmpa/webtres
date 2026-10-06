@@ -162,7 +162,8 @@ function vistaLogin() {
   const msg = h('div', { class: 'mut' });
   const go = async () => {
     const r = await fetch('/api/panel/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ usuario: u.value, clave: c.value }) });
-    const j = await r.json();
+    let j = {}; try { j = await r.json(); } catch (e) {}
+    if (r.status >= 500) { msg.textContent = 'Error del servidor' + (j.error ? ' (' + j.error + ')' : ''); return; }
     if (j.ok) { S.ok = true; S.primera = true; await refrescar(); draw(); } else msg.textContent = 'Usuario o clave incorrectos';
   };
   c.addEventListener('keydown', (ev) => ev.key === 'Enter' && go());

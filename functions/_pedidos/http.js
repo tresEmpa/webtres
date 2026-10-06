@@ -42,7 +42,14 @@ export async function loginPanel(request, env) {
   const pass = String(body.clave || '');
   const usuarioOk = await secreto(env, 'COCINA_USER');
   const okUser = timingSafeEqual(user.trim().toLowerCase(), usuarioOk.trim().toLowerCase());
-  const okPass = await verifyPassword(pass, (await secreto(env, 'PANEL_PASS_HASH')) || (await secreto(env, 'COCINA_PASS_HASH')));
+  let okPass = false;
+  try {
+    okPass = await verifyPassword(pass, (await secreto(env, 'PANEL_PASS_HASH')) || (await secreto(env, 'COCINA_PASS_HASH')));
+  } catch (e) {
+    // Cloudflare Workers admite como máximo 100000 iteraciones de PBKDF2: un hash con más rompe el login.
+    console.error('verifyPassword falló', e && e.message);
+    return json({ ok: false, error: 'hash_no_soportado' }, 500);
+  }
   if (!okUser || !okPass) {
     await new Promise((r) => setTimeout(r, 600)); // frena la prueba de claves
     return json({ ok: false, error: 'credenciales' }, 401);
