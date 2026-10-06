@@ -157,7 +157,7 @@ function draw() {
 }
 
 function vistaLogin() {
-  const u = h('input', { placeholder: 'Usuario', autocomplete: 'username' });
+  const u = h('input', { placeholder: 'Usuario', autocomplete: 'username', autocapitalize: 'none', autocorrect: 'off', spellcheck: 'false' });
   const c = h('input', { type: 'password', placeholder: 'Clave', autocomplete: 'current-password' });
   const msg = h('div', { class: 'mut' });
   const go = async () => {

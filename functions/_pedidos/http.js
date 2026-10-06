@@ -31,7 +31,7 @@ export async function loginPanel(request, env) {
   try { body = await request.json(); } catch { return json({ ok: false, error: 'formato' }, 400); }
   const user = String(body.usuario || '');
   const pass = String(body.clave || '');
-  const okUser = timingSafeEqual(user, String(env.COCINA_USER || ''));
+  const okUser = timingSafeEqual(user.trim().toLowerCase(), String(env.COCINA_USER || '').trim().toLowerCase());
   const okPass = await verifyPassword(pass, env.PANEL_PASS_HASH || env.COCINA_PASS_HASH);
   if (!okUser || !okPass) {
     await new Promise((r) => setTimeout(r, 600)); // frena la prueba de claves
