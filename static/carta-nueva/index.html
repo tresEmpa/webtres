@@ -230,16 +230,21 @@ function drawSheet() {
 
 function textoEstado(e) { return { recibido: 'Recibido', parcial: 'En camino (parte entregada)', servido: 'Entregado', anulado: 'Anulado' }[e] || e; }
 
+function graciasCard() {
+  return h('div', { class: 'ped gracias' }, h('h2', { style: 'font-family:var(--fd);color:var(--negro)' }, '¡Gracias por venir! 🎭'),
+    h('p', {}, 'Ojalá te hayas reído un montón. Somos un club chiquito y cada reseña en Google hace que más gente nos encuentre.'),
+    h('p', { style: 'margin-top:6px' }, 'Si la pasaste bien, ¿nos dejás unas palabras? Te lleva 30 segundos y nos ayuda muchísimo.'),
+    h('a', { href: RESENA, target: '_blank', rel: 'noopener' }, '⭐ Dejar mi reseña'));
+}
+
 function vistaMisPedidos() {
   const w = h('div', {});
-  if (S.fin) w.append(h('div', { class: 'ped gracias' }, h('h2', { style: 'font-family:var(--fd);color:var(--negro)' }, '¡Gracias por la noche!'),
-    h('p', {}, 'La barra cerró. Si podés, contanos cómo te fue:'), h('a', { href: RESENA, target: '_blank', rel: 'noopener' }, '⭐ Dejanos tu reseña en Google')));
+  if (S.fin) w.append(graciasCard());
   if (S.recien && unidades() > 0) S.recien = false;
   if (S.recien) w.append(h('div', { class: 'banner', style: 'background:var(--dorado);color:var(--negro);font-weight:700;font-size:1.1rem' }, '✅ ¡Pedido hecho! Ya lo recibimos.'));
   if (!S.estado || !S.estado.length) return w;
   if (S.cuenta && S.cuenta.pagada_en) {
-    w.append(h('div', { class: 'ped gracias' }, h('h2', { style: 'font-family:var(--fd);color:var(--negro)' }, '¡Gracias por la noche!'),
-      h('p', {}, 'Esperamos que la hayas pasado genial. Si podés, contanos cómo te fue:'), h('a', { href: RESENA, target: '_blank', rel: 'noopener' }, '⭐ Dejanos tu reseña en Google')));
+    w.append(graciasCard());
   }
   w.append(h('div', { class: 'cat' }, 'Tus pedidos'));
   for (const p of S.estado) {
