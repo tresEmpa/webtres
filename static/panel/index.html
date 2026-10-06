@@ -259,13 +259,13 @@ function filaStock(p) {
       h('button', { class: p.disponible ? 'on' : '', onclick: () => accion({ tipo: 'producto', producto_id: p.id, disponible: 1 }) }, 'HAY'),
       h('button', { class: !p.disponible ? 'on' : '', onclick: () => accion({ tipo: 'producto', producto_id: p.id, disponible: 0 }) }, 'NO HAY'));
   } else {
-    const inp = h('input', { type: 'number', inputmode: 'numeric', min: 0, value: p.stock, style: 'width:90px;text-align:center' });
+    const inp = h('input', { type: 'number', inputmode: 'numeric', min: 0, value: p.stock, style: 'width:100px;text-align:center;font-weight:700;font-size:1.2rem',
+      onfocus: (e) => e.target.select(),
+      onchange: (e) => { const v = parseInt(e.target.value, 10); if (v >= 0) accion({ tipo: 'fijar_stock', producto_id: p.id, stock: v, motivo: 'carga' }); else e.target.value = p.stock; } });
     cuerpo = h('div', { class: 'stp', style: 'margin-top:8px' },
       h('button', { onclick: () => p.stock > 0 && accion({ tipo: 'fijar_stock', producto_id: p.id, stock: p.stock - 1 }) }, '−'),
-      h('b', {}, p.stock),
-      h('button', { onclick: () => accion({ tipo: 'fijar_stock', producto_id: p.id, stock: p.stock + 1 }) }, '+'),
-      h('span', { style: 'flex:1' }), inp,
-      h('button', { class: 'pri', onclick: () => accion({ tipo: 'fijar_stock', producto_id: p.id, stock: parseInt(inp.value, 10), motivo: 'carga' }) }, 'Fijar'));
+      inp,
+      h('button', { onclick: () => accion({ tipo: 'fijar_stock', producto_id: p.id, stock: p.stock + 1 }) }, '+'));
   }
   return h('div', { class: 'card' },
     h('div', { class: 'row' }, h('b', {}, p.nombre), manual && h('span', { class: 'chip warn' }, 'MANUAL')), cuerpo, modoSw);
@@ -289,8 +289,8 @@ function modalPedido() {
   const cuerpo = h('div', {});
   const pintar = () => {
     cuerpo.replaceChildren(...e.productos.filter((p) => p.activo).map((p) => h('div', { class: 'row', style: 'padding:6px 0' }, h('span', {}, p.nombre),
-      h('div', { class: 'stp' }, h('button', { onclick: () => { S.carro[p.id] = Math.max(0, (S.carro[p.id] || 0) - 1); pintar(); } }, '−'), h('b', {}, S.carro[p.id] || 0),
-        h('button', { onclick: () => { S.carro[p.id] = Math.min(12, (S.carro[p.id] || 0) + 1); pintar(); } }, '+')))));
+      h('div', { class: 'stp' }, h('button', { onclick: () => { S.carro[p.id] = Math.max(0, (S.carro[p.id] || 0) - 1); pintar(); } }, '−'), h('input', { type: 'number', inputmode: 'numeric', min: 0, value: S.carro[p.id] || 0, style: 'width:64px;text-align:center;font-weight:700', onfocus: (e) => e.target.select(), onchange: (e) => { S.carro[p.id] = Math.max(0, Math.min(99, parseInt(e.target.value, 10) || 0)); pintar(); } }),
+        h('button', { onclick: () => { S.carro[p.id] = Math.min(99, (S.carro[p.id] || 0) + 1); pintar(); } }, '+')))));
   };
   pintar();
   const id = uuid(); // un solo id por pantalla: tocar dos veces no duplica

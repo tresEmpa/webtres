@@ -7,7 +7,7 @@
  * Anti-sobreventa: guardia en el lote + CHECK (stock >= 0) en la base.
  */
 
-export const TOPE_POR_RENGLON = 12;
+export const TOPE_POR_RENGLON = 99;
 export const TOPE_RENGLONES = 20;
 const RE_ID = /^[A-Za-z0-9-]{16,64}$/;
 
