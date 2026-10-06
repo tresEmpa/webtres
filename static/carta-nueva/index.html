@@ -111,7 +111,11 @@ async function cargarEstado() {
   try {
     const q = new URLSearchParams({ mesa: S.mesa, ids: S.pedidos.map((p) => p.id).join(',') });
     const r = await (await fetch('/api/pedido?' + q, { cache: 'no-store' })).json();
-    if (r.ok) { S.estado = r.pedidos; S.cuenta = r.cuenta; if (r.cuenta) { S.avisado = !!r.cuenta.aviso_transf; L.set('tep_avisado', S.avisado); } }
+    if (r.ok && r.pedidos.length && (!r.abierta || r.jornada_id !== r.jornada_actual)) {
+      // La noche terminó: se cierra la cuenta en pantalla (sin pagar ni "ya transferí") y se empieza de cero.
+      S.fin = true; S.sheet = null; drawSheet(); S.pedidos = []; S.estado = null; S.cuenta = null; S.avisado = false;
+      L.set('tep_pedidos', []); L.set('tep_avisado', false);
+    } else if (r.ok) { S.estado = r.pedidos; S.cuenta = r.cuenta; if (r.cuenta) { S.avisado = !!r.cuenta.aviso_transf; L.set('tep_avisado', S.avisado); } }
   } catch (e) {}
   if (!S.sheet) draw();
 }
@@ -228,6 +232,8 @@ function textoEstado(e) { return { recibido: 'Recibido', parcial: 'En camino (pa
 
 function vistaMisPedidos() {
   const w = h('div', {});
+  if (S.fin) w.append(h('div', { class: 'ped gracias' }, h('h2', { style: 'font-family:var(--fd);color:var(--negro)' }, '¡Gracias por la noche!'),
+    h('p', {}, 'La barra cerró. Si podés, contanos cómo te fue:'), h('a', { href: RESENA, target: '_blank', rel: 'noopener' }, '⭐ Dejanos tu reseña en Google')));
   if (S.recien && unidades() > 0) S.recien = false;
   if (S.recien) w.append(h('div', { class: 'banner', style: 'background:var(--dorado);color:var(--negro);font-weight:700;font-size:1.1rem' }, '✅ ¡Pedido hecho! Ya lo recibimos.'));
   if (!S.estado || !S.estado.length) return w;
@@ -254,7 +260,10 @@ function vistaPagar() {
   const c = S.cuenta;
   const copiar = async () => { try { await navigator.clipboard.writeText(ALIAS); alert('Alias copiado'); } catch (e) { alert('Alias: ' + ALIAS); } };
   const avisar = async () => {
-    try { await fetch('/api/aviso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mesa: S.mesa }) }); } catch (e) {}
+    try {
+      const r = await (await fetch('/api/aviso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mesa: S.mesa }) })).json();
+      if (!r.ok) { await cargarEstado(); return; }
+    } catch (e) { alert('No hay conexión. Probá de nuevo.'); return; }
     S.avisado = true; L.set('tep_avisado', true); drawSheet();
   };
   return h('div', {}, h('h2', {}, 'Pagar · ' + S.mesa), h('div', { class: 'l tot' }, h('span', {}, c.pagado > 0 ? 'Falta pagar' : 'Total'), h('span', {}, $$(c.saldo))),

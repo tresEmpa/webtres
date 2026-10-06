@@ -37,6 +37,6 @@ export async function onRequestGet({ request, env }) {
     // La cuenta solo existe para la jornada del pedido; si ya cerró, se informa.
     const jornadaId = pedidos[0]?.jornada_id ?? j?.id;
     const cuenta = pedidos.length && jornadaId && mesa ? await cuentaDeMesa(env.DB, jornadaId, mesa) : null;
-    return json({ ok: true, abierta: !!j, jornada_id: jornadaId ?? null, pedidos, cuenta });
+    return json({ ok: true, abierta: !!j, jornada_id: jornadaId ?? null, jornada_actual: j?.id ?? null, pedidos, cuenta });
   } catch (e) { return errorJson(e); }
 }
