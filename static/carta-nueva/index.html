@@ -259,7 +259,7 @@ function vistaPagar() {
     h('button', { class: 'sec', onclick: copiar }, 'Copiar alias'),
     S.avisado ? h('div', { class: 'banner', style: 'color:var(--crema);margin-top:12px' }, 'Gracias. Mostrale el comprobante a quien te atienda y confirmamos el pago.')
       : h('button', { class: 'prim', style: 'margin-top:10px', onclick: avisar }, 'Ya transferí'),
-    h('p', { style: 'margin-top:12px;font-size:.9rem' }, 'También podés pagar en efectivo en la barra.'),
+    !S.avisado && h('p', { style: 'margin-top:12px;font-size:.9rem' }, 'También podés pagar en efectivo en la barra.'),
     h('button', { class: 'sec', onclick: () => { S.sheet = null; drawSheet(); draw(); } }, 'Cerrar'));
 }
 
