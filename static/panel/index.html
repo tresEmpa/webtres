@@ -216,8 +216,8 @@ function vistaCuentas() {
   const cs = [...e.cuentas].sort((a, b) => (a.pagada_en ? 1 : 0) - (b.pagada_en ? 1 : 0) || String(a.mesa).localeCompare(String(b.mesa), 'es', { numeric: true }));
   return h('div', {}, !cs.length && h('div', { class: 'card mut' }, 'Todavía no hay mesas.'),
     cs.map((c) => h('button', { class: 'card', style: 'width:100%;text-align:left;display:block', onclick: () => modalCuenta(c.mesa) },
-      h('div', { class: 'row' }, h('div', { class: 'big' }, 'Mesa ' + c.mesa), h('div', { class: 'big' }, $$(c.entregado))),
-      h('div', { class: 'mut' }, c.pagada_en ? h('span', { class: 'chip ok' }, 'PAGÓ · ' + (c.medio || '')) : '', ' ', c.aviso_transf && !c.pagada_en ? h('span', { class: 'chip warn' }, 'dice que transfirió') : '', ' ', c.pendientes ? h('span', { class: 'chip warn' }, c.pendientes + ' sin entregar') : ''))));
+      h('div', { class: 'row' }, h('div', { class: 'big' }, 'Mesa ' + c.mesa), h('div', { class: 'big' }, $$(c.pagado > 0 ? c.saldo : c.entregado))),
+      h('div', { class: 'mut' }, c.pagada_en ? h('span', { class: 'chip ok' }, 'PAGÓ · ' + (c.medio || '')) : c.pagado > 0 ? h('span', { class: 'chip warn' }, 'PAGÓ ' + $$(c.pagado) + ' · DEBE ' + $$(c.saldo)) : '', ' ', c.aviso_transf && !c.pagada_en ? h('span', { class: 'chip warn' }, 'dice que transfirió') : '', ' ', c.pendientes ? h('span', { class: 'chip warn' }, c.pendientes + ' sin entregar') : ''))));
 }
 
 async function modalCuenta(mesa) {
@@ -233,7 +233,9 @@ async function modalCuenta(mesa) {
   document.body.append(h('div', { class: 'modal', onclick: (ev) => ev.target.classList.contains('modal') && cerrar() }, h('div', {},
     h('div', { class: 'row' }, h('div', { class: 'big' }, 'Mesa ' + mesa), h('button', { class: 'ghost', onclick: cerrar }, 'Cerrar')),
     c.lineas.filter((l) => l.cobrar > 0).map((l) => h('div', { class: 'row', style: 'padding:6px 0' }, h('span', {}, l.cobrar + '× ' + l.nombre + (l.pendientes > 0 && l.cobrar > l.entregadas ? '  (' + (l.cobrar - l.entregadas) + ' sin entregar)' : '')), h('span', {}, $$(l.cobrar * l.precio)))),
-    h('div', { class: 'row big', style: 'padding:10px 0;border-top:1px solid #333' }, h('span', {}, 'Total'), h('span', {}, $$(c.total))),
+    h('div', { class: 'row big', style: 'padding:10px 0;border-top:1px solid #333' }, h('span', {}, 'Total pedido'), h('span', {}, $$(c.total))),
+    c.pagado > 0 && h('div', { class: 'row', style: 'padding:4px 0' }, h('span', {}, 'Ya pagó'), h('span', {}, $$(c.pagado))),
+    c.pagado > 0 && c.saldo > 0 && h('div', { class: 'row big', style: 'padding:4px 0;color:var(--warn,#e8b04a)' }, h('span', {}, 'Debe'), h('span', {}, $$(c.saldo))),
     c.pendientes > 0 && h('div', { class: 'aviso' }, c.pendientes + ' unidades todavía sin entregar (están en el total).'),
     c.pagada_en ? h('div', { class: 'chip ok' }, 'Pagada · ' + (c.medio || '')) :
       h('div', { class: 'grid', style: 'grid-template-columns:1fr 1fr' }, ['efectivo', 'transferencia', 'qr', 'tarjeta'].map((m) => h('button', { class: m === 'efectivo' || m === 'transferencia' ? 'ok' : '', onclick: () => pagar(m) }, 'PAGÓ · ' + m))))));

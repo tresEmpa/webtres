@@ -15,14 +15,15 @@ export async function onRequestGet({ request, env }) {
       const { results: cs } = await db.prepare('SELECT * FROM cuentas WHERE jornada_id = ?').bind(j.id).all();
       const porMesa = new Map();
       for (const p of pedidos) {
-        const c = porMesa.get(p.mesa) || { mesa: p.mesa, entregado: 0, pendientes: 0, pagada_en: null, medio: null, aviso_transf: null };
+        const c = porMesa.get(p.mesa) || { mesa: p.mesa, entregado: 0, pendientes: 0, pagada_en: null, medio: null, aviso_transf: null, pagado: 0, saldo: 0 };
         for (const r of p.renglones) {
           c.entregado += (p.anulado_en ? r.entregadas : r.cantidad) * r.precio;
           if (!p.anulado_en) c.pendientes += r.cantidad - r.entregadas;
         }
         porMesa.set(p.mesa, c);
       }
-      for (const c of cs) { const x = porMesa.get(c.mesa); if (x) { x.pagada_en = c.pagada_en; x.medio = c.medio; x.aviso_transf = c.aviso_transf; } }
+      for (const c of cs) { const x = porMesa.get(c.mesa); if (x) { x.pagado = c.pagado || 0; x.saldo = Math.max(0, x.entregado - x.pagado); x.pagada_en = x.pagado > 0 && x.saldo === 0 ? c.pagada_en : null; x.medio = c.medio; x.aviso_transf = c.aviso_transf; } }
+      for (const x of porMesa.values()) if (!x.pagado) x.saldo = x.entregado;
       cuentas = [...porMesa.values()];
     }
     return json({ ok: true, jornada: j, productos, pedidos, cuentas, ahora: new Date().toISOString() });

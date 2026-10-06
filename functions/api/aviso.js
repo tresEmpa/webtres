@@ -8,9 +8,11 @@ export async function onRequestPost({ request, env }) {
     const mesa = String(b.mesa || '').trim().slice(0, 20);
     const j = await jornadaAbierta(env.DB);
     if (!j || !mesa) return json({ ok: false, error: 'cerrado' }, 400);
-    const r = await env.DB.prepare(
-      'UPDATE cuentas SET aviso_transf = COALESCE(aviso_transf, ?) WHERE jornada_id = ? AND mesa = ?',
-    ).bind(new Date().toISOString(), j.id, mesa).run();
-    return json({ ok: !!r.meta.changes });
+    const ts = new Date().toISOString();
+    await env.DB.prepare(
+      `INSERT INTO cuentas (jornada_id, mesa, aviso_transf) VALUES (?,?,?)
+       ON CONFLICT (jornada_id, mesa) DO UPDATE SET aviso_transf = excluded.aviso_transf`,
+    ).bind(j.id, mesa, ts).run();
+    return json({ ok: true });
   } catch (e) { return errorJson(e); }
 }

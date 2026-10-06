@@ -249,14 +249,19 @@ export async function cuentaDeMesa(db, jornadaId, mesa) {
               WHERE p.jornada_id = ? AND p.mesa = ? AND p.anulado_en IS NULL`).bind(jornadaId, mesa).all();
   const total = lineas.reduce((s, l) => s + l.cobrar * l.precio, 0);
   const c = await db.prepare('SELECT * FROM cuentas WHERE jornada_id = ? AND mesa = ?').bind(jornadaId, mesa).first();
-  return { mesa, lineas, total, pendientes: pend[0].n, pagada_en: c?.pagada_en ?? null, medio: c?.medio ?? null };
+  const pagado = c?.pagado ?? 0;
+  const saldo = Math.max(0, total - pagado);
+  const pagadaTodo = pagado > 0 && saldo === 0;
+  return { mesa, lineas, total, pagado, saldo, pendientes: pend[0].n, pagada_en: pagadaTodo ? c.pagada_en : null, medio: c?.medio ?? null, aviso_transf: c?.aviso_transf ?? null };
 }
 
 export async function pagarCuenta(db, jornadaId, mesa, medio) {
+  // "Pagó" = pagó todo lo pedido hasta este momento. Si después pide más, queda saldo por cobrar.
+  const actual = await cuentaDeMesa(db, jornadaId, mesa);
   await db.prepare(
-    `INSERT INTO cuentas (jornada_id, mesa, pagada_en, medio) VALUES (?,?,?,?)
-     ON CONFLICT (jornada_id, mesa) DO UPDATE SET pagada_en = COALESCE(pagada_en, excluded.pagada_en),
-       medio = COALESCE(medio, excluded.medio)`).bind(jornadaId, mesa, ahora(), medio ?? null).run();
+    `INSERT INTO cuentas (jornada_id, mesa, pagada_en, medio, pagado) VALUES (?,?,?,?,?)
+     ON CONFLICT (jornada_id, mesa) DO UPDATE SET pagada_en = excluded.pagada_en,
+       medio = excluded.medio, pagado = excluded.pagado, aviso_transf = NULL`).bind(jornadaId, mesa, ahora(), medio ?? null, actual.total).run();
   return cuentaDeMesa(db, jornadaId, mesa);
 }
 
