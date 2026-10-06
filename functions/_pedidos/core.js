@@ -27,8 +27,24 @@ export class ErrorPedido extends Error {
 
 // ---------- Jornada ----------
 
+/** Último corte de las 06:00 de Argentina (09:00 UTC) anterior o igual a `ahoraMs`. */
+export function ultimoCorte(ahoraMs = Date.now()) {
+  const d = new Date(ahoraMs);
+  let c = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 9, 0, 0);
+  if (c > ahoraMs) c -= 86400000;
+  return new Date(c).toISOString();
+}
+
 export async function jornadaAbierta(db) {
-  return db.prepare('SELECT * FROM jornadas WHERE cerrada_en IS NULL ORDER BY id DESC LIMIT 1').first();
+  const j = await db.prepare('SELECT * FROM jornadas WHERE cerrada_en IS NULL ORDER BY id DESC LIMIT 1').first();
+  if (!j) return j;
+  // Si se olvidaron de cerrarla, se cierra sola a las 6 de la mañana.
+  const corte = ultimoCorte();
+  if (j.abierta_en < corte) {
+    await db.prepare('UPDATE jornadas SET cerrada_en = ? WHERE id = ? AND cerrada_en IS NULL').bind(corte, j.id).run();
+    return null;
+  }
+  return j;
 }
 
 export async function abrirJornada(db) {
