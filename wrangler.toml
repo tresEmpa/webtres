@@ -9,3 +9,10 @@ pages_build_output_dir = "dist"
 # Las variables sensibles (COCINA_USER, COCINA_PASS_HASH, SESSION_SECRET,
 # GITHUB_TOKEN, GITHUB_REPO, GITHUB_BRANCH, APPS_SCRIPT_URL) NO van acá.
 # Se cargan en el panel de Cloudflare como "Environment variables / Secrets".
+
+# Sistema de pedidos nuevo: la base D1 se vincula SOLO a las vistas previas (Preview).
+# Producción no tiene esta base hasta el cambio final.
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "tres-pedidos"
+database_id = "6a9f797b-1770-44dc-a118-c6d0b25e873d"
