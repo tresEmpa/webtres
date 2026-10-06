@@ -15,8 +15,8 @@ export async function onRequestGet({ request, env }) {
     `SELECT p.id AS pedido, p.mesa, p.creado_en, p.origen, p.anulado_en, r.nombre, r.cantidad, r.entregadas, r.precio
      FROM renglones r JOIN pedidos p ON p.id = r.pedido_id WHERE p.jornada_id = ? ORDER BY p.creado_en, r.id`,
   ).bind(id).all();
-  const cab = ['pedido', 'mesa', 'hora', 'origen', 'anulado', 'producto', 'pedidas', 'entregadas', 'precio', 'importe_entregado'];
-  const filas = results.map((r) => [r.pedido, r.mesa, r.creado_en, r.origen, r.anulado_en || '', r.nombre, r.cantidad, r.entregadas, r.precio, r.entregadas * r.precio].map(q).join(','));
+  const cab = ['pedido', 'mesa', 'hora', 'origen', 'anulado', 'producto', 'pedidas', 'entregadas', 'precio', 'importe'];
+  const filas = results.map((r) => [r.pedido, r.mesa, r.creado_en, r.origen, r.anulado_en || '', r.nombre, r.cantidad, r.entregadas, r.precio, (r.anulado_en ? r.entregadas : r.cantidad) * r.precio].map(q).join(','));
   return new Response('﻿' + [cab.join(','), ...filas].join('\n'), {
     headers: { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': `attachment; filename="jornada-${id}.csv"` },
   });

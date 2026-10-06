@@ -26,6 +26,7 @@ export async function onRequestGet({ request, env }) {
       for (const x of porMesa.values()) if (!x.pagado) x.saldo = x.entregado;
       cuentas = [...porMesa.values()];
     }
-    return json({ ok: true, jornada: j, productos, pedidos, cuentas, ahora: new Date().toISOString() });
+    const { results: jornadas } = await db.prepare('SELECT id, abierta_en, cerrada_en FROM jornadas WHERE cerrada_en IS NOT NULL ORDER BY id DESC LIMIT 30').all();
+    return json({ ok: true, jornada: j, jornadas, productos, pedidos, cuentas, ahora: new Date().toISOString() });
   } catch (e) { return errorJson(e); }
 }

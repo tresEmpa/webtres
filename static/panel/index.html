@@ -273,8 +273,17 @@ function filaStock(p) {
     h('div', { class: 'row' }, h('b', {}, p.nombre), manual && h('span', { class: 'chip warn' }, 'MANUAL')), cuerpo, modoSw);
 }
 
+async function bajarNoche(id) {
+  const r = await fetch('/api/panel/csv?jornada=' + id); if (!r.ok) return alert('No se pudo bajar.');
+  const b = await r.blob();
+  const a = h('a', { href: URL.createObjectURL(b), download: 'jornada-' + id + '.csv' }); document.body.append(a); a.click(); a.remove();
+}
+
 function vistaCarta() {
-  return h('div', {}, h('p', { class: 'mut' }, 'Lo que está oculto no aparece en la carta de los clientes.'),
+  const fecha = (iso) => new Date(iso).toLocaleDateString('es-AR', { weekday: 'short', day: 'numeric', month: 'numeric' });
+  const noches = (S.est.jornadas || []).length ? h('div', { class: 'card' }, h('b', {}, 'Noches anteriores'),
+    (S.est.jornadas || []).map((j) => h('div', { class: 'row', style: 'padding:6px 0' }, h('span', {}, fecha(j.abierta_en)), h('button', { onclick: () => bajarNoche(j.id) }, 'Descargar')))) : null;
+  return h('div', {}, h('p', { class: 'mut' }, 'Lo que está oculto no aparece en la carta de los clientes.'), noches,
     S.est.productos.map((p) => {
       const inp = h('input', { type: 'number', inputmode: 'numeric', value: p.precio, style: 'width:110px' });
       return h('div', { class: 'card' }, h('div', { class: 'row' }, h('b', {}, p.nombre),
@@ -310,10 +319,8 @@ async function cerrarJornada() {
   const e = S.est;
   const pend = e.pedidos.filter((p) => p.estado === 'recibido' || p.estado === 'parcial').length;
   const sinPagar = e.cuentas.filter((c) => !c.pagada_en && c.entregado > 0).length;
-  const t = 'Vas a cerrar la noche.' + (pend ? `\n• ${pend} pedidos sin terminar.` : '') + (sinPagar ? `\n• ${sinPagar} cuentas sin marcar como pagadas.` : '') + '\n\nSe va a descargar el resumen. ¿Cerrar?';
+  const t = 'Vas a cerrar la noche.' + (pend ? `\n• ${pend} pedidos sin terminar.` : '') + (sinPagar ? `\n• ${sinPagar} cuentas sin marcar como pagadas.` : '') + '\n\nTodo queda guardado en el sistema (lo podés bajar después desde la pestaña Carta). ¿Cerrar?';
   if (!confirm(t)) return;
-  const r = await fetch('/api/panel/csv'); const b = await r.blob();
-  const a = h('a', { href: URL.createObjectURL(b), download: 'jornada-' + e.jornada.id + '.csv' }); document.body.append(a); a.click(); a.remove();
   await accion({ tipo: 'cerrar_jornada' });
 }
 
