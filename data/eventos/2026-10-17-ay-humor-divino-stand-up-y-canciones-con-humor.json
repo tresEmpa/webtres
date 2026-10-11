@@ -1,0 +1,22 @@
+{
+    "fecha": "2026-10-17",
+    "nombre_show": "Ay Humor Divino | Stand Up y Canciones con Humor",
+    "descripcion": "Una noche especial en Tres Empanadas: Viene de CABA nuestro amigo Eduardo Argüelles con su humor musical.  \r\nShow a la gorra.",
+    "hora": "21:30",
+    "duracion_minutos": 90,
+    "estado": "activo",
+    "motivo_cancelacion": "",
+    "plantilla": "edicion-especial-alumnos",
+    "link_instagram": "",
+    "notas_internas": "",
+    "color": "violeta",
+    "flyer": "2026-10-17-ay-humor-divino-stand-up-y-canciones-con-humor.png",
+    "elenco": [
+        "Eduardo Argüelles",
+        "Checho Falco"
+    ],
+    "dia_semana": "sábado",
+    "actualizado": "2026-10-11T14:29:20.151Z",
+    "creado": "2026-10-11T14:29:20.151Z",
+    "id": "2026-10-17-ay-humor-divino-stand-up-y-canciones-con-humor"
+}
