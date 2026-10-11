@@ -67,7 +67,7 @@ export async function verifyPassword(password, stored) {
 }
 
 /** Genera un hash PBKDF2 (usado por tools/hash-password.mjs). */
-export async function hashPassword(password, iterations = 210000) {
+export async function hashPassword(password, iterations = 100000) {
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const key = await crypto.subtle.importKey(
     'raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveBits'],
