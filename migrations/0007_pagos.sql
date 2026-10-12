@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS pagos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  jornada_id INTEGER NOT NULL,
+  mesa TEXT NOT NULL,
+  monto INTEGER NOT NULL,
+  medio TEXT,
+  creado_en TEXT NOT NULL
+);

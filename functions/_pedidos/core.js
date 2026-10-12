@@ -290,6 +290,13 @@ export async function pagarCuenta(db, jornadaId, mesa, medio) {
     `INSERT INTO cuentas (jornada_id, mesa, pagada_en, medio, pagado) VALUES (?,?,?,?,?)
      ON CONFLICT (jornada_id, mesa) DO UPDATE SET pagada_en = excluded.pagada_en,
        medio = excluded.medio, pagado = excluded.pagado, aviso_transf = NULL`).bind(jornadaId, mesa, ahora(), medio ?? null, actual.total).run();
+  const delta = actual.total - actual.pagado;
+  if (delta > 0) { // registro del pago (para el resumen y el control de transferencias)
+    try {
+      await db.prepare('INSERT INTO pagos (jornada_id, mesa, monto, medio, creado_en) VALUES (?,?,?,?,?)')
+        .bind(jornadaId, mesa, delta, medio ?? null, ahora()).run();
+    } catch (e) { console.error('pagos', e); }
+  }
   return cuentaDeMesa(db, jornadaId, mesa);
 }
 
