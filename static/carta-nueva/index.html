@@ -70,7 +70,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:12px 16px
 </style>
 </head>
 <body>
-<header><img src="/assets/img/logo.png" alt="Tres Empanadas Comedia" width="92" height="92"><h1>Tres Empanadas Comedia</h1><p>Pedí sin levantarte. Reite tranquilo.</p></header>
+<header><img src="/assets/img/logo.png" alt="Tres Empanadas Comedia" width="92" height="92"><h1>Tres Empanadas Comedia</h1><p>Pedí sin levantarte. Disfrutá la noche.</p></header>
 <main id="app"></main>
 <div id="barra"></div>
 <script>
@@ -274,7 +274,7 @@ function vistaMisPedidos() {
   const w = h('div', {});
   if (S.fin) w.append(graciasCard());
   if (S.recien && unidades() > 0) S.recien = false;
-  if (S.recien) w.append(h('div', { class: 'banner', style: 'background:var(--dorado);color:var(--negro);font-weight:700;font-size:1.1rem' }, '✅ ¡Listo! Ya lo estamos preparando. Reite tranquilo.'));
+  if (S.recien) w.append(h('div', { class: 'banner', style: 'background:var(--dorado);color:var(--negro);font-weight:700;font-size:1.1rem' }, '✅ ¡Listo! Ya lo estamos preparando.'));
   if (!S.estado || !S.estado.length) return w;
   if (S.cuenta && S.cuenta.pagada_en) {
     w.append(graciasCard());
