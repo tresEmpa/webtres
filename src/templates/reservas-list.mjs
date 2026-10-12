@@ -275,8 +275,8 @@ ${BLOQUE_RESENAS}
 `;
 
   return page({
-    title: 'Reservar — Próximas funciones | Tres Empanadas Comedia',
-    description: 'Próximas funciones de stand up en Tres Empanadas — La Plata. Reservá gratis tu mesa.',
+    title: 'Próximas funciones de stand up en La Plata | Tres Empanadas Comedia',
+    description: 'Stand up jueves y viernes 21:30 en Tres Empanadas, 43 y 22, La Plata. Elegí la función y reservá gratis: el show es a la gorra.',
     url: 'https://tresempanadas.com.ar/reservas/',
     bodyClass: 'page-reservas-listado',
     extraCss: '/assets/css/reservas.css',
