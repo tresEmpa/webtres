@@ -26,9 +26,9 @@ header h1{font-family:var(--fd);font-size:1.7rem;font-weight:800;line-height:1.0
 header p{font-style:italic;color:var(--dorado)}
 main{max-width:640px;margin:0 auto;padding:0 14px}
 button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:12px 16px;min-height:46px}
-.cats{position:sticky;top:0;z-index:4;background:var(--rojo);margin:0 -14px;padding:8px 14px;overflow-x:auto;white-space:nowrap;box-shadow:0 6px 8px -6px #0006;-webkit-overflow-scrolling:touch}
-.cats button{display:inline-block;min-height:38px;padding:6px 14px;border-radius:99px;background:var(--tinto);color:var(--crema);font-family:var(--fd);font-weight:700;margin-right:6px}
-.cat{scroll-margin-top:64px}
+.cats{position:sticky;top:0;z-index:4;background:var(--rojo);margin:0 -14px;padding:8px 14px;display:flex;gap:6px;box-shadow:0 6px 8px -6px #0006;-webkit-overflow-scrolling:touch}
+.cats button{flex:1;min-height:40px;padding:6px 8px;border-radius:99px;background:var(--tinto);color:var(--crema);font-family:var(--fd);font-weight:700;font-size:.95rem;white-space:nowrap}
+.cat{scroll-margin-top:62px}
 @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
 .bump{animation:bump .25s ease-out}
 #barra .dos{display:flex;gap:10px;max-width:640px;margin:0 auto}
@@ -193,11 +193,17 @@ function draw() {
     app.append(vistaMisPedidos());
     const vis = S.menu.filter((p) => p.disponible);
     const cats = [...new Set(vis.map((p) => p.categoria))];
-    app.append(h('div', { id: 'menu' }));
+    // Navegación corta: Cervezas · Sin alcohol · Para comer (lo que no calza queda como su propio grupo)
+    const GRUPOS = [['🍺 Cervezas', ['Tiradas', 'Latas']], ['🥤 Sin alcohol', ['Sin alcohol']], ['🥟 Para comer', ['Snacks', 'Empanadas']]];
+    const usadas = new Set(GRUPOS.flatMap((g) => g[1]));
+    const grupos = [...GRUPOS, ...cats.filter((c) => !usadas.has(c)).map((c) => [c, [c]])]
+      .map(([n, cs]) => [n, cats.find((c) => cs.includes(c))]).filter(([, c]) => c);
+    app.append(h('div', { class: 'cats', id: 'menu' }, grupos.map(([n, c]) => h('button', { onclick: () => document.getElementById('cat-' + cats.indexOf(c))?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, n))));
     for (const [i, c] of cats.entries()) {
       app.append(h('div', { class: 'cat', id: 'cat-' + i }, c));
       for (const p of vis.filter((x) => x.categoria === c)) app.append(fila(p));
     }
+    app.append(h('div', { style: 'height:38vh' })); // para que la última sección pueda llegar arriba
   }
   pintarBarra();
   window.scrollTo(0, y);
