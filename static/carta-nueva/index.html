@@ -93,6 +93,14 @@ const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'p' + Date.now().t
 const total = () => S.menu.reduce((s, p) => s + (S.carro[p.id] || 0) * p.precio, 0);
 const unidades = () => Object.values(S.carro).reduce((a, b) => a + b, 0);
 
+const escribiendo = () => { const a = document.activeElement; return !!a && a.tagName === 'INPUT'; };
+let _huella = '';
+function redibujar() { // solo si cambió algo y el cliente no está escribiendo (si no, se le cierra el teclado)
+  const hu = JSON.stringify([S.menu, S.abierta, S.estado, S.cuenta, S.fin, S.recien]);
+  if (hu === _huella || escribiendo()) return;
+  _huella = hu; draw();
+}
+
 async function cargarMenu() {
   try {
     const r = await (await fetch('/api/menu', { cache: 'no-store' })).json();
@@ -103,7 +111,7 @@ async function cargarMenu() {
       else if (p.quedan != null && (S.carro[p.id] || 0) > p.quedan) S.carro[p.id] = p.quedan;
     }
   } catch (e) {}
-  if (!S.sheet) draw();
+  if (!S.sheet) redibujar();
 }
 
 async function cargarEstado() {
@@ -117,7 +125,7 @@ async function cargarEstado() {
       L.set('tep_pedidos', []); L.set('tep_avisado', false);
     } else if (r.ok) { S.estado = r.pedidos; S.cuenta = r.cuenta; if (r.cuenta) { S.avisado = !!r.cuenta.aviso_transf; L.set('tep_avisado', S.avisado); } }
   } catch (e) {}
-  if (!S.sheet) draw();
+  if (!S.sheet) redibujar();
 }
 
 // ---- envío: un solo id por intento; si falla la red se reintenta con el MISMO id ----
