@@ -193,7 +193,7 @@ function draw() {
     app.append(vistaMisPedidos());
     const vis = S.menu.filter((p) => p.disponible);
     const cats = [...new Set(vis.map((p) => p.categoria))];
-    app.append(h('div', { class: 'cats', id: 'menu' }, cats.map((c, i) => h('button', { onclick: () => document.getElementById('cat-' + i)?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, c))));
+    app.append(h('div', { id: 'menu' }));
     for (const [i, c] of cats.entries()) {
       app.append(h('div', { class: 'cat', id: 'cat-' + i }, c));
       for (const p of vis.filter((x) => x.categoria === c)) app.append(fila(p));
