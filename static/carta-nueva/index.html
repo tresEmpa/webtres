@@ -20,11 +20,23 @@
 :root{--rojo:#B33227;--rojo2:#8E2A20;--tinto:#6E1F18;--crema:#F1E8D2;--papel:#ECE0C2;--dorado:#D9B76A;--negro:#1A1614;--tx:#3D352F;--verde:#2f7d4f;--fd:'Bricolage Grotesque',system-ui,sans-serif;--fb:'Fraunces',Georgia,serif}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:var(--fb);background:var(--rojo);color:var(--crema);line-height:1.5;padding-bottom:120px;-webkit-font-smoothing:antialiased}
-header{text-align:center;padding:1.6rem 1rem 1rem}
-header h1{font-family:var(--fd);font-size:1.8rem;font-weight:800;line-height:1.05}
+header{text-align:center;padding:1.1rem 1rem .6rem}
+header img{width:92px;height:92px;border-radius:50%;box-shadow:0 0 0 3px var(--dorado),0 6px 18px #0005;display:block;margin:0 auto .6rem}
+header h1{font-family:var(--fd);font-size:1.7rem;font-weight:800;line-height:1.05}
 header p{font-style:italic;color:var(--dorado)}
 main{max-width:640px;margin:0 auto;padding:0 14px}
 button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:12px 16px;min-height:46px}
+.cats{position:sticky;top:0;z-index:4;background:var(--rojo);margin:0 -14px;padding:8px 14px;overflow-x:auto;white-space:nowrap;box-shadow:0 6px 8px -6px #0006;-webkit-overflow-scrolling:touch}
+.cats button{display:inline-block;min-height:38px;padding:6px 14px;border-radius:99px;background:var(--tinto);color:var(--crema);font-family:var(--fd);font-weight:700;margin-right:6px}
+.cat{scroll-margin-top:64px}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+.bump{animation:bump .25s ease-out}
+#barra .dos{display:flex;gap:10px;max-width:640px;margin:0 auto}
+#barra .dos button{flex:1;width:auto;margin:0}
+#barra .dos button.o{background:transparent;border:2px solid var(--dorado);color:var(--crema)}
+.pasos{margin-top:8px}.pasos .paso{display:flex;gap:10px;align-items:flex-start;margin:10px 0}
+.pasos .paso i{flex:none;width:26px;height:26px;border-radius:50%;background:var(--rojo);color:#fff;font:700 .9rem var(--fd);display:flex;align-items:center;justify-content:center;font-style:normal}
+.titular{font-size:.9rem;text-align:center;margin-top:-2px}
 .cat{font-family:var(--fd);font-weight:800;font-size:1.15rem;color:var(--dorado);margin:1.4rem 0 .5rem;text-transform:uppercase;letter-spacing:.06em}
 .item{display:flex;align-items:center;gap:10px;background:var(--papel);color:var(--tx);border-radius:14px;padding:10px 12px;margin-bottom:8px}
 .item.no{opacity:.55}
@@ -57,12 +69,13 @@ button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:12px 16px
 </style>
 </head>
 <body>
-<header><h1>Tres Empanadas Comedia</h1><p>Pedí desde tu lugar</p></header>
+<header><img src="/assets/img/logo.png" alt="Tres Empanadas Comedia" width="92" height="92"><h1>Tres Empanadas Comedia</h1><p>Pedí sin levantarte. Reite tranquilo.</p></header>
 <main id="app"></main>
 <div id="barra"></div>
 <script>
 'use strict';
 const ALIAS = 'Comedia123';
+const TITULAR = 'Sergio Norberto Falco';
 const RESENA = 'https://g.page/r/CcRc7MWoc9jTEBM/review';
 const L = { // localStorage con tolerancia a fallas (navegadores internos de redes sociales)
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return mem[k] ?? d; } },
@@ -177,12 +190,11 @@ function draw() {
   else {
     if (!S.abierta && !S.fin) app.append(h('div', { class: 'banner' }, 'La barra todavía no abrió. Cuando abra vas a poder pedir desde acá.'));
     app.append(vistaMisPedidos());
-    app.append(h('div', { class: 'mesa' }, h('label', { for: 'mesa' }, 'Tu nombre'),
-      h('input', { id: 'mesa', inputmode: 'text', maxlength: 20, placeholder: 'Nombre (ej: Juan)', value: S.mesa, oninput: (e) => { S.mesa = e.target.value.trim(); L.set('tep_mesa', S.mesa); pintarBarra(); } })));
     const vis = S.menu.filter((p) => p.disponible);
     const cats = [...new Set(vis.map((p) => p.categoria))];
-    for (const c of cats) {
-      app.append(h('div', { class: 'cat' }, c));
+    app.append(h('div', { class: 'cats', id: 'menu' }, cats.map((c, i) => h('button', { onclick: () => document.getElementById('cat-' + i)?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, c))));
+    for (const [i, c] of cats.entries()) {
+      app.append(h('div', { class: 'cat', id: 'cat-' + i }, c));
       for (const p of vis.filter((x) => x.categoria === c)) app.append(fila(p));
     }
   }
@@ -190,8 +202,10 @@ function draw() {
   window.scrollTo(0, y);
 }
 
-function numIn(n, tope, set) {
-  return h('input', { type: 'number', inputmode: 'numeric', min: 0, max: tope, value: n, disabled: !S.abierta,
+function bump(id) { document.querySelector('[data-n="' + id + '"]')?.classList.add('bump'); try { navigator.vibrate && navigator.vibrate(8); } catch (e) {} }
+
+function numIn(n, tope, set, id) {
+  return h('input', { 'data-n': id, type: 'number', inputmode: 'numeric', min: 0, max: tope, value: n, disabled: !S.abierta,
     style: 'width:64px;text-align:center;font-weight:700;font-size:1.1rem;padding:8px;border-radius:10px;border:1px solid #bbb',
     onfocus: (e) => e.target.select(),
     onchange: (e) => { let v = parseInt(e.target.value, 10); if (!(v >= 0)) v = 0; set(Math.min(v, tope)); } });
@@ -204,18 +218,26 @@ function fila(p) {
   return h('div', { class: 'item' + (p.disponible ? '' : ' no') },
     h('div', { class: 'n' }, h('b', {}, p.nombre), h('span', { class: 'p' }, $$(p.precio)), (p.quedan != null && n >= p.quedan && n > 0) ? h('div', { class: 'q', style: 'color:#b00020;font-weight:700' }, 'No hay más: pediste todas las que quedan (' + p.quedan + ')') : poco && h('div', { class: 'q' }, p.quedan === 1 ? 'Queda 1' : 'Quedan ' + p.quedan)),
     p.disponible ? h('div', { class: 'stp' },
-      h('button', { disabled: n === 0 || !S.abierta, onclick: () => { S.carro[p.id] = n - 1; draw(); } }, '−'), numIn(n, tope, (v) => { S.carro[p.id] = v; draw(); }),
-      h('button', { disabled: n >= tope || !S.abierta, onclick: () => { S.carro[p.id] = n + 1; draw(); } }, '+')) : h('span', { class: 'agot' }, 'Agotado'));
+      h('button', { disabled: n === 0 || !S.abierta, onclick: () => { S.carro[p.id] = n - 1; draw(); bump(p.id); } }, '−'), numIn(n, tope, (v) => { S.carro[p.id] = v; draw(); bump(p.id); }, p.id),
+      h('button', { disabled: n >= tope || !S.abierta, onclick: () => { S.carro[p.id] = n + 1; draw(); bump(p.id); } }, '+')) : h('span', { class: 'agot' }, 'Agotado'));
 }
 
 function pintarBarra() {
   const b = document.getElementById('barra'); b.replaceChildren();
   const u = unidades();
   if (S.pendiente) { b.append(h('button', { onclick: () => { S.sheet = 'confirmar'; drawSheet(); } }, 'Reintentar el pedido en curso')); return; }
-  if (!u) { b.style.display = 'none'; return; }
+  const hay = S.estado && S.estado.length && !S.fin;
+  if (!u && !hay) { b.style.display = 'none'; return; }
   b.style.display = '';
-  b.append(h('button', { disabled: !S.abierta, onclick: () => { if (!S.mesa) { document.getElementById('mesa').focus(); S.msg = ''; alert('Poné tu nombre primero.'); return; } S.sheet = 'confirmar'; drawSheet(); } },
-    `Hacer pedido · ${u} ${u === 1 ? 'producto' : 'productos'} · ${$$(total())}`));
+  if (u) {
+    b.append(h('button', { disabled: !S.abierta, onclick: () => { S.sheet = 'confirmar'; drawSheet(); } },
+      `Hacer pedido · ${u} ${u === 1 ? 'producto' : 'productos'} · ${$$(total())}`));
+    return;
+  }
+  const saldo = S.cuenta ? S.cuenta.saldo : 0;
+  b.append(h('div', { class: 'dos' },
+    h('button', { class: 'o', disabled: !S.abierta, onclick: () => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, '＋ Pedir algo más'),
+    saldo > 0 && h('button', { onclick: () => { S.sheet = 'pagar'; drawSheet(); } }, 'Pagar ' + $$(saldo))));
 }
 
 function drawSheet() {
@@ -226,12 +248,14 @@ function drawSheet() {
     const items = S.pendiente ? S.pendiente.items : Object.entries(S.carro).filter(([, n]) => n > 0).map(([producto_id, cantidad]) => ({ producto_id, cantidad }));
     const nom = (id) => S.menu.find((p) => p.id === id) || { nombre: id, precio: 0 };
     const t = items.reduce((s, i) => s + nom(i.producto_id).precio * i.cantidad, 0);
-    cont = h('div', {}, h('h2', {}, 'Tu pedido · ' + (S.pendiente ? S.pendiente.mesa : S.mesa)),
+    cont = h('div', {}, h('h2', {}, S.pendiente ? 'Tu pedido · ' + S.pendiente.mesa : 'Tu pedido'),
+      !S.pendiente && h('div', { class: 'mesa' }, h('label', { for: 'mesa' }, '¿A nombre de quién?'),
+        h('input', { id: 'mesa', inputmode: 'text', maxlength: 20, autocomplete: 'given-name', placeholder: 'Tu nombre (ej: Juan)', value: S.mesa, oninput: (e) => { S.mesa = e.target.value.trim(); L.set('tep_mesa', S.mesa); } })),
       items.map((i) => h('div', { class: 'l' }, h('span', {}, i.cantidad + '× ' + nom(i.producto_id).nombre), h('span', {}, $$(nom(i.producto_id).precio * i.cantidad)))),
       h('div', { class: 'l tot' }, h('span', {}, 'Total'), h('span', {}, $$(t))),
       S.msg && h('div', { class: 'err' }, S.msg),
-      h('button', { class: 'prim', style: 'margin-top:10px', disabled: S.enviando, onclick: enviar }, S.enviando ? 'Enviando…' : S.pendiente ? 'Reintentar' : 'Enviar pedido'),
-      !S.enviando && !S.pendiente && h('button', { class: 'sec', onclick: () => { S.sheet = null; S.msg = ''; drawSheet(); draw(); } }, 'Volver y cambiar'));
+      h('button', { class: 'prim', style: 'margin-top:10px', disabled: S.enviando, onclick: () => { if (!S.pendiente && !S.mesa) { S.msg = 'Poné tu nombre para saber a quién llevarle el pedido.'; drawSheet(); document.getElementById('mesa')?.focus(); return; } enviar(); } }, S.enviando ? 'Enviando…' : S.pendiente ? 'Reintentar' : 'Enviar pedido'),
+      !S.enviando && !S.pendiente && h('button', { class: 'sec', onclick: () => { S.sheet = null; S.msg = ''; drawSheet(); draw(); } }, 'Seguir eligiendo'));
   } else if (S.sheet === 'pagar') cont = vistaPagar();
   document.body.append(h('div', { class: 'sheet' }, cont));
 }
@@ -249,7 +273,7 @@ function vistaMisPedidos() {
   const w = h('div', {});
   if (S.fin) w.append(graciasCard());
   if (S.recien && unidades() > 0) S.recien = false;
-  if (S.recien) w.append(h('div', { class: 'banner', style: 'background:var(--dorado);color:var(--negro);font-weight:700;font-size:1.1rem' }, '✅ ¡Pedido hecho! Ya lo recibimos.'));
+  if (S.recien) w.append(h('div', { class: 'banner', style: 'background:var(--dorado);color:var(--negro);font-weight:700;font-size:1.1rem' }, '✅ ¡Listo! Ya lo estamos preparando. Reite tranquilo.'));
   if (!S.estado || !S.estado.length) return w;
   if (S.cuenta && S.cuenta.pagada_en) {
     w.append(graciasCard());
@@ -271,7 +295,11 @@ function vistaMisPedidos() {
 
 function vistaPagar() {
   const c = S.cuenta;
-  const copiar = async () => { try { await navigator.clipboard.writeText(ALIAS); alert('Alias copiado'); } catch (e) { alert('Alias: ' + ALIAS); } };
+  const btn = h('button', { class: 'prim' }, 'Copiar alias');
+  btn.onclick = async () => {
+    try { await navigator.clipboard.writeText(ALIAS); btn.textContent = '✓ ¡Alias copiado!'; setTimeout(() => { btn.textContent = 'Copiar alias'; }, 2500); }
+    catch (e) { const el = document.getElementById('alias'); const r = document.createRange(); r.selectNodeContents(el); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); btn.textContent = 'Mantené apretado el alias para copiarlo'; }
+  };
   const avisar = async () => {
     try {
       const r = await (await fetch('/api/aviso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mesa: S.mesa }) })).json();
@@ -279,12 +307,15 @@ function vistaPagar() {
     } catch (e) { alert('No hay conexión. Probá de nuevo.'); return; }
     S.avisado = true; L.set('tep_avisado', true); drawSheet();
   };
-  return h('div', {}, h('h2', {}, 'Pagar · ' + S.mesa), h('div', { class: 'l tot' }, h('span', {}, c.pagado > 0 ? 'Falta pagar' : 'Total'), h('span', {}, $$(c.saldo))),
-    h('p', { style: 'margin-top:10px' }, h('b', {}, 'Transferencia'), ' al alias:'), h('div', { class: 'alias' }, ALIAS),
-    h('button', { class: 'sec', onclick: copiar }, 'Copiar alias'),
-    S.avisado ? h('div', { class: 'banner', style: 'color:var(--crema);margin-top:12px' }, 'Gracias. Mostrale el comprobante a quien te atienda y confirmamos el pago.')
-      : h('button', { class: 'prim', style: 'margin-top:10px', onclick: avisar }, 'Ya transferí'),
-    !S.avisado && h('p', { style: 'margin-top:12px;font-size:.9rem' }, 'También podés pagar en efectivo en la barra.'),
+  const paso = (n, ...x) => h('div', { class: 'paso' }, h('i', {}, n), h('div', {}, ...x));
+  return h('div', {}, h('h2', {}, 'Pagar · ' + S.mesa), h('div', { class: 'l tot' }, h('span', {}, c.pagado > 0 ? 'Falta pagar' : 'Total a transferir'), h('span', {}, $$(c.saldo))),
+    h('div', { class: 'pasos' },
+      paso(1, h('b', {}, 'Copiá el alias'), h('div', { class: 'alias', id: 'alias' }, ALIAS), h('div', { class: 'titular' }, 'Titular: ' + TITULAR), btn),
+      paso(2, h('b', {}, 'Transferí ' + $$(c.saldo)), ' desde la app de tu banco o billetera.'),
+      paso(3, h('b', {}, 'Tocá "Ya transferí"'), ' para avisarnos.')),
+    S.avisado ? h('div', { class: 'banner', style: 'color:var(--crema);margin-top:12px' }, '¡Gracias! Mostrale el comprobante a quien te atienda y lo confirmamos.')
+      : h('button', { class: 'prim', style: 'margin-top:6px', onclick: avisar }, 'Ya transferí'),
+    !S.avisado && h('p', { style: 'margin-top:12px;font-size:.9rem;text-align:center' }, 'También podés pagar en efectivo en la barra.'),
     h('button', { class: 'sec', onclick: () => { S.sheet = null; drawSheet(); draw(); } }, 'Cerrar'));
 }
 
