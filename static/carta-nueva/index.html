@@ -303,17 +303,17 @@ function vistaPagar() {
   };
   const avisar = async () => {
     try {
-      const r = await (await fetch('/api/aviso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mesa: S.mesa }) })).json();
-      if (!r.ok) { await cargarEstado(); return; }
+      const r = await (await fetch('/api/aviso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mesa: S.mesa, dispositivo: S.dev }) })).json();
+      if (!r.ok) { S.sheet = null; drawSheet(); await cargarEstado(); return; }
     } catch (e) { alert('No hay conexión. Probá de nuevo.'); return; }
-    S.avisado = true; L.set('tep_avisado', true); drawSheet();
+    S.sheet = null; drawSheet(); await cargarEstado(); window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   const paso = (n, ...x) => h('div', { class: 'paso' }, h('i', {}, n), h('div', {}, ...x));
   return h('div', {}, h('h2', {}, 'Pagar · ' + S.mesa), h('div', { class: 'l tot' }, h('span', {}, c.pagado > 0 ? 'Falta pagar' : 'Total a transferir'), h('span', {}, $$(c.saldo))),
     h('div', { class: 'pasos' },
       paso(1, h('b', {}, 'Copiá el alias'), h('div', { class: 'alias', id: 'alias' }, ALIAS), h('div', { class: 'titular' }, 'Titular: ' + TITULAR), btn),
       paso(2, h('b', {}, 'Transferí ' + $$(c.saldo)), ' desde la app de tu banco o billetera.'),
-      paso(3, h('b', {}, 'Tocá "Ya transferí"'), ' para avisarnos.')),
+      paso(3, h('b', {}, 'Tocá "Ya transferí"'), ' para registrar tu pago.')),
     S.avisado ? h('div', { class: 'banner', style: 'color:var(--crema);margin-top:12px' }, '¡Gracias! Mostrale el comprobante a quien te atienda y lo confirmamos.')
       : h('button', { class: 'prim', style: 'margin-top:6px', onclick: avisar }, 'Ya transferí'),
     !S.avisado && h('p', { style: 'margin-top:12px;font-size:.9rem;text-align:center' }, 'También podés pagar en efectivo en la barra.'),
