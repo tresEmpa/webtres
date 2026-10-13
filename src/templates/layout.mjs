@@ -4,7 +4,7 @@
  */
 
 import {
-  ESTADO_CSS, estadoScript, TRACKING_JS, WSP_FLOTANTE_JS, GA4_ID,
+  ESTADO_CSS, estadoScript, TRACKING_JS, WSP_FLOTANTE_JS, ATAJO_JS, GA4_ID,
 } from '../lib/cliente.mjs';
 
 const SITE_NAME = 'Tres Empanadas Comedia';
@@ -218,6 +218,10 @@ ${opts.funciones ? ESTADO_CSS + estadoScript(opts.funciones, !!opts.refrescarAge
         </span>
       </a>
 
+${opts.adsSafe || currentPath.startsWith('/reservas') ? '' : `      <!-- Atajo a reservar, sólo mobile (en desktop ya está el CTA del nav).
+           No va en la landing de Ads ni dentro de /reservas, donde sobra. -->
+      <a href="/reservas/" class="site-header__reservar" data-atajo="atajo_header">Reservar</a>
+`}
       <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
         <span></span>
         <span></span>
@@ -329,6 +333,7 @@ ${opts.content || ''}
     });
   </script>
 ${WSP_FLOTANTE_JS}
+${ATAJO_JS}
 </body>
 </html>`;
 }

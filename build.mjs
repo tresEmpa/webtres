@@ -273,16 +273,16 @@ async function main() {
   await medirFlyers(eventos);
   console.log(`  · ${eventos.length} eventos cargados`);
 
-  // 4) Home
-  await writeFile('index.html', renderHome(YEAR));
-
-  // 5) Listado de reservas (próximos, mismos filtros que el PHP)
+  // 4) Listado de reservas (próximos, mismos filtros que el PHP)
   const listado = listarEventos(eventos, {
     estados: ['activo', 'programado', 'agotado'],
     orden: 'asc',
     incluirPasados: false,
     now: NOW,
   });
+
+  // 5) Home (usa el listado para la tarjeta "Próxima función")
+  await writeFile('index.html', renderHome(YEAR, listado, NOW));
   await writeFile('reservas/index.html', renderReservasList(listado, YEAR));
 
   // 6) Una página por evento (incluye pasados, para no romper links viejos)

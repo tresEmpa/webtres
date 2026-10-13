@@ -472,3 +472,38 @@ a:focus-visible, button:focus-visible {
   color: var(--crema);
   transform: translateY(-1px);
 }
+
+/* --- Atajo "Reservar" en la cabecera, sólo mobile ---
+   En desktop el nav ya muestra su CTA. En mobile el nav vive dentro de la
+   hamburguesa, así que sin esto la primera pantalla no tenía cómo reservar. */
+.site-header__reservar { display: none; }
+
+@media (max-width: 768px) {
+  .site-header__reservar {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+    background: var(--rojo);
+    color: var(--crema) !important;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1;
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--radius);
+    text-decoration: none !important;
+    white-space: nowrap;
+  }
+  .site-header__reservar:active { background: var(--rojo-oscuro); }
+}
+
+@media (max-width: 400px) {
+  .site-header__inner { gap: 0.5rem; }
+  .site-header__logo { gap: 0.5rem; }
+  .site-header__logo img { width: 36px; height: 36px; }
+  .site-header__logo-text { font-size: 0.9rem; }
+  .site-header__logo-text small { font-size: 0.5625rem; letter-spacing: 0.12em; }
+  .site-header__reservar { padding: 0.55rem 0.7rem; margin-right: 0.25rem; }
+}
