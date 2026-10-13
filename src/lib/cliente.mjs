@@ -281,3 +281,22 @@ export const WSP_FLOTANTE_JS = `
     });
   })();
   </script>`;
+
+/**
+ * Clicks en los atajos a reservar ([data-atajo]): botón de la cabecera mobile
+ * y tarjeta "Próxima función" de la home.
+ *
+ * Evento personalizado a propósito, NO Lead: un click no es una reserva, y
+ * meterlo en Lead inflaría la señal con la que optimiza Meta. Sirve para ver
+ * si los atajos se usan; la reserva real se sigue midiendo en cada función.
+ */
+export const ATAJO_JS = `
+  <script>
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-atajo]');
+    if (!a) return;
+    var cat = a.getAttribute('data-atajo');
+    try { if (typeof fbq === 'function') fbq('trackCustom', 'AtajoReserva', { content_category: cat }); } catch (x) {}
+    try { if (typeof gtag === 'function') gtag('event', 'select_content', { content_type: cat, transport_type: 'beacon' }); } catch (x) {}
+  });
+  </script>`;

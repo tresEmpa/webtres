@@ -1,5 +1,6 @@
 /** Home — port de index.php */
 import { page } from './layout.mjs';
+import { proximaFuncion } from './proxima-funcion.mjs';
 
 const FAQ_SCHEMA = `<script type="application/ld+json">
 {
@@ -42,7 +43,7 @@ function semaforo(aria) {
       </div>`;
 }
 
-export function renderHome(year) {
+export function renderHome(year, listado = [], now = new Date()) {
   const content = `
 <!-- ============= APERTURA ============= -->
 <section class="apertura">
@@ -62,6 +63,9 @@ export function renderHome(year) {
       Vení a reír.
       <em>El stand up de la ciudad.</em>
     </h1>
+
+    <!-- Próxima función: atajo a reservar en el hueco del hero (sólo desktop) -->
+    ${proximaFuncion(listado, now)}
 
     <!-- Chapa de Google: prueba social sin una cantidad que quede desactualizada -->
     <a class="gmaps-chapa" href="https://share.google/dyTTJVXR25JTlU7kX"
