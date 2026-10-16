@@ -80,7 +80,7 @@ function vistaProducto(p) {
     disponible = p.stock > 0;
   }
   return {
-    id: p.id, nombre: p.nombre, categoria: p.categoria, precio: p.precio,
+    id: p.id, nombre: p.nombre, detalle: p.detalle || null, categoria: p.categoria, precio: p.precio,
     control: p.control, modo: p.modo, disponible, quedan,
   };
 }
