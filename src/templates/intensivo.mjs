@@ -72,7 +72,7 @@ export function renderIntensivo(year, now = new Date()) {
 <section class="cursos-hero">
 <div class="container-narrow">
 <span class="int-badge">${esc(ed.nombre)}</span>
-<h1>Intensivo de stand up en La Plata</h1>
+<h1>Taller inicial de Stand Up en La Plata</h1>
 <p>Una tarde para empezar en el stand up, en el escenario del club.</p>
 </div>
 </section>
@@ -109,7 +109,7 @@ ${ESTILOS}
 <section class="cursos-hero">
 <div class="container-narrow">
 <span class="int-badge">${esc(ed.nombre)}</span>
-<h1>Intensivo de stand up en La Plata</h1>
+<h1>Taller inicial de Stand Up en La Plata</h1>
 <p class="int-datos"><strong>${esc(cuando.charAt(0).toUpperCase() + cuando.slice(1))}</strong><br>${esc(ed.horario)} · Tres Empanadas, 43 y 22, La Plata</p>
 <p>Una tarde para empezar en el stand up, en el escenario del club.</p>
 <p style="margin-top:var(--space-md);"><a class="btn-whatsapp" href="#anotarme">Anotarme →</a></p>
@@ -122,7 +122,7 @@ ${ESTILOS}
 <section class="cursos-bloque">
 <h2>Una puerta de entrada</h2>
 <p>No es el curso de cuatro meses en cuatro horas: es la puerta de entrada. Una introducción, un panorama para entender de qué se trata y arrancar a escribir.</p>
-<p>Y si te quedan ganas, seguís vinculado al espacio de formación del club con las alternativas de <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a>: el material online, las consultas y la práctica de los jueves.</p>
+<p>Y si te quedan ganas, seguís vinculado al espacio de formación del club con las alternativas de <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a>: el material online y el espacio presencial de los jueves.</p>
 </section>
 
 <section class="cursos-bloque">
@@ -138,7 +138,7 @@ ${ESTILOS}
 
 <section class="cursos-bloque">
 <h2>Antes de venir</h2>
-<p>Cuando te anotás recibís acceso a una tarea corta para llegar con tus temas pensados.</p>
+<p>Cuando te anotás recibís acceso a una plataforma con material y una tarea breve que vamos a utilizar oportunamente.</p>
 </section>
 
 <section class="cursos-bloque">
@@ -152,7 +152,7 @@ ${ed.showNoche ? `<li>Una invitación al show de las ${esc(ed.showNoche)}.</li>`
 
 <section class="cursos-bloque int-cta" id="anotarme">
 <h2>Anotate</h2>
-<p class="int-precio"><strong>${esc(ed.precio)}</strong><small>Grupo chico</small></p>
+<p class="int-precio"><strong>${esc(ed.precio)}</strong><small>Grupo reducido</small></p>
 <a class="btn-whatsapp" href="${esc(anotarme)}"${anotarmeAttrs}>Anotarme →</a>
 </section>
 
