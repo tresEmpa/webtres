@@ -113,7 +113,6 @@ ${ESTILOS}
 <h1>Taller inicial de Stand Up en La Plata</h1>
 <p class="int-datos"><strong>${esc(cuando.charAt(0).toUpperCase() + cuando.slice(1))}</strong><br>${esc(ed.horario)} · Tres Empanadas, 43 y 22, La Plata</p>
 <p>Una tarde para empezar en el stand up, en el escenario del club.</p>
-<p style="margin-top:var(--space-md);"><a class="btn-whatsapp" href="#anotarme">Anotarme →</a></p>
 </div>
 </section>
 
