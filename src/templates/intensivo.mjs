@@ -41,7 +41,7 @@ ${JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Course',
   name: 'Intensivo de stand up en La Plata',
-  description: 'Una tarde de cuatro horas para empezar en el stand up: escribir y decir en un escenario los primeros dos minutos de material propio. Con Checho Falco en Tres Empanadas Comedia.',
+  description: 'Una tarde de cuatro horas para empezar en el stand up: teoría y práctica en el escenario, y un plan para seguir. Con Checho Falco en Tres Empanadas Comedia.',
   url: URL,
   inLanguage: 'es',
   provider: { '@type': 'Organization', name: 'Tres Empanadas Comedia', url: 'https://tresempanadas.com.ar' },
@@ -73,7 +73,7 @@ export function renderIntensivo(year, now = new Date()) {
 <div class="container-narrow">
 <span class="int-badge">${esc(ed.nombre)}</span>
 <h1>Intensivo de stand up en La Plata</h1>
-<p>Una tarde para empezar. Te vas con tus primeros <strong>2 minutos de material propio</strong>, escritos por vos y dichos en un escenario de verdad.</p>
+<p>Una tarde para empezar en el stand up, en el escenario del club.</p>
 </div>
 </section>
 <main class="cursos-main">
@@ -90,7 +90,7 @@ ${ESTILOS}
 </main>`;
     return page({
       title: 'Intensivo de stand up en La Plata | Tres Empanadas Comedia',
-      description: 'Una tarde para empezar en el stand up: escribís y decís en un escenario tus primeros 2 minutos de material propio. Próxima fecha a confirmar.',
+      description: 'Una tarde para empezar en el stand up, con teoría y práctica en el escenario de Tres Empanadas, La Plata. Próxima fecha a confirmar.',
       url: URL,
       bodyClass: 'page-cursos',
       extraCss: '/assets/css/cursos.css',
@@ -111,7 +111,7 @@ ${ESTILOS}
 <span class="int-badge">${esc(ed.nombre)}</span>
 <h1>Intensivo de stand up en La Plata</h1>
 <p class="int-datos"><strong>${esc(cuando.charAt(0).toUpperCase() + cuando.slice(1))}</strong><br>${esc(ed.horario)} · Tres Empanadas, 43 y 22, La Plata</p>
-<p>Una tarde para empezar. Te vas con tus primeros <strong>2 minutos de material propio</strong>, escritos por vos y dichos en un escenario de verdad.</p>
+<p>Una tarde para empezar en el stand up, en el escenario del club.</p>
 <p style="margin-top:var(--space-md);"><a class="btn-whatsapp" href="#anotarme">Anotarme →</a></p>
 </div>
 </section>
@@ -121,16 +121,18 @@ ${ESTILOS}
 
 <section class="cursos-bloque">
 <h2>Una puerta de entrada</h2>
-<p>No es el curso de cuatro meses en cuatro horas: es la puerta de entrada. Después seguís los jueves en el club y con el material online de <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a>.</p>
+<p>No es el curso de cuatro meses en cuatro horas: es la puerta de entrada. Una introducción, un panorama para entender de qué se trata y arrancar a escribir.</p>
+<p>Y si te quedan ganas, seguís vinculado al espacio de formación del club con las alternativas de <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a>: el material online, las consultas y la práctica de los jueves.</p>
 </section>
 
 <section class="cursos-bloque">
 <h2>Cómo es la tarde</h2>
 <ul class="int-tarde">
-<li>Cómo funciona un chiste: de dónde sale, información y remate.</li>
-<li>Break.</li>
-<li>Al micrófono: cada uno pasa su material y recibe devolución.</li>
-<li>Cómo seguir después.</li>
+<li>Mezclamos todo el tiempo teoría y práctica en el escenario.</li>
+<li>Descansamos un rato en el medio.</li>
+<li>Vale traer mate, agua o lo que quieras.</li>
+<li>Podés salir a fumar.</li>
+<li>Te vas con un plan para seguir.</li>
 </ul>
 </section>
 
@@ -162,7 +164,7 @@ ${ed.showNoche ? `<li>Una invitación al show de las ${esc(ed.showNoche)}.</li>`
 
   return page({
     title: `Intensivo de stand up en La Plata · ${ed.fechaTexto.replace(/^\w+ /, '')} | Tres Empanadas`,
-    description: `Una tarde para empezar en el stand up: ${ed.fechaTexto}, ${ed.horario}, en Tres Empanadas. Escribís y decís en un escenario tus primeros 2 minutos.`,
+    description: `Una tarde para empezar en el stand up: ${ed.fechaTexto}, ${ed.horario}, en Tres Empanadas. Teoría y práctica en el escenario, y un plan para seguir.`,
     url: URL,
     bodyClass: 'page-cursos',
     extraCss: '/assets/css/cursos.css',
