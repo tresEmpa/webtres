@@ -80,6 +80,10 @@ const estilos = `
 .alt-tabla tbody th { color: var(--rojo); font-weight: 800; white-space: nowrap; }
 .alt-tabla tbody tr:last-child th, .alt-tabla tbody tr:last-child td { border-bottom: 0; }
 .alt-tabla a { color: var(--rojo); font-weight: 700; white-space: nowrap; }
+.alt-num { display: inline-grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: 50%; background: var(--rojo); color: #fff; font-size: .8em; margin-right: .3em; vertical-align: .05em; }
+.alt-tabla a.alt-btn { display: inline-block; background: var(--rojo); color: #fff; text-decoration: none; padding: .45rem .9rem; border-radius: 999px; font-weight: 700; font-size: .9rem; }
+.alt-tabla a.alt-btn:hover { opacity: .9; }
+.alt-destino { display: block; font-size: .75rem; opacity: .7; margin-top: .35rem; }
 @media (max-width: 640px) {
 .alt-tabla thead { display: none; }
 .alt-tabla, .alt-tabla tbody, .alt-tabla tr, .alt-tabla th, .alt-tabla td { display: block; width: 100%; }
@@ -203,16 +207,16 @@ const waEspacio = `https://wa.me/${wa}?text=` + encodeURIComponent('Hola! Quiero
 // ── LAS CUATRO OPCIONES (misma redacción en tresempanadas, aprendestandup y nochesdestandup) ──
 const tresOpciones = `
 <section class="cursos-bloque" id="opciones">
-<h2>Cuatro formas de empezar en el stand up</h2>
+<h2>Cómo empezar en el stand up</h2>
 <div class="alt-wrap">
-<p class="alt-titulo">Cuatro alternativas</p>
+<p class="alt-titulo">4 alternativas para empezar</p>
 <table class="alt-tabla">
-<thead><tr><th scope="col">Alternativa</th><th scope="col">Cómo es</th><th scope="col">Qué hacés</th></tr></thead>
+<thead><tr><th scope="col">Alternativa</th><th scope="col">Qué es</th><th scope="col"></th></tr></thead>
 <tbody>
-<tr id="taller-inicial"><th scope="row">Taller inicial<br><small style="font-weight:600;text-transform:none;letter-spacing:0;white-space:normal">Intensivo con lo esencial para arrancar</small></th><td>Una tarde de 4 horas para empezar, con teoría y práctica en el escenario. Algunos feriados y sábados.</td><td><strong>Mirá la próxima fecha.</strong> <a href="/intensivo/">Ver el taller →</a></td></tr>
-<tr id="presencial"><th scope="row">Curso presencial</th><td>La edición 2026 ya empezó y no tiene lugares. La próxima es en 2027.</td><td><strong>Te avisamos cuando abra.</strong> <a href="https://aprendestandup.com.ar/avisame/?de=tresempanadas">Avisame →</a></td></tr>
-<tr id="online-practica"><th scope="row">Online + práctica</th><td>La teoría online y el taller de práctica en el club los jueves desde las 19:30. A la gorra.</td><td><strong>Avisá que venís el próximo jueves.</strong> <a href="${waEspacio}" target="_blank" rel="noopener">Avisar por WhatsApp →</a></td></tr>
-<tr id="online"><th scope="row">100% online</th><td>La teoría online es gratis: a tu ritmo, por tu cuenta y sin horarios.</td><td><strong>Arrancá ya mismo</strong> y después ves cómo seguís. <a href="https://aprendestandup.com.ar/notas/" target="_blank" rel="noopener">Empezar ahora →</a></td></tr>
+<tr id="taller-inicial"><th scope="row"><span class="alt-num">1</span> Taller inicial<br><small style="font-weight:600;text-transform:none;letter-spacing:0;white-space:normal">Intensivo con lo esencial para arrancar</small></th><td>Una tarde para empezar. Algunos feriados y sábados.</td><td><a class="alt-btn" href="/intensivo/">Ver el taller →</a></td></tr>
+<tr id="presencial"><th scope="row"><span class="alt-num">2</span> Curso presencial</th><td>La edición 2026 está completa. La próxima, en 2027.</td><td><a class="alt-btn" href="https://aprendestandup.com.ar/avisame/?de=tresempanadas">Avisame →</a><span class="alt-destino">🎙️ Te llevamos a Aprende Stand Up, nuestra escuela online</span></td></tr>
+<tr id="online-practica"><th scope="row"><span class="alt-num">3</span> Online + práctica</th><td>Leés la teoría online y los jueves venís al club con lo que escribiste o tus dudas. Desde las 19:30, a la gorra.</td><td><a class="alt-btn" href="https://aprendestandup.com.ar/los-jueves/">Cómo funciona →</a><span class="alt-destino">🎙️ Te llevamos a Aprende Stand Up, nuestra escuela online</span></td></tr>
+<tr id="online"><th scope="row"><span class="alt-num">4</span> 100% online</th><td>La teoría, gratis y a tu ritmo.</td><td><a class="alt-btn" href="https://aprendestandup.com.ar/notas/">Empezar →</a><span class="alt-destino">🎙️ Te llevamos a Aprende Stand Up, nuestra escuela online</span></td></tr>
 </tbody>
 </table>
 </div>
