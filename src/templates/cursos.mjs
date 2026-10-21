@@ -199,7 +199,6 @@ return false;
 // ── CTA principal: coordinar el jueves por WhatsApp (espacio abierto) ──
 const waEspacio = `https://wa.me/${wa}?text=` + encodeURIComponent('Hola! Quiero coordinar para venir un jueves al espacio abierto de stand up. Ya leí algo de aprendestandup.com.ar.');
 
-const waProxima = `https://wa.me/${wa}?text=` + encodeURIComponent('Hola! Quiero que me avisen cuando se abra la próxima edición del curso presencial de stand up.');
 
 // ── LAS CUATRO OPCIONES (misma redacción en tresempanadas, aprendestandup y nochesdestandup) ──
 const tresOpciones = `
@@ -211,7 +210,7 @@ const tresOpciones = `
 <thead><tr><th scope="col">Alternativa</th><th scope="col">Cómo es</th><th scope="col">Qué hacés</th></tr></thead>
 <tbody>
 <tr id="taller-inicial"><th scope="row">Taller inicial<br><small style="font-weight:600;text-transform:none;letter-spacing:0;white-space:normal">Intensivo con lo esencial para arrancar</small></th><td>Una tarde de 4 horas para empezar, con teoría y práctica en el escenario. Algunos feriados y sábados.</td><td><strong>Mirá la próxima fecha.</strong> <a href="/intensivo/">Ver el taller →</a></td></tr>
-<tr id="presencial"><th scope="row">Presencial</th><td>Ya empezó: jueves de 18 a 19:30, de agosto a noviembre. $50.000 por mes.</td><td><strong>Esperá el próximo.</strong> <a href="${waProxima}" target="_blank" rel="noopener">Avisame cuando abra →</a></td></tr>
+<tr id="presencial"><th scope="row">Curso presencial</th><td>La edición 2026 ya empezó y no tiene lugares. La próxima es en 2027.</td><td><strong>Te avisamos cuando abra.</strong> <a href="https://aprendestandup.com.ar/avisame/?de=tresempanadas">Avisame →</a></td></tr>
 <tr id="online-practica"><th scope="row">Online + práctica</th><td>La teoría online y el taller de práctica en el club los jueves desde las 19:30. A la gorra.</td><td><strong>Avisá que venís el próximo jueves.</strong> <a href="${waEspacio}" target="_blank" rel="noopener">Avisar por WhatsApp →</a></td></tr>
 <tr id="online"><th scope="row">100% online</th><td>Gratis, a tu ritmo y por tu cuenta, sin horarios.</td><td><strong>Arrancá ya mismo</strong> y después ves cómo seguís. <a href="https://aprendestandup.com.ar/notas/" target="_blank" rel="noopener">Empezar ahora →</a></td></tr>
 </tbody>
@@ -254,7 +253,7 @@ const hero = CURSO_REGULAR_ABIERTO
 const mencionCursoRegular = `
 <section class="cursos-bloque">
 <h2>Curso regular</h2>
-<p>Cada tanto abrimos una edición del <strong>curso presencial</strong>: arranque y horario fijo, clases semanales y una estructura de principio a fin. La de 2026 está en marcha y sin cupos; para la próxima, escribinos por WhatsApp.</p>
+<p>Cada tanto abrimos una edición del <strong>curso presencial</strong>: arranque y horario fijo, clases semanales y una estructura de principio a fin. La de 2026 ya empezó y no tiene lugares. La próxima es en 2027: <a href="https://aprendestandup.com.ar/avisame/?de=tresempanadas">dejá tu mail y te avisamos cuando abra</a>.</p>
 </section>`;
 
 const content = `
