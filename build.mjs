@@ -17,6 +17,7 @@ import { renderReservasList } from './src/templates/reservas-list.mjs';
 import { renderEvento } from './src/templates/evento.mjs';
 import { renderDia } from './src/templates/dia.mjs';
 import { renderCursos } from './src/templates/cursos.mjs';
+import { renderIntensivo } from './src/templates/intensivo.mjs';
 import { renderStandupLaPlata } from './src/templates/standup-la-plata.mjs';
 import { renderNotFound } from './src/templates/not-found.mjs';
 
@@ -154,6 +155,7 @@ function sitemap(eventosUpcoming) {
     { loc: `${base}/reservas/jueves/`, freq: 'weekly', pri: '0.9', lastmod: lmDia('jueves') },
     { loc: `${base}/stand-up-la-plata/`, freq: 'weekly', pri: '0.9' },
     { loc: `${base}/cursos/`, freq: 'monthly', pri: '0.8' },
+    { loc: `${base}/intensivo/`, freq: 'weekly', pri: '0.8' },
     { loc: `${base}/carta/`, freq: 'monthly', pri: '0.3' },
   ];
   // changefreq 'daily' era mentira para una función a cinco semanas, y Google
@@ -310,6 +312,7 @@ async function main() {
 
   // 7) Cursos
   await writeFile('cursos/index.html', renderCursos(YEAR, lugar));
+  await writeFile('intensivo/index.html', renderIntensivo(YEAR, NOW));
 
   // 8) Landing limpia para Google Ads
   await writeFile('stand-up-la-plata/index.html', renderStandupLaPlata(YEAR));
