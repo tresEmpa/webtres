@@ -132,6 +132,10 @@ const EXTRA = `
     🎭 ¿Primera vez? Te contamos <a href="/stand-up-la-plata/">cómo es una noche de stand up
     en La Plata</a>: horarios, cuánto sale y qué esperar.
   </p>
+  <p>
+    📅 Conocé cada ciclo: <a href="/reservas/viernes/">la Sociedad Platense, los viernes</a>
+    y <a href="/reservas/jueves/">El Rotativo Platense, los jueves</a>.
+  </p>
 
   <div class="tep-galeria">
     <figure class="tep-galeria__item">
