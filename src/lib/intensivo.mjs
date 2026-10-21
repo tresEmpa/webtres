@@ -15,7 +15,7 @@
  * no se anuncia.
  */
 export const INTENSIVO = {
-  nombre: 'Intensivo de arranque',
+  nombre: 'Intensivo con lo esencial para arrancar',
   fecha: '2026-11-19',                       // AAAA-MM-DD, o null
   fechaTexto: 'jueves 19 de noviembre',
   fechaNota: 'feriado en La Plata',           // '' si no aplica
