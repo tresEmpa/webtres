@@ -20,7 +20,7 @@ import { page, esc } from './layout.mjs';
 const CURSO_REGULAR_ABIERTO = false;
 const CURSO_FECHA = 'el jueves 13 de agosto'; // usado sólo cuando el curso está abierto
 const PRACTICA_HORA = '19:30'; // inicio del espacio abierto / práctica de los jueves
-const CURSO_PRECIO = '$35.000';               // cuota mensual del curso regular
+const CURSO_PRECIO = '$50.000';               // cuota mensual del curso regular
 
 const COURSE_SCHEMA = `<script type="application/ld+json">
 {
@@ -49,7 +49,7 @@ const COURSE_SCHEMA = `<script type="application/ld+json">
 "courseMode": ["onsite", "online"],
 "inLanguage": "es",
 "offers": [
-{ "@type": "Offer", "name": "Curso presencial (jueves 18 a 19:30)", "category": "Paid", "priceCurrency": "ARS", "price": "35000", "url": "https://tresempanadas.com.ar/cursos/" },
+{ "@type": "Offer", "name": "Curso presencial (jueves 18 a 19:30)", "category": "Paid", "priceCurrency": "ARS", "price": "50000", "url": "https://tresempanadas.com.ar/cursos/" },
 { "@type": "Offer", "name": "Curso online (teoría)", "category": "Free", "priceCurrency": "ARS", "price": "0", "url": "https://aprendestandup.com.ar/notas/" },
 { "@type": "Offer", "name": "Online + práctica los jueves desde las 19:30", "category": "Gorra / Contribución voluntaria", "priceCurrency": "ARS", "price": "0", "url": "https://aprendestandup.com.ar/los-jueves/" }
 ],
@@ -209,7 +209,7 @@ const tresOpciones = `
 <table class="alt-tabla">
 <thead><tr><th scope="col">Alternativa</th><th scope="col">Cómo es</th><th scope="col">Qué hacés</th></tr></thead>
 <tbody>
-<tr id="presencial"><th scope="row">Presencial</th><td>Ya empezó: jueves de 18 a 19:30, de agosto a noviembre. $35.000 por mes.</td><td><strong>Esperá el próximo.</strong> <a href="${waProxima}" target="_blank" rel="noopener">Avisame cuando abra →</a></td></tr>
+<tr id="presencial"><th scope="row">Presencial</th><td>Ya empezó: jueves de 18 a 19:30, de agosto a noviembre. $50.000 por mes.</td><td><strong>Esperá el próximo.</strong> <a href="${waProxima}" target="_blank" rel="noopener">Avisame cuando abra →</a></td></tr>
 <tr id="online-practica"><th scope="row">Online + práctica</th><td>La teoría online y el taller de práctica en el club los jueves desde las 19:30. A la gorra.</td><td><strong>Avisá que venís el próximo jueves.</strong> <a href="${waEspacio}" target="_blank" rel="noopener">Avisar por WhatsApp →</a></td></tr>
 <tr id="online"><th scope="row">100% online</th><td>Gratis, a tu ritmo y por tu cuenta, sin horarios.</td><td><strong>Arrancá ya mismo</strong> y después ves cómo seguís. <a href="https://aprendestandup.com.ar/notas/" target="_blank" rel="noopener">Empezar ahora →</a></td></tr>
 </tbody>
