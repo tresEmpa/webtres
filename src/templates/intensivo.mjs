@@ -123,7 +123,7 @@ ${ESTILOS}
 <section class="cursos-bloque">
 <h2>Una puerta de entrada</h2>
 <p>No es el curso de cuatro meses en cuatro horas: es la puerta de entrada. Una introducción, un panorama para entender de qué se trata y arrancar a escribir.</p>
-<p>Y si te quedan ganas, seguís vinculado al espacio de formación del club con las alternativas de <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a>: el material online y el espacio presencial de los jueves.</p>
+<p>La idea es que sigas vinculado al espacio de formación del club sin esperar a que abra el próximo curso: con el material online de <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a> y el espacio presencial de los jueves.</p>
 </section>
 
 <section class="cursos-bloque">
