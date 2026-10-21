@@ -311,7 +311,7 @@ async function main() {
   }
 
   // 7) Cursos
-  await writeFile('cursos/index.html', renderCursos(YEAR, lugar));
+  await writeFile('cursos/index.html', renderCursos(YEAR, lugar, NOW));
   await writeFile('intensivo/index.html', renderIntensivo(YEAR, NOW));
 
   // 8) Landing limpia para Google Ads

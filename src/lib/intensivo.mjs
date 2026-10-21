@@ -25,6 +25,9 @@ export const INTENSIVO = {
   precio: '$50.000',
   precioNumero: 50000,
   showNoche: '21:30',                         // '' si esa noche no hay show
+  // Aviso con la fecha arriba de /cursos/. Prenderlo recién cuando la fecha
+  // esté confirmada (decisión de Tres: no anunciar fecha hasta confirmar).
+  anunciarEnCursos: false,
   // A dónde lleva "Anotarme": la inscripción en Aprende Stand Up.
   // null → abre WhatsApp (por si alguna vez hace falta volver a eso).
   inscripcionUrl: 'https://aprendestandup.com.ar/alumnos/intensivo/',

@@ -1,5 +1,6 @@
 /** Cursos — port de cursos/index.php */
 import { page, esc } from './layout.mjs';
+import { INTENSIVO, intensivoVigente } from '../lib/intensivo.mjs';
 
 /*
  * ─────────────────────────────────────────────────────────────────────────────
@@ -57,7 +58,7 @@ const COURSE_SCHEMA = `<script type="application/ld+json">
 }
 </script>`;
 
-export function renderCursos(year, lugar = {}) {
+export function renderCursos(year, lugar = {}, now = new Date()) {
 const wa = esc(lugar.whatsapp || '5492215247488');
 const waDisplay = esc(lugar.whatsapp_display || '221 524-7488');
 const precioCurso = CURSO_PRECIO;
@@ -200,15 +201,16 @@ const waEspacio = `https://wa.me/${wa}?text=` + encodeURIComponent('Hola! Quiero
 
 const waProxima = `https://wa.me/${wa}?text=` + encodeURIComponent('Hola! Quiero que me avisen cuando se abra la próxima edición del curso presencial de stand up.');
 
-// ── LAS TRES OPCIONES (misma redacción en tresempanadas, aprendestandup y nochesdestandup) ──
+// ── LAS CUATRO OPCIONES (misma redacción en tresempanadas, aprendestandup y nochesdestandup) ──
 const tresOpciones = `
 <section class="cursos-bloque" id="opciones">
-<h2>Tres formas de aprender stand up</h2>
+<h2>Cuatro formas de empezar en el stand up</h2>
 <div class="alt-wrap">
-<p class="alt-titulo">Un curso, tres alternativas</p>
+<p class="alt-titulo">Cuatro alternativas</p>
 <table class="alt-tabla">
 <thead><tr><th scope="col">Alternativa</th><th scope="col">Cómo es</th><th scope="col">Qué hacés</th></tr></thead>
 <tbody>
+<tr id="taller-inicial"><th scope="row">Taller inicial</th><td>Una tarde de 4 horas para empezar, con teoría y práctica en el escenario. Algunos feriados y sábados.</td><td><strong>Mirá la próxima fecha.</strong> <a href="/intensivo/">Ver el taller →</a></td></tr>
 <tr id="presencial"><th scope="row">Presencial</th><td>Ya empezó: jueves de 18 a 19:30, de agosto a noviembre. $50.000 por mes.</td><td><strong>Esperá el próximo.</strong> <a href="${waProxima}" target="_blank" rel="noopener">Avisame cuando abra →</a></td></tr>
 <tr id="online-practica"><th scope="row">Online + práctica</th><td>La teoría online y el taller de práctica en el club los jueves desde las 19:30. A la gorra.</td><td><strong>Avisá que venís el próximo jueves.</strong> <a href="${waEspacio}" target="_blank" rel="noopener">Avisar por WhatsApp →</a></td></tr>
 <tr id="online"><th scope="row">100% online</th><td>Gratis, a tu ritmo y por tu cuenta, sin horarios.</td><td><strong>Arrancá ya mismo</strong> y después ves cómo seguís. <a href="https://aprendestandup.com.ar/notas/" target="_blank" rel="noopener">Empezar ahora →</a></td></tr>
@@ -216,6 +218,15 @@ const tresOpciones = `
 </table>
 </div>
 </section>`;
+
+// ── AVISO DEL TALLER INICIAL (sólo con fecha confirmada: INTENSIVO.anunciarEnCursos) ──
+const avisoIntensivo = (INTENSIVO.anunciarEnCursos && intensivoVigente(now)) ? `
+<section class="cursos-bloque curso-nuevo" id="taller-inicial-aviso">
+<span class="curso-nuevo__badge">Taller inicial</span>
+<h2>Próximo taller inicial: ${esc(INTENSIVO.fechaTexto)}</h2>
+<p>${esc(INTENSIVO.horario)} en Tres Empanadas. Una tarde para empezar, con teoría y práctica en el escenario.</p>
+<p style="margin-top:var(--space-sm);"><a class="btn-whatsapp" href="/intensivo/">Ver el taller →</a></p>
+</section>` : '';
 
 // ── HERO (cambia según el flag) ──
 const hero = CURSO_REGULAR_ABIERTO
@@ -230,12 +241,12 @@ const hero = CURSO_REGULAR_ABIERTO
 <section class="cursos-hero">
 <div class="container-narrow">
 <h1>Curso de stand up en La Plata</h1>
-<p>Tres formas de aprender con Checho Falco: curso presencial, online gratis, u online con práctica los jueves en el club. Vengas con una idea a medias o con cinco minutos listos, hay un lugar.</p>
+<p>Cuatro formas de aprender con Checho Falco: un taller inicial de una tarde, curso presencial, online gratis, u online con práctica los jueves en el club. Vengas con una idea a medias o con cinco minutos listos, hay un lugar.</p>
 <p style="margin-top:.6rem;">Teoría gratis en <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a> · Práctica los jueves desde las ${PRACTICA_HORA} · Tres Empanadas Comedia</p>
 <div class="cursos-hero-foto">
 <img src="/assets/img/espacio-jueves.webp" width="1200" height="1070" loading="eager" alt="Tres comediantes en el escenario de Tres Empanadas Comedia frente al público, mural Mondrian de fondo">
 </div>
-<p style="margin-top:var(--space-md);"><a class="btn-whatsapp" href="#opciones">Ver las tres opciones →</a></p>
+<p style="margin-top:var(--space-md);"><a class="btn-whatsapp" href="#opciones">Ver las opciones →</a></p>
 </div>
 </section>`;
 
@@ -252,6 +263,8 @@ ${hero}
 <main class="cursos-main">
 
 ${estilos}
+
+${avisoIntensivo}
 
 ${CURSO_REGULAR_ABIERTO ? bloqueCursoRegular : ''}
 
