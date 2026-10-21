@@ -26,6 +26,7 @@ const ESTILOS = `
 .int-cta { text-align: center; border: 2px solid var(--dorado); background: var(--crema); }
 .int-precio { font-family: var(--font-display); color: var(--rojo-tinto); font-size: 1.1rem; margin: 0 0 var(--space-sm) !important; }
 .int-precio strong { color: var(--rojo); font-size: 1.6rem; }
+.int-nota { font-size: .92rem; color: var(--gris-text); max-width: 46ch; margin: var(--space-sm) auto 0 !important; line-height: 1.45; }
 .int-precio small { display: block; font-family: var(--font-body); font-style: italic; font-size: .9rem; color: var(--gris-text); margin-top: 2px; }
 </style>`;
 
@@ -154,6 +155,7 @@ ${ed.showNoche ? `<li>Una invitación al show de las ${esc(ed.showNoche)}.</li>`
 <h2>Anotate</h2>
 <p class="int-precio"><strong>${esc(ed.precio)}</strong><small>Grupo reducido</small></p>
 <a class="btn-whatsapp" href="${esc(anotarme)}"${anotarmeAttrs}>Anotarme →</a>
+<p class="int-nota">Para anotarte vas a entrar a Aprende Stand Up, la plataforma de formación de Tres Empanadas, con tu cuenta de Google. Ahí cargás tus datos, tenés el material para llegar al taller y las opciones de pago: transferencia o tarjeta.</p>
 </section>
 
 <section class="cursos-bloque">

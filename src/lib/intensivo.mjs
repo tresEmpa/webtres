@@ -25,10 +25,18 @@ export const INTENSIVO = {
   precio: '$50.000',
   precioNumero: 50000,
   showNoche: '21:30',                         // '' si esa noche no hay show
-  // A dónde lleva "Anotarme". Mientras no esté la inscripción de Aprende,
-  // abre WhatsApp. Cuando esté, va acá la URL de la inscripción.
-  inscripcionUrl: null,
+  // A dónde lleva "Anotarme": la inscripción en Aprende Stand Up.
+  // null → abre WhatsApp (por si alguna vez hace falta volver a eso).
+  inscripcionUrl: 'https://aprendestandup.com.ar/alumnos/intensivo/',
 };
+
+// En las vistas previas de Cloudflare (cualquier rama que no sea main) el botón
+// apunta a la vista previa de Aprende, para probar el circuito entero sin tocar
+// producción. CF_PAGES_BRANCH lo define Cloudflare durante el build.
+const RAMA = process.env.CF_PAGES_BRANCH || '';
+if (INTENSIVO.inscripcionUrl && RAMA && RAMA !== 'main') {
+  INTENSIVO.inscripcionUrl = `https://${RAMA}.aprende-dkg.pages.dev/alumnos/intensivo/`;
+}
 
 /** ¿Hay una edición vigente (hoy o en el futuro) a la fecha del build? */
 export function intensivoVigente(now = new Date()) {
