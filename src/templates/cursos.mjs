@@ -212,7 +212,7 @@ const tresOpciones = `
 <tr id="taller-inicial"><th scope="row">Taller inicial<br><small style="font-weight:600;text-transform:none;letter-spacing:0;white-space:normal">Intensivo con lo esencial para arrancar</small></th><td>Una tarde de 4 horas para empezar, con teoría y práctica en el escenario. Algunos feriados y sábados.</td><td><strong>Mirá la próxima fecha.</strong> <a href="/intensivo/">Ver el taller →</a></td></tr>
 <tr id="presencial"><th scope="row">Curso presencial</th><td>La edición 2026 ya empezó y no tiene lugares. La próxima es en 2027.</td><td><strong>Te avisamos cuando abra.</strong> <a href="https://aprendestandup.com.ar/avisame/?de=tresempanadas">Avisame →</a></td></tr>
 <tr id="online-practica"><th scope="row">Online + práctica</th><td>La teoría online y el taller de práctica en el club los jueves desde las 19:30. A la gorra.</td><td><strong>Avisá que venís el próximo jueves.</strong> <a href="${waEspacio}" target="_blank" rel="noopener">Avisar por WhatsApp →</a></td></tr>
-<tr id="online"><th scope="row">100% online</th><td>Gratis, a tu ritmo y por tu cuenta, sin horarios.</td><td><strong>Arrancá ya mismo</strong> y después ves cómo seguís. <a href="https://aprendestandup.com.ar/notas/" target="_blank" rel="noopener">Empezar ahora →</a></td></tr>
+<tr id="online"><th scope="row">100% online</th><td>La teoría online es gratis: a tu ritmo, por tu cuenta y sin horarios.</td><td><strong>Arrancá ya mismo</strong> y después ves cómo seguís. <a href="https://aprendestandup.com.ar/notas/" target="_blank" rel="noopener">Empezar ahora →</a></td></tr>
 </tbody>
 </table>
 </div>
