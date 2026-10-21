@@ -17,6 +17,9 @@
 export const INTENSIVO = {
   nombre: 'Intensivo con lo esencial para arrancar',
   fecha: '2026-11-19',                       // AAAA-MM-DD, o null
+  // false → la página muestra la fecha como "probable, a confirmar" y en vez de
+  // "Anotarme" ofrece "Avisame cuando se confirme". true → abre la inscripción.
+  confirmada: false,
   fechaTexto: 'jueves 19 de noviembre',
   fechaNota: 'feriado en La Plata',           // '' si no aplica
   horario: '16 a 20 hs',

@@ -68,7 +68,7 @@ export function renderIntensivo(year, now = new Date()) {
   const vigente = intensivoVigente(now);
 
   if (!vigente) {
-    const avisame = waLink('Hola! Quiero que me avisen cuando haya fecha para el próximo intensivo de stand up.');
+    const avisame = 'https://aprendestandup.com.ar/avisame/?para=taller&de=tresempanadas';
     const content = `
 <section class="cursos-hero">
 <div class="container-narrow">
@@ -81,8 +81,8 @@ export function renderIntensivo(year, now = new Date()) {
 ${ESTILOS}
 <section class="cursos-bloque int-cta">
 <h2>Próximo intensivo a confirmar</h2>
-<p>Lo hacemos algunos feriados y sábados. Dejanos tu WhatsApp y te avisamos apenas haya fecha.</p>
-<a class="btn-whatsapp" href="${avisame}" target="_blank" rel="noopener">Avisame cuando haya fecha →</a>
+<p>Lo hacemos algunos feriados y sábados. Dejanos tu mail y te avisamos apenas haya fecha.</p>
+<a class="btn-whatsapp" href="${avisame}">Avisame cuando haya fecha →</a>
 </section>
 <section class="cursos-bloque">
 <h2>Mientras tanto</h2>
@@ -101,7 +101,9 @@ ${ESTILOS}
     });
   }
 
-  const cuando = `${ed.fechaTexto}${ed.fechaNota ? ` (${ed.fechaNota})` : ''}`;
+  const confirmada = !!ed.confirmada;
+  const cuando = `${confirmada ? '' : 'Fecha probable: '}${ed.fechaTexto}${ed.fechaNota ? ` (${ed.fechaNota})` : ''}${confirmada ? '' : ' · a confirmar'}`;
+  const avisame = 'https://aprendestandup.com.ar/avisame/?para=taller&de=tresempanadas';
   const anotarme = ed.inscripcionUrl
     || waLink(`Hola! Quiero anotarme al intensivo de stand up del ${ed.fechaTexto}.`);
   const anotarmeAttrs = ed.inscripcionUrl ? '' : ' target="_blank" rel="noopener"';
@@ -151,10 +153,11 @@ ${ed.showNoche ? `<li>Una invitación al show de las ${esc(ed.showNoche)}.</li>`
 </section>
 
 <section class="cursos-bloque int-cta" id="anotarme">
-<h2>Anotate</h2>
+<h2>${confirmada ? 'Anotate' : 'Próximamente'}</h2>
 <p class="int-precio"><strong>${esc(ed.precio)}</strong><small>Grupo reducido</small></p>
-<a class="btn-whatsapp" href="${esc(anotarme)}"${anotarmeAttrs}>Anotarme →</a>
-<p class="int-nota">Para anotarte vas a entrar a Aprende Stand Up, la plataforma de formación de Tres Empanadas, con tu cuenta de Google. Ahí cargás tus datos, tenés el material para llegar al taller y las opciones de pago: transferencia o tarjeta.</p>
+${confirmada ? `<a class="btn-whatsapp" href="${esc(anotarme)}"${anotarmeAttrs}>Anotarme →</a>
+<p class="int-nota">Para anotarte vas a entrar a Aprende Stand Up, la plataforma de formación de Tres Empanadas, con tu cuenta de Google. Ahí cargás tus datos, tenés el material para llegar al taller y las opciones de pago: transferencia o tarjeta.</p>` : `<a class="btn-whatsapp" href="${avisame}">Avisame cuando se confirme →</a>
+<p class="int-nota">La fecha todavía no está confirmada. Dejá tu mail y te avisamos apenas abra la inscripción.</p>`}
 </section>
 
 <section class="cursos-bloque">
@@ -169,7 +172,7 @@ ${ed.showNoche ? `<li>Una invitación al show de las ${esc(ed.showNoche)}.</li>`
     url: URL,
     bodyClass: 'page-cursos',
     extraCss: '/assets/css/cursos.css',
-    extraSchema: schema(ed),
+    extraSchema: confirmada ? schema(ed) : '',
     currentPath: '/cursos/',
     content,
     year,
