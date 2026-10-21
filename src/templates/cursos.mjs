@@ -83,6 +83,12 @@ const estilos = `
 .alt-num { display: inline-grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: 50%; background: var(--rojo); color: #fff; font-size: .8em; margin-right: .3em; vertical-align: .05em; }
 .alt-tabla a.alt-btn { display: inline-block; background: var(--rojo); color: #fff; text-decoration: none; padding: .45rem .9rem; border-radius: 999px; font-weight: 700; font-size: .9rem; }
 .alt-tabla a.alt-btn:hover { opacity: .9; }
+.alt-aviso { display: flex; flex-direction: column; gap: .5rem; margin-top: .2rem; max-width: 320px; }
+.alt-aviso input { padding: .55rem .7rem; border: 1px solid var(--gris-suave, #ddd); border-radius: 8px; font: inherit; font-size: .95rem; background: #fff; }
+.alt-aviso .alt-btn { border: 0; cursor: pointer; font: inherit; font-weight: 700; }
+.alt-trampa { position: absolute; left: -9999px; }
+.alt-aviso-msg { font-size: .85rem; color: var(--rojo); }
+.alt-aviso-ok { font-weight: 700; color: var(--rojo); }
 .alt-destino { display: block; font-size: .75rem; opacity: .7; margin-top: .35rem; }
 @media (max-width: 640px) {
 .alt-tabla thead { display: none; }
@@ -214,11 +220,23 @@ const tresOpciones = `
 <thead><tr><th scope="col">Alternativa</th><th scope="col">Qué es</th><th scope="col"></th></tr></thead>
 <tbody>
 <tr id="taller-inicial"><th scope="row"><span class="alt-num">1</span> Taller inicial<br><small style="font-weight:600;text-transform:none;letter-spacing:0;white-space:normal">Intensivo con lo esencial para arrancar</small></th><td>Una tarde para empezar. Algunos feriados y sábados.</td><td><a class="alt-btn" href="/intensivo/">Ver el taller →</a></td></tr>
-<tr id="presencial"><th scope="row"><span class="alt-num">2</span> Curso presencial</th><td>La edición 2026 está completa. La próxima, en 2027.</td><td><a class="alt-btn" href="https://aprendestandup.com.ar/avisame/?de=tresempanadas">Avisame →</a><span class="alt-destino">🎙️ Te llevamos a Aprende Stand Up, nuestra escuela online</span></td></tr>
+<tr id="presencial"><th scope="row"><span class="alt-num">2</span> Curso presencial</th><td>La edición 2026 está completa. La próxima, en 2027.</td><td><button class="alt-btn" type="button" onclick="this.hidden=true;var f=this.nextElementSibling;f.hidden=false;f.querySelector('input[type=email]').focus()">Avisame →</button><form class="alt-aviso" hidden onsubmit="return avisameCurso(event)"><input name="nombre" autocomplete="name" placeholder="Tu nombre" maxlength="80"><input name="email" type="email" inputmode="email" autocomplete="email" placeholder="Tu mail" required maxlength="120"><input name="web" class="alt-trampa" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="alt-btn" type="submit">Avisame cuando abra</button><span class="alt-aviso-msg"></span></form></td></tr>
 <tr id="online-practica"><th scope="row"><span class="alt-num">3</span> Online + jueves en el club</th><td>Leés el material online y los jueves venís al club a trabajar lo que escribiste o tus dudas. Desde las 19:30, a la gorra.</td><td><a class="alt-btn" href="https://aprendestandup.com.ar/los-jueves/">Cómo funciona →</a><span class="alt-destino">🎙️ Te llevamos a Aprende Stand Up, nuestra escuela online</span></td></tr>
 <tr id="online"><th scope="row"><span class="alt-num">4</span> Por las tuyas</th><td>Te dejamos el material online para que avances solo, a tu ritmo y desde donde estés. Gratis.</td><td><a class="alt-btn" href="https://aprendestandup.com.ar/notas/">Empezar →</a><span class="alt-destino">🎙️ Te llevamos a Aprende Stand Up, nuestra escuela online</span></td></tr>
 </tbody>
 </table>
+<script>
+function avisameCurso(e) {
+  e.preventDefault();
+  var f = e.target, msg = f.querySelector('.alt-aviso-msg'), btn = f.querySelector('button');
+  btn.disabled = true; msg.textContent = '';
+  fetch('https://aprendestandup.com.ar/api/avisame', { method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ nombre: f.nombre.value, email: f.email.value, web: f.web.value, origen: 'tresempanadas', para: 'curso' }) })
+    .then(function (r) { if (!r.ok) throw r; f.innerHTML = '<span class="alt-aviso-ok">¡Listo! Te avisamos cuando abra el curso de 2027.</span>'; })
+    .catch(function () { msg.textContent = 'No se pudo guardar. Revisá el mail y probá de nuevo.'; btn.disabled = false; });
+  return false;
+}
+</script>
 </div>
 </section>`;
 
