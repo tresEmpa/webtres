@@ -167,8 +167,12 @@ ${confirmada ? `<a class="btn-whatsapp" href="${esc(anotarme)}"${anotarmeAttrs}>
 </main>`;
 
   return page({
-    title: `Intensivo de stand up en La Plata · ${ed.fechaTexto.replace(/^\w+ /, '')} | Tres Empanadas`,
-    description: `Una tarde para empezar en el stand up: ${ed.fechaTexto}, ${ed.horario}, en Tres Empanadas. Teoría y práctica en el escenario, y un plan para seguir.`,
+    title: confirmada
+      ? `Taller inicial de stand up en La Plata · ${ed.fechaTexto.replace(/^\w+ /, '')} | Tres Empanadas`
+      : 'Taller inicial de stand up en La Plata | Tres Empanadas',
+    description: confirmada
+      ? `Intensivo con lo esencial para arrancar: ${ed.fechaTexto}, ${ed.horario}, en Tres Empanadas. Teoría y práctica en el escenario, y un plan para seguir.`
+      : `Intensivo con lo esencial para arrancar en Tres Empanadas, La Plata. Fecha probable: ${ed.fechaTexto} (a confirmar). Teoría y práctica en el escenario.`,
     url: URL,
     bodyClass: 'page-cursos',
     extraCss: '/assets/css/cursos.css',
