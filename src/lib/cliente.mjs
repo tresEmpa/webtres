@@ -38,7 +38,7 @@ export const WHATSAPP = '542215247488';
  * los eventos igual se disparan, pero ninguna propiedad de Analytics los recibe.
  * Se saca de analytics.google.com → Administrar → Flujos de datos.
  */
-export const GA4_ID = '';
+export const GA4_ID = 'G-LCT7DQDGLR';
 
 // ══════════════════════════════════════════════════════════════════════
 //  1) ESTADO DE LA NOCHE

@@ -85,8 +85,8 @@ const ORG_SCHEMA = `
   </script>`;
 
 const tracking = (opts = {}) => `
-  <!-- Google Ads (gtag.js) — AW-11304999909 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11304999909"></script>
+  <!-- Google tag (gtag.js) — GA4 ${GA4_ID} + Google Ads AW-11304999909 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_ID || 'AW-11304999909'}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
