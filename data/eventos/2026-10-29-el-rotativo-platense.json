@@ -1,7 +1,7 @@
 {
     "fecha": "2026-10-29",
     "nombre_show": "El Rotativo Platense",
-    "descripcion": "Stand up de los jueves en Tres Empanadas, edición nuevos talentos: voces nuevas de la comedia platense, con Checho Falco de maestro de ceremonias. Show a la gorra.",
+    "descripcion": "Edición nuevos talentos: suben al escenario alumnos y amigos de Tres Empanadas, las voces nuevas de la comedia platense, con Checho Falco de maestro de ceremonias. Una noche para descubrir a los que vienen, en la sala más cálida de La Plata, con empanadas y birra. Show a la gorra.",
     "hora": "21:30",
     "duracion_minutos": 90,
     "estado": "activo",
@@ -18,7 +18,7 @@
         "Checho Falco (MC)"
     ],
     "dia_semana": "jueves",
-    "actualizado": "2026-10-24T21:22:09.000Z",
+    "actualizado": "2026-10-24T21:35:55.000Z",
     "creado": "2026-10-24T21:22:09.000Z",
     "id": "2026-10-29-el-rotativo-platense"
 }
