@@ -1,0 +1,24 @@
+{
+    "fecha": "2026-10-29",
+    "nombre_show": "El Rotativo Platense",
+    "descripcion": "Stand up de los jueves en Tres Empanadas, edición nuevos talentos: voces nuevas de la comedia platense, con Checho Falco de maestro de ceremonias. Show a la gorra.",
+    "hora": "21:30",
+    "duracion_minutos": 90,
+    "estado": "activo",
+    "motivo_cancelacion": "",
+    "plantilla": "rotativo-platense",
+    "link_instagram": "",
+    "notas_internas": "Edición nuevos talentos",
+    "color": "violeta",
+    "flyer": "2026-10-29-el-rotativo-platense.jpg",
+    "elenco": [
+        "Lucho Lasca",
+        "Ema Chanta",
+        "Jesús Chaudary",
+        "Checho Falco (MC)"
+    ],
+    "dia_semana": "jueves",
+    "actualizado": "2026-10-24T21:22:09.000Z",
+    "creado": "2026-10-24T21:22:09.000Z",
+    "id": "2026-10-29-el-rotativo-platense"
+}
