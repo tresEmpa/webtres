@@ -84,7 +84,7 @@ const ORG_SCHEMA = `
   }
   </script>`;
 
-const TRACKING = `
+const tracking = (opts = {}) => `
   <!-- Google Ads (gtag.js) — AW-11304999909 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11304999909"></script>
   <script>
@@ -109,11 +109,11 @@ const TRACKING = `
   'https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', '546014447181846');
   fbq('track', 'PageView');
-  fbq('track', 'ViewContent', {
+  ${opts.viewContentPropio ? '' : `fbq('track', 'ViewContent', {
     content_name: document.title || 'Tres Empanadas Comedia',
     content_type: 'show',
     content_category: 'shows'
-  });
+  });`}
   </script>
   <noscript>
     <img height="1" width="1" style="display:none"
@@ -202,7 +202,7 @@ ${opts.noindex ? '  <meta name="robots" content="noindex, follow">\n' : ''}
   ${extraCss ? `<link rel="stylesheet" href="${esc(extraCss)}">` : ''}
 ${ORG_SCHEMA}
   ${extraSchema || ''}
-${TRACKING}
+${tracking(opts)}
 ${TRACKING_JS}
 ${opts.funciones ? ESTADO_CSS + estadoScript(opts.funciones, !!opts.refrescarAgenda) : ''}
 </head>

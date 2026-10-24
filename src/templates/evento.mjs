@@ -583,7 +583,22 @@ function enviarReserva(e) {
   var show = ${JSON.stringify(ev.nombre_show)};
   var evId = ${JSON.stringify(ev.id)};
 
-  // Vio la función.
+  // Vio la función. El layout no dispara su ViewContent genérico en estas
+  // páginas (viewContentPropio), así sale uno solo, con categoría y eventID.
+  TEP.track('ViewContent', { content_name: show, content_category: 'funcion' },
+            'view_item',    { content_name: show, content_category: 'funcion' });
+
+  // Empezó a completar el formulario: primer foco en cualquier campo, una sola
+  // vez por sesión y por función.
+  var form = document.getElementById('reserva-form');
+  if (form) {
+    form.addEventListener('focusin', function () {
+      TEP.unaVez('checkout:' + evId, function () {
+        TEP.track('InitiateCheckout', { content_name: show },
+                  'begin_checkout',   { content_name: show });
+      });
+    }, { once: true });
+  }
 
   // Consultó por WhatsApp estando sobre la hora. Mismo Lead, otra categoría.
   // Sin preventDefault: el link abre en pestaña nueva y la página no se
@@ -639,6 +654,7 @@ ${trackScript}
     extraCss: '/assets/css/reservas.css',
     extraSchema,
     currentPath: `/reservas/${ev.id}/`,
+    viewContentPropio: true,
     // Sólo la fecha de ESTA función: el jueves a las 21:10 se apaga la página
     // del jueves, no la del viernes que viene.
     funciones: formScript ? [ev.fecha] : null,
