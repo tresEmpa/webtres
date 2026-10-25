@@ -137,7 +137,7 @@ const bloqueCursoRegular = `
 <section class="cursos-bloque curso-nuevo" id="inscripcion">
 <span class="curso-nuevo__badge">🔥 Cupos limitados</span>
 <h2>Curso de stand up — arranca ${CURSO_FECHA}</h2>
-<p>Un curso con arranque y horario fijo para meterte de lleno en el stand up. Y si querés, te quedás a la práctica abierta y al show. Todo el mismo jueves.</p>
+<p>Un curso con arranque y horario fijo para meterte de lleno en el stand up. Y si querés, te quedás al espacio abierto y al show. Todo el mismo jueves.</p>
 
 <div class="curso-nuevo__programa">
 <p class="programa-titulo">La cursada · de agosto a noviembre</p>
@@ -149,9 +149,9 @@ const bloqueCursoRegular = `
 </div>
 
 <div class="cursos-horario"><span>Curso de stand up</span><span class="cursos-horario__hora">18 a 19:30 hs</span></div>
-<div class="cursos-horario"><span>Práctica abierta</span><span class="cursos-horario__hora">20 hs</span></div>
+<div class="cursos-horario"><span>Espacio abierto</span><span class="cursos-horario__hora">${PRACTICA_HORA} hs</span></div>
 <div class="cursos-horario"><span>El Rotativo Platense (show)</span><span class="cursos-horario__hora">21:30 hs</span></div>
-<p class="curso-nuevo__nota">La práctica abierta de las 20 hs es para los alumnos libres de <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">aprendestandup.com.ar</a> (la teoría, gratis y online). Si hacés el curso y te querés quedar, dale — sos bienvenido/a.</p>
+<p class="curso-nuevo__nota">El espacio abierto de las ${PRACTICA_HORA} hs es para los alumnos libres de <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">aprendestandup.com.ar</a> (la teoría, gratis y online). Si hacés el curso y te querés quedar, dale — sos bienvenido/a.</p>
 
 <p class="curso-nuevo__precio">Cuota: <strong>${precioCurso}</strong><small>por mes</small></p>
 <p class="curso-nuevo__pago">😌 No pagás nada por adelantado. Anotate, vení, y el pago lo arreglamos personalmente según tu medio de pago (efectivo, tarjeta, transferencia o QR).</p>
@@ -219,8 +219,8 @@ const tresOpciones = `
 <table class="alt-tabla">
 <thead><tr><th scope="col">Alternativa</th><th scope="col">Qué es</th><th scope="col"></th></tr></thead>
 <tbody>
-<tr id="taller-inicial"><th scope="row"><span class="alt-num">1</span> Taller inicial<br><small style="font-weight:600;text-transform:none;letter-spacing:0;white-space:normal">Intensivo con lo esencial para arrancar</small></th><td>Una tarde para empezar. Algunos feriados y sábados.</td><td><a class="alt-btn" href="/intensivo/">Ver el taller →</a></td></tr>
-<tr id="presencial"><th scope="row"><span class="alt-num">2</span> Curso presencial</th><td>La edición 2026 está completa. La próxima, en 2027.</td><td><button class="alt-btn" type="button" onclick="this.hidden=true;var f=this.nextElementSibling;f.hidden=false;f.querySelector('input[type=email]').focus()">Avisame →</button><form class="alt-aviso" hidden onsubmit="return avisameCurso(event)"><input name="nombre" autocomplete="name" placeholder="Tu nombre" maxlength="80"><input name="email" type="email" inputmode="email" autocomplete="email" placeholder="Tu mail" required maxlength="120"><input name="web" class="alt-trampa" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="alt-btn" type="submit">Avisame cuando abra</button><span class="alt-aviso-msg"></span></form></td></tr>
+<tr id="taller-inicial"><th scope="row"><span class="alt-num">1</span> Taller inicial<br><small style="font-weight:600;text-transform:none;letter-spacing:0;white-space:normal">Intensivo con lo esencial para arrancar</small></th><td>Una tarde de 4 horas para arrancar de cero. Es una edición especial: la hacemos algunos feriados y sábados.</td><td><a class="alt-btn" href="/intensivo/">Ver el taller →</a></td></tr>
+<tr id="presencial"><th scope="row"><span class="alt-num">2</span> Curso presencial</th><td>Cuatro meses, una clase por semana, con arranque y horario fijo. La edición 2026 está completa; la próxima, en 2027.</td><td><button class="alt-btn" type="button" onclick="this.hidden=true;var f=this.nextElementSibling;f.hidden=false;f.querySelector('input[type=email]').focus()">Avisame →</button><form class="alt-aviso" hidden onsubmit="return avisameCurso(event)"><input name="nombre" autocomplete="name" placeholder="Tu nombre" maxlength="80"><input name="email" type="email" inputmode="email" autocomplete="email" placeholder="Tu mail" required maxlength="120"><input name="web" class="alt-trampa" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="alt-btn" type="submit">Avisame cuando abra</button><span class="alt-aviso-msg"></span></form></td></tr>
 <tr id="online-practica"><th scope="row"><span class="alt-num">3</span> Online + jueves en el club</th><td>Leés el material online y los jueves venís al club a trabajar lo que escribiste o tus dudas. Desde las 19:30, a la gorra.</td><td><a class="alt-btn" href="https://aprendestandup.com.ar/los-jueves/">Cómo funciona →</a><span class="alt-destino">🎙️ Te llevamos a Aprende Stand Up, nuestra escuela online</span></td></tr>
 <tr id="online"><th scope="row"><span class="alt-num">4</span> Por las tuyas</th><td>Te dejamos el material online para que avances solo, a tu ritmo y desde donde estés. Gratis.</td><td><a class="alt-btn" href="https://aprendestandup.com.ar/notas/">Empezar →</a><span class="alt-destino">🎙️ Te llevamos a Aprende Stand Up, nuestra escuela online</span></td></tr>
 </tbody>
@@ -262,8 +262,8 @@ const hero = CURSO_REGULAR_ABIERTO
 <section class="cursos-hero">
 <div class="container-narrow">
 <h1>Curso de stand up en La Plata</h1>
-<p>Cuatro formas de aprender con Checho Falco: un taller inicial de una tarde, curso presencial, online gratis, u online con práctica los jueves en el club. Vengas con una idea a medias o con cinco minutos listos, hay un lugar.</p>
-<p style="margin-top:.6rem;">Teoría gratis en <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a> · Práctica los jueves desde las ${PRACTICA_HORA} · Tres Empanadas Comedia</p>
+<p>Cuatro formas de aprender con Checho Falco: un taller inicial de una tarde, el curso presencial, online con el espacio abierto de los jueves en el club, u online por tu cuenta, gratis. Vengas con una idea a medias o con cinco minutos listos, hay un lugar.</p>
+<p style="margin-top:.6rem;">Teoría gratis en <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a> · Espacio abierto los jueves desde las ${PRACTICA_HORA} · Tres Empanadas Comedia</p>
 <div class="cursos-hero-foto">
 <img src="/assets/img/espacio-jueves.webp" width="1200" height="1070" loading="eager" alt="Tres comediantes en el escenario de Tres Empanadas Comedia frente al público, mural Mondrian de fondo">
 </div>
@@ -300,7 +300,7 @@ La teoría la tenés gratis en
 — qué es el stand up, cómo se construye un chiste, tipos de remates, manejo del escenario y mucho más.
 La leés a tu ritmo, sin horarios ni fechas.
 </div>
-<p>Y cuando querés, venís al club. No es una clase con lista y examen: es un espacio abierto donde trabajamos tu material con vos, estés donde estés. Hay quien viene cada jueves y hay quien viene cuando puede. Los dos tienen lugar.</p>
+<p>Y cuando querés, venís al club. No es una clase con lista y examen: es un espacio abierto donde trabajamos tu material con vos, en el punto en que estés. Hay quien viene cada jueves y hay quien viene cuando puede. Los dos tienen lugar.</p>
 </section>
 
 <section class="cursos-bloque">
@@ -325,7 +325,7 @@ La leés a tu ritmo, sin horarios ni fechas.
 <span class="cursos-horario__hora">18 a 19:30 hs</span>
 </div>
 <div class="cursos-horario">
-<span>Espacio abierto / práctica</span>
+<span>Espacio abierto</span>
 <span class="cursos-horario__hora">${PRACTICA_HORA} hs</span>
 </div>
 <div class="cursos-horario">
@@ -368,7 +368,7 @@ description: 'Curso de stand up en La Plata en Tres Empanadas Comedia. Práctica
 }
 : {
 title: 'Curso de Stand Up en La Plata: presencial, online y práctica',
-description: 'Curso de stand up en La Plata: presencial los jueves, online gratis o online con práctica desde las 19:30 en Tres Empanadas Comedia. Elegí cómo empezar.',
+description: 'Curso de stand up en La Plata: presencial los jueves, online gratis u online con el espacio abierto de los jueves desde las 19:30 en Tres Empanadas Comedia. Elegí cómo empezar.',
 };
 
 return page({

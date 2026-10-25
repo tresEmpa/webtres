@@ -249,8 +249,8 @@ export function renderStandupLaPlata(year) {
           rápido.
         </p>
         <p>
-          Los jueves desde las 18:00 hay
-          <a href="/cursos/">taller libre de stand up</a>.
+          Los jueves desde las 19:30 hay
+          <a href="/cursos/">espacio abierto de stand up</a>, para trabajar tu material.
         </p>
       </article>
 

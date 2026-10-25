@@ -143,9 +143,9 @@ export function renderDia(dia, eventosDelDia, year, now = new Date()) {
     .map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join('\n');
 
   const tallerBlock = d.taller ? `
-  <h3>De paso: el taller</h3>
+  <h3>De paso: el espacio abierto</h3>
   <p>
-    Los jueves desde las 18hs hay <strong>taller libre</strong>, antes del show.
+    Los jueves desde las 19:30 hay <strong>espacio abierto</strong> para trabajar tu material, antes del show.
     Si querés probar, <a href="/cursos/">mirá cómo es</a>.
   </p>` : '';
 
