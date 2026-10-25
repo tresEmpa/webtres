@@ -42,7 +42,7 @@ const EXTRA = (lugar) => `
   <h3>Aprendé stand-up</h3>
   <p>
     ¿Querés hacer reír? Tenemos cursos y coaching personalizados.
-    Los <strong>jueves desde las 18hs hay taller libre</strong>.
+    Los <strong>jueves desde las 19:30 hay espacio abierto</strong> para trabajar tu material.
   </p>
   <p>
     📝 <a href="/cursos/" target="_blank" rel="noopener">Ver próximo curso</a>
