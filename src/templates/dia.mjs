@@ -126,7 +126,21 @@ export function renderDia(dia, eventosDelDia, year, now = new Date()) {
 
   // A propósito no lleva schema Event: la función puntual ya lo declara en su
   // propia página, y dos URLs marcando el mismo evento sólo confunden a Google.
-  const extraSchema = `<script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>`;
+  // Lo que sí lleva es un ItemList que sólo apunta a esas páginas (patrón de
+  // "página resumen" de Google): le dice que esta URL es la puerta de entrada
+  // a las próximas fechas, sin repetir los datos del evento.
+  const itemList = eventosDelDia.length ? {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Próximas funciones de ${d.ciclo}`,
+    itemListElement: eventosDelDia.map((ev, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://tresempanadas.com.ar/reservas/${ev.id}/`,
+    })),
+  } : null;
+  const extraSchema = [breadcrumb, itemList].filter(Boolean)
+    .map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join('\n');
 
   const tallerBlock = d.taller ? `
   <h3>De paso: el taller</h3>
