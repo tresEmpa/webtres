@@ -81,8 +81,16 @@ const estilos = `
 .alt-tabla tbody tr:last-child th, .alt-tabla tbody tr:last-child td { border-bottom: 0; }
 .alt-tabla a { color: var(--rojo); font-weight: 700; white-space: nowrap; }
 .alt-num { display: inline-grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: 50%; background: var(--rojo); color: #fff; font-size: .8em; margin-right: .3em; vertical-align: .05em; }
-.alt-tabla a.alt-btn { display: inline-block; background: var(--rojo); color: #fff; text-decoration: none; padding: .45rem .9rem; border-radius: 999px; font-weight: 700; font-size: .9rem; }
-.alt-tabla a.alt-btn:hover { opacity: .9; }
+.alt-tabla .alt-btn { display: inline-block; border: 0; cursor: pointer; font-family: inherit; line-height: inherit; background: var(--rojo); color: #fff; text-decoration: none; padding: .45rem .9rem; border-radius: 999px; font-weight: 700; font-size: .9rem; }
+.alt-tabla .alt-btn:hover { opacity: .9; }
+.alt-aviso[hidden] { display: none; }
+@media (min-width: 641px) {
+.alt-tabla { table-layout: fixed; }
+.alt-tabla thead th:nth-child(1) { width: 24%; }
+.alt-tabla thead th:nth-child(2) { width: 43%; }
+.alt-tabla thead th:nth-child(3) { width: 33%; }
+.alt-tabla tbody th { white-space: normal; }
+}
 .alt-aviso { display: flex; flex-direction: column; gap: .5rem; margin-top: .2rem; max-width: 320px; }
 .alt-aviso input { padding: .55rem .7rem; border: 1px solid var(--gris-suave, #ddd); border-radius: 8px; font: inherit; font-size: .95rem; background: #fff; }
 .alt-aviso .alt-btn { border: 0; cursor: pointer; font: inherit; font-weight: 700; }
