@@ -89,7 +89,7 @@ const ORG_SCHEMA = `
     "sameAs": [
       "https://www.instagram.com/tresempanadascomedia",
       "https://www.youtube.com/@TresEmpanadasComediaLP",
-      "https://www.facebook.com/TresEmpanadasComedia",
+      "https://www.facebook.com/profile.php?id=61594706140564",
       "https://twitter.com/StandUpDeNoche",
       "https://nochesdestandup.com.ar",
       "https://aprendestandup.com.ar"
@@ -277,7 +277,7 @@ ${opts.content || ''}
         <ul>
           <li><a href="https://www.instagram.com/tresempanadascomedia">Instagram</a></li>
           <li><a href="https://www.youtube.com/@TresEmpanadasComediaLP">YouTube</a></li>
-          <li><a href="https://www.facebook.com/TresEmpanadasComedia">Facebook</a></li>
+          <li><a href="https://www.facebook.com/profile.php?id=61594706140564">Facebook</a></li>
           <li><a href="${GOOGLE.url}">Google Maps · ${GOOGLE.nota} ⭐</a></li>
         </ul>
       </div>
