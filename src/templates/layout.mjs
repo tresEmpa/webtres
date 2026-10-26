@@ -38,13 +38,19 @@ const ORG_SCHEMA = `
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": "ComedyClub",
     "@id": "https://tresempanadas.com.ar/#business",
     "name": "Tres Empanadas Comedia",
-    "alternateName": "Casa de Comedia",
+    "alternateName": ["Casa de Comedia", "Club de Comedia Tres Empanadas"],
+    "description": "Club de comedia y microteatro de stand up en La Plata. Sala chica, comediantes platenses y funciones jueves y viernes en 43 y 22. El show es a la gorra.",
     "url": "https://tresempanadas.com.ar",
     "logo": "https://tresempanadas.com.ar/assets/img/logo.png",
-    "image": "https://tresempanadas.com.ar/assets/img/og-default.jpg",
+    "image": [
+      "https://tresempanadas.com.ar/assets/img/og-default.jpg",
+      "https://tresempanadas.com.ar/assets/img/interior-publico.jpg",
+      "https://tresempanadas.com.ar/assets/img/escenario-mondrian.jpg",
+      "https://tresempanadas.com.ar/assets/img/lugar-fachada.webp"
+    ],
     "telephone": "+5492215247488",
     "email": "info@tresempanadas.com.ar",
     "address": {
@@ -55,6 +61,12 @@ const ORG_SCHEMA = `
       "postalCode": "B1902AFA",
       "addressCountry": "AR"
     },
+    "areaServed": [
+      {"@type": "City", "name": "La Plata"},
+      {"@type": "City", "name": "Berisso"},
+      {"@type": "City", "name": "Ensenada"}
+    ],
+    "publicAccess": true,
     "openingHoursSpecification": [{
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": ["Thursday", "Friday"],
@@ -86,16 +98,13 @@ const ORG_SCHEMA = `
   </script>`;
 
 const tracking = (opts = {}) => `
-  <!-- Google tag (gtag.js) — GA4 ${GA4_ID} + Google Ads AW-11304999909 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_ID || 'AW-11304999909'}"></script>
+  <!-- Google Analytics 4 — ${GA4_ID} (Google Ads se sacó el 26/10/2026) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_ID}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'AW-11304999909');${GA4_ID ? `
-    gtag('config', '${GA4_ID}');` : `
-    // Google Analytics 4: falta el ID "G-…". Cargalo en GA4_ID, arriba de
-    // src/lib/cliente.mjs, y los eventos empiezan a llegar a Analytics.`}
+    gtag('config', '${GA4_ID}');
   </script>
 
   <!-- Meta Pixel — 546014447181846 -->
@@ -243,7 +252,7 @@ ${opts.content || ''}
 
       <div class="site-footer__brand">
         <h3>Tres Empanadas Comedia</h3>
-        <p>Microteatro de stand up en La Plata.</p>
+        <p>Microteatro de <a href="/stand-up-la-plata/">stand up en La Plata</a>.</p>
         <p style="margin-top: var(--space-md);">
           Calle 43 N° 1349, esquina 22<br>
           La Plata, Buenos Aires<br>

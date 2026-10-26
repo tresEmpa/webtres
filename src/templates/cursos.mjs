@@ -150,7 +150,7 @@ const bloqueCursoRegular = `
 
 <div class="cursos-horario"><span>Curso de stand up</span><span class="cursos-horario__hora">18 a 19:30 hs</span></div>
 <div class="cursos-horario"><span>Espacio abierto</span><span class="cursos-horario__hora">${PRACTICA_HORA} hs</span></div>
-<div class="cursos-horario"><span>El Rotativo Platense (show)</span><span class="cursos-horario__hora">21:30 hs</span></div>
+<div class="cursos-horario"><span>El Rotativo Platense (<a href="/stand-up-la-plata/">show de stand up en La Plata</a>)</span><span class="cursos-horario__hora">21:30 hs</span></div>
 <p class="curso-nuevo__nota">El espacio abierto de las ${PRACTICA_HORA} hs es para los alumnos libres de <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">aprendestandup.com.ar</a> (la teoría, gratis y online). Si hacés el curso y te querés quedar, dale — sos bienvenido/a.</p>
 
 <p class="curso-nuevo__precio">Cuota: <strong>${precioCurso}</strong><small>por mes</small></p>
@@ -192,7 +192,6 @@ var nombre = (document.getElementById('c-nombre').value || '').trim();
 var wsp = (document.getElementById('c-wsp').value || '').trim();
 var exp = document.getElementById('c-exp').value || '';
 if (!nombre || !wsp || !exp) { alert('Completá tu nombre, WhatsApp y experiencia 🙌'); return false; }
-try { if (typeof gtag === 'function') { gtag('event', 'conversion', { 'send_to': 'AW-11304999909/reserva_whatsapp' }); } } catch (_) {}
 try { if (typeof fbq === 'function') { fbq('track', 'Lead', { content_name: 'Curso stand up', content_category: 'curso' }); } } catch (_) {}
 var msg = 'Hola! Me quiero anotar al curso de stand up.\\n\\nNombre: ' + nombre + '\\nWhatsApp: ' + wsp + '\\nExperiencia: ' + exp;
 var url = 'https://wa.me/${wa}?text=' + encodeURIComponent(msg);
@@ -329,7 +328,7 @@ La leés a tu ritmo, sin horarios ni fechas.
 <span class="cursos-horario__hora">${PRACTICA_HORA} hs</span>
 </div>
 <div class="cursos-horario">
-<span>El Rotativo Platense (show)</span>
+<span>El Rotativo Platense (<a href="/stand-up-la-plata/">show de stand up en La Plata</a>)</span>
 <span class="cursos-horario__hora">21:30 hs</span>
 </div>
 <p style="margin-top:1rem;">Cada jueves el Tres Empanadas abre para trabajar el stand up. Y si te quedás, a las 21:30 arranca <strong>El Rotativo Platense</strong> — el show semanal donde vas a ver arriba del escenario a gente que empezó exactamente donde estás vos ahora.</p>
