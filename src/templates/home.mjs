@@ -372,7 +372,7 @@ export function renderHome(year, listado = [], now = new Date()) {
 `;
 
   return page({
-    title: 'Tres Empanadas Comedia | Microteatro de Stand Up en La Plata',
+    title: 'Tres Empanadas Comedia | Club de comedia en 43 y 22, La Plata',
     description: 'Vení a reír. Microteatro de stand up en La Plata. Funciones jueves y viernes 21:30hs. Reservá gratis.',
     url: 'https://tresempanadas.com.ar/',
     image: 'https://tresempanadas.com.ar/assets/img/og-default.jpg',
