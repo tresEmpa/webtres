@@ -33,9 +33,6 @@ export const WHATSAPP = '542215247488';
 
 /**
  * ID de Google Analytics 4. Empieza con "G-".
- * ⚠ HOY ESTÁ VACÍO: el sitio tiene gtag cargado sólo para Google Ads
- * (AW-11304999909), que NO es lo mismo que Analytics. Mientras esto esté vacío
- * los eventos igual se disparan, pero ninguna propiedad de Analytics los recibe.
  * Se saca de analytics.google.com → Administrar → Flujos de datos.
  */
 export const GA4_ID = 'G-LCT7DQDGLR';

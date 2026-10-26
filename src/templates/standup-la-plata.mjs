@@ -37,51 +37,6 @@ function semaforo(aria) {
 const SCHEMA = `<script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "ComedyClub",
-  "@id": "https://tresempanadas.com.ar/#comedyclub",
-  "name": "Tres Empanadas Comedia",
-  "alternateName": "Club de Comedia Tres Empanadas",
-  "description": "Microteatro de stand up en La Plata. Sala chica, comediantes platenses y funciones jueves y viernes en 43 y 22.",
-  "url": "https://tresempanadas.com.ar/stand-up-la-plata/",
-  "image": [
-    "https://tresempanadas.com.ar/assets/img/interior-publico.jpg",
-    "https://tresempanadas.com.ar/assets/img/escenario-mondrian.jpg",
-    "https://tresempanadas.com.ar/assets/img/lugar-fachada.webp"
-  ],
-  "logo": "https://tresempanadas.com.ar/assets/img/logo.png",
-  "telephone": "+5492215247488",
-  "email": "info@tresempanadas.com.ar",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Calle 43 N° 1349",
-    "addressLocality": "La Plata",
-    "addressRegion": "Buenos Aires",
-    "postalCode": "B1902AFA",
-    "addressCountry": "AR"
-  },
-  "areaServed": [
-    {"@type": "City", "name": "La Plata"},
-    {"@type": "City", "name": "Berisso"},
-    {"@type": "City", "name": "Ensenada"}
-  ],
-  "openingHoursSpecification": [{
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Thursday", "Friday"],
-    "opens": "21:00",
-    "closes": "23:45"
-  }],
-  "publicAccess": true,
-  "isAccessibleForFree": false,
-  "sameAs": [
-    "https://www.instagram.com/tresempanadascomedia",
-    "https://www.facebook.com/TresEmpanadasComedia",
-    "https://nochesdestandup.com.ar"
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {"@type":"Question","name":"¿Dónde hay stand up en La Plata?","acceptedAnswer":{"@type":"Answer","text":"En Tres Empanadas Comedia, Calle 43 N° 1349 esquina 22, en el casco de La Plata. Es la fachada violeta con cortinas amarillas."}},
