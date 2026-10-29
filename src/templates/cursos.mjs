@@ -1,6 +1,6 @@
 /** Cursos — port de cursos/index.php */
 import { page, esc } from './layout.mjs';
-import { INTENSIVO, intensivoVigente } from '../lib/intensivo.mjs';
+import { INTENSIVO, intensivoVigente, aperturaPendiente, scriptApertura } from '../lib/intensivo.mjs';
 
 /*
  * ─────────────────────────────────────────────────────────────────────────────
@@ -240,13 +240,14 @@ function avisameCurso(e) {
 </section>`;
 
 // ── AVISO DEL TALLER INICIAL (sólo con fecha confirmada: INTENSIVO.anunciarEnCursos) ──
-const avisoIntensivo = (INTENSIVO.anunciarEnCursos && intensivoVigente(now)) ? `
-<section class="cursos-bloque curso-nuevo" id="taller-inicial-aviso">
+const pendienteInt = aperturaPendiente(now);
+const avisoIntensivo = ((INTENSIVO.anunciarEnCursos || pendienteInt) && intensivoVigente(now)) ? `
+<section class="cursos-bloque curso-nuevo" id="taller-inicial-aviso"${pendienteInt ? ' data-int="post" style="display:none"' : ''}>
 <span class="curso-nuevo__badge">Intensivo con lo esencial para arrancar</span>
 <h2>Próximo taller inicial: ${esc(INTENSIVO.fechaTexto)}</h2>
 <p>${esc(INTENSIVO.horario)} en Tres Empanadas. Una tarde para empezar, con teoría y práctica en el escenario.</p>
 <p style="margin-top:var(--space-sm);"><a class="btn-whatsapp" href="/intensivo/">Ver el taller →</a></p>
-</section>` : '';
+</section>${pendienteInt ? scriptApertura() : ''}` : '';
 
 // ── HERO (cambia según el flag) ──
 const hero = CURSO_REGULAR_ABIERTO

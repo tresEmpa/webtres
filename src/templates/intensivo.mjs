@@ -11,7 +11,7 @@
  * ni el elefante: es interno, se descubre en el intensivo.
  */
 import { page, esc } from './layout.mjs';
-import { INTENSIVO, intensivoVigente } from '../lib/intensivo.mjs';
+import { INTENSIVO, intensivoVigente, aperturaPendiente, scriptApertura } from '../lib/intensivo.mjs';
 
 const URL = 'https://tresempanadas.com.ar/intensivo/';
 
@@ -102,7 +102,12 @@ ${ESTILOS}
   }
 
   const confirmada = !!ed.confirmada;
-  const cuando = `${confirmada ? '' : 'Fecha probable: '}${ed.fechaTexto}${ed.fechaNota ? ` (${ed.fechaNota})` : ''}${confirmada ? '' : ' · a confirmar'}`;
+  const pendiente = aperturaPendiente(now);
+  const cuandoDe = (c) => { const t = `${c ? '' : 'Fecha probable: '}${ed.fechaTexto}${ed.fechaNota ? ` (${ed.fechaNota})` : ''}${c ? '' : ' · a confirmar'}`; return t.charAt(0).toUpperCase() + t.slice(1); };
+  // Versión confirmada y versión previa; con apertura pendiente van las dos y decide el navegador.
+  const dos = (pre, post) => pendiente
+    ? `<span data-int="pre">${pre}</span><span data-int="post" style="display:none">${post}</span>`
+    : (confirmada ? post : pre);
   const avisame = 'https://aprendestandup.com.ar/avisame/?para=taller&de=tresempanadas';
   const anotarme = ed.inscripcionUrl
     || waLink(`Hola! Quiero anotarme al intensivo de stand up del ${ed.fechaTexto}.`);
@@ -113,7 +118,7 @@ ${ESTILOS}
 <div class="container-narrow">
 <span class="int-badge">${esc(ed.nombre)}</span>
 <h1>Taller inicial de Stand Up en La Plata</h1>
-<p class="int-datos"><strong>${esc(cuando.charAt(0).toUpperCase() + cuando.slice(1))}</strong><br>${esc(ed.horario)} · Tres Empanadas, 43 y 22, La Plata</p>
+<p class="int-datos"><strong>${dos(esc(cuandoDe(false)), esc(cuandoDe(true)))}</strong><br>${esc(ed.horario)} · Tres Empanadas, 43 y 22, La Plata</p>
 <p>Una tarde para empezar en el stand up, en el escenario del club.</p>
 </div>
 </section>
@@ -152,13 +157,21 @@ ${ed.showNoche ? `<li>Una invitación al show de las ${esc(ed.showNoche)}.</li>`
 </ul>
 </section>
 
-<section class="cursos-bloque int-cta" id="anotarme">
-<h2>${confirmada ? 'Anotate' : 'Próximamente'}</h2>
+${(() => {
+  const pre = `<section class="cursos-bloque int-cta" id="anotarme"${pendiente ? ' data-int="pre"' : ''}>
+<h2>Próximamente</h2>
 <p class="int-precio"><strong>${esc(ed.precio)}</strong><small>Grupo reducido</small></p>
-${confirmada ? `<a class="btn-whatsapp" href="${esc(anotarme)}"${anotarmeAttrs}>Anotarme →</a>
-<p class="int-nota">Para anotarte vas a entrar a Aprende Stand Up, la plataforma de formación de Tres Empanadas, con tu cuenta de Google. Cargás tus datos y listo. Podés pagar antes por transferencia o el día del taller, en el lugar.</p>` : `<a class="btn-whatsapp" href="${avisame}">Avisame cuando se confirme →</a>
-<p class="int-nota">La fecha todavía no está confirmada. Dejá tu mail y te avisamos apenas abra la inscripción.</p>`}
-</section>
+<a class="btn-whatsapp" href="${avisame}">Avisame cuando se confirme →</a>
+<p class="int-nota">La fecha todavía no está confirmada. Dejá tu mail y te avisamos apenas abra la inscripción.</p>
+</section>`;
+  const post = `<section class="cursos-bloque int-cta"${pendiente ? ' data-int="post" style="display:none"' : ' id="anotarme"'}>
+<h2>Anotate</h2>
+<p class="int-precio"><strong>${esc(ed.precio)}</strong><small>Grupo reducido</small></p>
+<a class="btn-whatsapp" href="${esc(anotarme)}"${anotarmeAttrs}>Anotarme →</a>
+<p class="int-nota">Para anotarte vas a entrar a Aprende Stand Up, la plataforma de formación de Tres Empanadas, con tu cuenta de Google. Cargás tus datos y listo. Podés pagar antes por transferencia o el día del taller, en el lugar.</p>
+</section>`;
+  return pendiente ? pre + post + scriptApertura() : (confirmada ? post : pre);
+})()}
 
 <section class="cursos-bloque">
 <h2>¿Preferís otra forma de empezar?</h2>
