@@ -140,14 +140,14 @@ ${ESTILOS}
 
 <section class="cursos-bloque">
 <h2>Antes de venir</h2>
-<p>Cuando te anotás recibís acceso a una plataforma con material y una tarea breve que vamos a utilizar oportunamente.</p>
+<p>Cuando te anotás te hacemos unas preguntas cortas y voluntarias, para arrancar la tarde trabajando con lo tuyo. No hace falta leer nada: si te dan ganas, tenés el curso online de <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a>.</p>
 </section>
 
 <section class="cursos-bloque">
 <h2>Incluye</h2>
 <ul class="int-tarde">
 <li>La tarde completa, ${esc(ed.horario)}.</li>
-<li>El material online.</li>
+<li>Acceso al material online de Aprende Stand Up.</li>
 ${ed.showNoche ? `<li>Una invitación al show de las ${esc(ed.showNoche)}.</li>` : ''}
 </ul>
 </section>
@@ -156,7 +156,7 @@ ${ed.showNoche ? `<li>Una invitación al show de las ${esc(ed.showNoche)}.</li>`
 <h2>${confirmada ? 'Anotate' : 'Próximamente'}</h2>
 <p class="int-precio"><strong>${esc(ed.precio)}</strong><small>Grupo reducido</small></p>
 ${confirmada ? `<a class="btn-whatsapp" href="${esc(anotarme)}"${anotarmeAttrs}>Anotarme →</a>
-<p class="int-nota">Para anotarte vas a entrar a Aprende Stand Up, la plataforma de formación de Tres Empanadas, con tu cuenta de Google. Ahí cargás tus datos, tenés el material para llegar al taller y las opciones de pago: transferencia o tarjeta.</p>` : `<a class="btn-whatsapp" href="${avisame}">Avisame cuando se confirme →</a>
+<p class="int-nota">Para anotarte vas a entrar a Aprende Stand Up, la plataforma de formación de Tres Empanadas, con tu cuenta de Google. Cargás tus datos y listo. Podés pagar antes por transferencia o el día del taller, en el lugar.</p>` : `<a class="btn-whatsapp" href="${avisame}">Avisame cuando se confirme →</a>
 <p class="int-nota">La fecha todavía no está confirmada. Dejá tu mail y te avisamos apenas abra la inscripción.</p>`}
 </section>
 
