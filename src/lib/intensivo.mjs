@@ -14,12 +14,23 @@
  * no viene y pide la plata, se le devuelve. El trabajo de imagen / elefante
  * no se anuncia.
  */
+/** Fecha de hoy en Argentina, AAAA-MM-DD. */
+function hoyAR(now = new Date()) {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Argentina/Buenos_Aires',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+  }).format(now);
+}
+
 export const INTENSIVO = {
   nombre: 'Intensivo con lo esencial para arrancar',
   fecha: '2026-11-19',                       // AAAA-MM-DD, o null
-  // false → la página muestra la fecha como "probable, a confirmar" y en vez de
-  // "Anotarme" ofrece "Avisame cuando se confirme". true → abre la inscripción.
-  confirmada: false,
+  // Se confirma sola desde `abreDesde` (hora AR, a la hora del build): la página
+  // pasa de "a confirmar / avisame" a "Anotarme". Mismo día que abre la
+  // inscripción en Aprende (functions/alumnos/api/intensivo/_edicion.js).
+  // Ojo: el sitio es estático, hace falta un build ese día para que se vea.
+  abreDesde: '2026-11-01',
+  get confirmada() { return hoyAR() >= this.abreDesde; },
   fechaTexto: 'jueves 19 de noviembre',
   fechaNota: 'feriado en La Plata',           // '' si no aplica
   horario: '16 a 20 hs',
@@ -28,9 +39,8 @@ export const INTENSIVO = {
   precio: '$50.000',
   precioNumero: 50000,
   showNoche: '21:30',                         // '' si esa noche no hay show
-  // Aviso con la fecha arriba de /cursos/. Prenderlo recién cuando la fecha
-  // esté confirmada (decisión de Tres: no anunciar fecha hasta confirmar).
-  anunciarEnCursos: false,
+  // Aviso con la fecha arriba de /cursos/: se prende junto con la confirmación.
+  get anunciarEnCursos() { return this.confirmada; },
   // A dónde lleva "Anotarme": la inscripción en Aprende Stand Up.
   // null → abre WhatsApp (por si alguna vez hace falta volver a eso).
   inscripcionUrl: 'https://aprendestandup.com.ar/alumnos/intensivo/',
@@ -47,9 +57,5 @@ if (INTENSIVO.inscripcionUrl && RAMA && RAMA !== 'main') {
 /** ¿Hay una edición vigente (hoy o en el futuro) a la fecha del build? */
 export function intensivoVigente(now = new Date()) {
   if (!INTENSIVO.fecha) return false;
-  const hoy = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'America/Argentina/Buenos_Aires',
-    year: 'numeric', month: '2-digit', day: '2-digit',
-  }).format(now);
-  return INTENSIVO.fecha >= hoy;
+  return INTENSIVO.fecha >= hoyAR(now);
 }
