@@ -28,7 +28,8 @@ export const INTENSIVO = {
   // Se confirma sola desde `abreDesde` (hora AR, a la hora del build): la página
   // pasa de "a confirmar / avisame" a "Anotarme". Mismo día que abre la
   // inscripción en Aprende (functions/alumnos/api/intensivo/_edicion.js).
-  // Ojo: el sitio es estático, hace falta un build ese día para que se vea.
+  // El sitio es estático: si el build es anterior a esa fecha, la página trae
+  // las dos versiones y el navegador muestra la que corresponde (scriptApertura).
   abreDesde: '2026-11-01',
   get confirmada() { return hoyAR() >= this.abreDesde; },
   fechaTexto: 'jueves 19 de noviembre',
@@ -58,4 +59,17 @@ if (INTENSIVO.inscripcionUrl && RAMA && RAMA !== 'main') {
 export function intensivoVigente(now = new Date()) {
   if (!INTENSIVO.fecha) return false;
   return INTENSIVO.fecha >= hoyAR(now);
+}
+
+/** Vigente pero todavía sin abrir a la fecha del build: el navegador decide. */
+export function aperturaPendiente(now = new Date()) {
+  return intensivoVigente(now) && !!INTENSIVO.abreDesde && hoyAR(now) < INTENSIVO.abreDesde;
+}
+
+/**
+ * Script en línea: desde `abreDesde` (hora AR, reloj del visitante) oculta lo
+ * marcado data-int="pre" y muestra lo marcado data-int="post".
+ */
+export function scriptApertura() {
+  return `<script>(function(){try{var h=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Argentina/Buenos_Aires',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());if(h>=${JSON.stringify(INTENSIVO.abreDesde)}){document.querySelectorAll('[data-int="pre"]').forEach(function(e){e.style.display='none'});document.querySelectorAll('[data-int="post"]').forEach(function(e){e.style.display=''})}}catch(e){}})();</script>`;
 }
