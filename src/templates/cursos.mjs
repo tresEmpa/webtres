@@ -72,6 +72,25 @@ const estilos = `
 .cursos-opcion__estado { display: inline-block; font-family: var(--font-display); font-weight: 800; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; background: var(--dorado); color: var(--rojo-tinto); padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
 .cursos-opcion__datos { font-family: var(--font-display); color: var(--rojo-tinto); margin: 6px 0; }
 .cursos-opcion p { margin: 6px 0; }
+.op-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-top: var(--space-md); text-align: left; }
+.op { --light: #fffaf0; --paper: #fffdf8; background: #fff; border: 1px solid #e9dfcd; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 6px 20px rgba(80,50,20,.07); }
+.op-top { position: relative; height: 128px; display: grid; place-items: center; color: var(--fg); background: radial-gradient(120% 90% at 50% 0%, var(--light) 0%, var(--bg) 60%); border-bottom: 1px solid var(--soft); }
+.op-art { width: 100%; max-width: 260px; height: 112px; }
+.op-chip { position: absolute; left: 14px; bottom: -13px; background: var(--paper); color: var(--fg); border: 1px solid var(--soft); font-size: .8rem; font-weight: 700; padding: 4px 11px; border-radius: 999px; box-shadow: 0 2px 6px rgba(0,0,0,.05); }
+.op-n { position: absolute; right: 14px; top: 10px; font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; opacity: .35; }
+.op-body { padding: 24px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.op-body h3 { margin: 0; font-size: 1.15rem; line-height: 1.2; }
+.op-body p { margin: 0; }
+.op-body ul { list-style: none; margin: 2px 0 6px; padding: 0; font-size: .92rem; color: #444; }
+.op-body li { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
+.op-body li svg { color: var(--rojo); flex: none; opacity: .85; }
+.op-link { margin-top: auto; align-self: flex-start; color: var(--rojo); font-weight: 700; }
+.op-form { margin-top: auto; display: flex; flex-direction: column; gap: 7px; background: var(--bg); border: 1px solid var(--soft); border-radius: 12px; padding: 12px; }
+.op-form label { font-weight: 700; font-size: .85rem; color: var(--fg); }
+.op-form input { font: inherit; font-size: .95rem; padding: 9px 11px; border: 1px solid var(--soft); border-radius: 8px; background: var(--paper); width: 100%; box-sizing: border-box; }
+.op-form button { font: inherit; font-weight: 700; background: var(--rojo); color: #fff; border: 0; border-radius: 8px; padding: 10px; cursor: pointer; }
+.op-form button:disabled { opacity: .6; }
+.op-nota { font-size: .8rem; opacity: .7; text-align: center; margin-top: var(--space-md); }
 .alt-wrap { margin: 1.2rem 0; }
 .alt-titulo { font-weight: 800; text-transform: uppercase; letter-spacing: .06em; font-size: .85rem; color: var(--rojo); margin: 0 0 .5rem; }
 .alt-tabla { width: 100%; border-collapse: collapse; background: var(--crema-papel); border: 1px solid var(--gris-suave); border-radius: 10px; overflow: hidden; font-size: .95rem; line-height: 1.4; text-align: left; }
@@ -209,21 +228,88 @@ return false;
 const waEspacio = `https://wa.me/${wa}?text=` + encodeURIComponent('Hola! Quiero coordinar para venir un jueves al espacio abierto de stand up. Ya leí algo de aprendestandup.com.ar.');
 
 
-// ── LAS CUATRO OPCIONES (misma redacción en tresempanadas, aprendestandup y nochesdestandup) ──
+// ── LAS CUATRO OPCIONES ──
+// Tarjetas con ilustración (SVG en línea, sin imágenes externas). El taller
+// lee fecha y precio de src/lib/intensivo.mjs; sin edición vigente muestra
+// "Algunos feriados y sábados". Antes de INTENSIVO.abreDesde la fecha sale
+// "a confirmar" y el navegador la cambia sola (scriptApertura).
+const icoCal = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>`;
+const icoPago = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M14.5 9.3c-.5-.8-1.4-1.3-2.5-1.3-1.5 0-2.5.8-2.5 1.9 0 2.7 5 1.4 5 4.2 0 1.1-1.1 1.9-2.5 1.9-1.1 0-2.1-.5-2.6-1.3M12 6.5V8M12 16v1.5"/></svg>`;
+const icoReloj = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>`;
+const ART_TALLER = `<svg class="op-art" viewBox="0 0 240 120" aria-hidden="true"><circle cx="196" cy="30" r="14" fill="var(--soft)"/>
+<path d="M120 4 L82 108 H158 Z" fill="var(--light)" opacity=".9"/>
+<ellipse cx="120" cy="108" rx="46" ry="6" fill="var(--soft)"/>
+<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="111" y="44" width="18" height="28" rx="9" fill="var(--paper)"/><path d="M105 64a15 15 0 0 0 30 0M120 79v26M110 105h20"/><path d="M114 52h12M114 58h12"/></g>
+<g fill="currentColor" opacity=".55"><circle cx="58" cy="40" r="2.5"/><circle cx="44" cy="70" r="1.8"/><circle cx="176" cy="74" r="2"/></g></svg>`;
+const ART_PRESENCIAL = `<svg class="op-art" viewBox="0 0 240 120" aria-hidden="true"><rect x="20" y="90" width="200" height="10" rx="5" fill="var(--soft)"/>
+<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M40 40v46"/><path d="M40 66h18v20"/><path d="M43 44c4-1 6 1 6 4v14" opacity=".0"/></g><rect x="39" y="62" width="20" height="5" rx="2" fill="var(--paper)" stroke="currentColor" stroke-width="2"/><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M78 40v46"/><path d="M78 66h18v20"/><path d="M81 44c4-1 6 1 6 4v14" opacity=".0"/></g><rect x="77" y="62" width="20" height="5" rx="2" fill="var(--paper)" stroke="currentColor" stroke-width="2"/><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M116 40v46"/><path d="M116 66h18v20"/><path d="M119 44c4-1 6 1 6 4v14" opacity=".0"/></g><rect x="115" y="62" width="20" height="5" rx="2" fill="var(--paper)" stroke="currentColor" stroke-width="2"/>
+<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="170" y="30" width="14" height="22" rx="7" fill="var(--paper)"/><path d="M165 46a12 12 0 0 0 24 0M177 58v28M168 86h18"/></g>
+<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".6"><path d="M150 40l-8-6M150 52h-10"/></g></svg>`;
+const ART_JUEVES = `<svg class="op-art" viewBox="0 0 240 120" aria-hidden="true"><rect x="150" y="84" width="74" height="16" rx="4" fill="var(--soft)"/>
+<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="22" y="34" width="62" height="42" rx="5" fill="var(--paper)"/><path d="M14 84h78"/><path d="M32 46h30M32 54h40M32 62h22"/></g>
+<path d="M92 56 C120 20, 150 20, 170 46" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 6" stroke-linecap="round"/>
+<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M164 42l7 5 1-9"/></g>
+<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="180" y="40" width="14" height="22" rx="7" fill="var(--paper)"/><path d="M175 56a12 12 0 0 0 24 0M187 68v16"/></g></svg>`;
+const ART_ONLINE = `<svg class="op-art" viewBox="0 0 240 120" aria-hidden="true"><ellipse cx="110" cy="96" rx="70" ry="8" fill="var(--soft)"/>
+<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M110 40c-14-8-34-9-50-4v54c16-5 36-4 50 4z" fill="var(--paper)"/><path d="M110 40c14-8 34-9 50-4v54c-16-5-36-4-50 4z" fill="var(--paper)"/><path d="M110 40v54"/>
+<path d="M70 50c10-2 20-1 30 3M70 60c10-2 20-1 30 3M120 53c10-4 20-5 30-3M120 63c10-4 20-5 30-3"/></g>
+<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M178 70h22v14a8 8 0 0 1-8 8h-6a8 8 0 0 1-8-8z" fill="var(--paper)"/><path d="M200 74h4a5 5 0 0 1 0 10h-4"/><path d="M185 60c-3-4 3-6 0-10M193 60c-3-4 3-6 0-10" opacity=".6"/></g></svg>`;
+
+const pendienteOp = aperturaPendiente(now);
+const fechaCap = INTENSIVO.fechaTexto ? INTENSIVO.fechaTexto[0].toUpperCase() + INTENSIVO.fechaTexto.slice(1) : '';
+const itemsTaller = intensivoVigente(now)
+  ? [[icoCal, pendienteOp
+        ? `${esc(fechaCap)}<span data-int="pre"> · a confirmar</span>`
+        : esc(fechaCap)],
+     [icoReloj, esc(INTENSIVO.horario)],
+     [icoPago, esc(INTENSIVO.precio)]]
+  : [[icoCal, 'Algunos feriados y sábados']];
+
+const op = (id, n, art, chip, tono, titulo, texto, items, cta) => `
+<article class="op" id="${id}" style="${tono}">
+<div class="op-top">${art}<span class="op-chip">${chip}</span><span class="op-n" aria-hidden="true">${n}</span></div>
+<div class="op-body">
+<h3>${titulo}</h3>
+<p>${texto}</p>
+<ul>${items.map(([i, t]) => `<li>${i}<span>${t}</span></li>`).join('')}</ul>
+${cta}
+</div>
+</article>`;
+
 const tresOpciones = `
 <section class="cursos-bloque" id="opciones">
-<h2>Cómo empezar en el stand up</h2>
-<div class="alt-wrap">
-<p class="alt-titulo">4 alternativas para empezar</p>
-<table class="alt-tabla">
-<thead><tr><th scope="col">Alternativa</th><th scope="col">Qué es</th><th scope="col"></th></tr></thead>
-<tbody>
-<tr id="taller-inicial"><th scope="row"><span class="alt-num">1</span> Taller inicial<br><small style="font-weight:600;text-transform:none;letter-spacing:0;white-space:normal">Intensivo con lo esencial para arrancar</small></th><td>Una tarde de 4 horas para arrancar de cero. Es una edición especial: la hacemos algunos feriados y sábados.</td><td><a class="alt-btn" href="/intensivo/">Ver el taller →</a></td></tr>
-<tr id="presencial"><th scope="row"><span class="alt-num">2</span> Curso presencial</th><td>Cuatro meses, una clase por semana, con arranque y horario fijo. La edición 2026 está completa; la próxima, en 2027.</td><td><button class="alt-btn" type="button" onclick="this.hidden=true;var f=this.nextElementSibling;f.hidden=false;f.querySelector('input[type=email]').focus()">Avisame →</button><form class="alt-aviso" hidden onsubmit="return avisameCurso(event)"><input name="nombre" autocomplete="name" placeholder="Tu nombre" maxlength="80"><input name="email" type="email" inputmode="email" autocomplete="email" placeholder="Tu mail" required maxlength="120"><input name="web" class="alt-trampa" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="alt-btn" type="submit">Avisame cuando abra</button><span class="alt-aviso-msg"></span></form></td></tr>
-<tr id="online-practica"><th scope="row"><span class="alt-num">3</span> Online + jueves en el club</th><td>Leés el material online y los jueves venís al club a trabajar lo que escribiste o tus dudas. Desde las 19:30, a la gorra.</td><td><a class="alt-btn" href="https://aprendestandup.com.ar/los-jueves/">Cómo funciona →</a><span class="alt-destino">🎙️ Te llevamos a Aprende Stand Up, nuestra escuela online</span></td></tr>
-<tr id="online"><th scope="row"><span class="alt-num">4</span> Por las tuyas</th><td>Te dejamos el material online para que avances solo, a tu ritmo y desde donde estés. Gratis.</td><td><a class="alt-btn" href="https://aprendestandup.com.ar/notas/">Empezar →</a><span class="alt-destino">🎙️ Te llevamos a Aprende Stand Up, nuestra escuela online</span></td></tr>
-</tbody>
-</table>
+<h2>Elegí cómo empezar</h2>
+<div class="op-grid">
+${op('taller-inicial', 1, ART_TALLER, 'Una tarde · 4 hs', '--fg:#B33227;--bg:#fbe6e1;--soft:#f5d2cb',
+  'Taller inicial intensivo',
+  'Una tarde de 4 horas para arrancar desde cero con lo esencial. Si te gusta, seguís, a tu ritmo, en el espacio de los jueves (opción 3).',
+  itemsTaller,
+  '<a class="op-link" href="/intensivo/">Ver el taller →</a>')}
+${op('presencial', 2, ART_PRESENCIAL, '4 meses', '--fg:#8a5a1c;--bg:#f6ecd8;--soft:#ead9b6',
+  'Curso presencial',
+  '4 meses, una clase por semana.',
+  [[icoCal, 'Edición 2026 completa'], [icoCal, 'Próxima: 2027']],
+  `<form class="op-form" onsubmit="return avisameCurso(event)">
+<label for="aviso-email">Avisame del próximo</label>
+<input name="nombre" autocomplete="name" placeholder="Tu nombre" maxlength="80" aria-label="Tu nombre">
+<input id="aviso-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Tu mail" required maxlength="120">
+<input name="web" class="alt-trampa" tabindex="-1" autocomplete="off" aria-hidden="true">
+<button type="submit">Avisame →</button>
+<span class="alt-aviso-msg" role="status"></span>
+</form>`)}
+${op('online-practica', 3, ART_JUEVES, `Jueves ${PRACTICA_HORA}`, '--fg:#2f7a4f;--bg:#e4f1e8;--soft:#cde5d5',
+  'Online + jueves en el club',
+  'Leés online y los jueves traés lo tuyo al escenario.',
+  [[icoCal, `Jueves desde las ${PRACTICA_HORA}`], [icoPago, 'A la gorra']],
+  '<a class="op-link" href="https://aprendestandup.com.ar/los-jueves/">Cómo funciona →</a>')}
+${op('online', 4, ART_ONLINE, 'Gratis', '--fg:#3d5a99;--bg:#e7ebf6;--soft:#d3dbef',
+  'Por las tuyas',
+  'Material online, a tu ritmo.',
+  [[icoCal, 'Cuando quieras'], [icoPago, 'Gratis']],
+  '<a class="op-link" href="https://aprendestandup.com.ar/notas/">Empezar →</a>')}
+</div>
+<p class="op-nota">Las opciones 3 y 4 te llevan a Aprende Stand Up, nuestra escuela online.</p>
+${pendienteOp ? scriptApertura() : ''}
 <script>
 function avisameCurso(e) {
   e.preventDefault();
@@ -236,7 +322,6 @@ function avisameCurso(e) {
   return false;
 }
 </script>
-</div>
 </section>`;
 
 // ── AVISO DEL TALLER INICIAL (sólo con fecha confirmada: INTENSIVO.anunciarEnCursos) ──
@@ -262,7 +347,7 @@ const hero = CURSO_REGULAR_ABIERTO
 <section class="cursos-hero">
 <div class="container-narrow">
 <h1>Curso de stand up en La Plata</h1>
-<p>Cuatro formas de aprender con Checho Falco: un taller inicial de una tarde, el curso presencial, online con el espacio abierto de los jueves en el club, u online por tu cuenta, gratis. Vengas con una idea a medias o con cinco minutos listos, hay un lugar.</p>
+<p>Cuatro formas de aprender stand up con Checho Falco. Arrancás desde donde estés.</p>
 <p style="margin-top:.6rem;">Teoría gratis en <a href="https://aprendestandup.com.ar" target="_blank" rel="noopener">Aprende Stand Up</a> · Espacio abierto los jueves desde las ${PRACTICA_HORA} · Tres Empanadas Comedia</p>
 <div class="cursos-hero-foto">
 <img src="/assets/img/espacio-jueves.webp" width="1200" height="1070" loading="eager" alt="Tres comediantes en el escenario de Tres Empanadas Comedia frente al público, mural Mondrian de fondo">
