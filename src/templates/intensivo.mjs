@@ -73,7 +73,7 @@ export function renderIntensivo(year, now = new Date()) {
 <section class="cursos-hero">
 <div class="container-narrow">
 <span class="int-badge">${esc(ed.nombre)}</span>
-<h1>Taller inicial de Stand Up en La Plata</h1>
+<h1>Taller inicial intensivo de Stand Up en La Plata</h1>
 <p>Una tarde para empezar en el stand up, en el escenario del club.</p>
 </div>
 </section>
@@ -117,7 +117,7 @@ ${ESTILOS}
 <section class="cursos-hero">
 <div class="container-narrow">
 <span class="int-badge">${esc(ed.nombre)}</span>
-<h1>Taller inicial de Stand Up en La Plata</h1>
+<h1>Taller inicial intensivo de Stand Up en La Plata</h1>
 <p class="int-datos"><strong>${dos(esc(cuandoDe(false)), esc(cuandoDe(true)))}</strong><br>${esc(ed.horario)} · Tres Empanadas, 43 y 22, La Plata</p>
 <p>Una tarde para empezar en el stand up, en el escenario del club.</p>
 </div>
@@ -181,8 +181,8 @@ ${(() => {
 
   return page({
     title: confirmada
-      ? `Taller inicial de stand up en La Plata · ${ed.fechaTexto.replace(/^\w+ /, '')} | Tres Empanadas`
-      : 'Taller inicial de stand up en La Plata | Tres Empanadas',
+      ? `Taller inicial intensivo de stand up en La Plata · ${ed.fechaTexto.replace(/^\w+ /, '')} | Tres Empanadas`
+      : 'Taller inicial intensivo de stand up en La Plata | Tres Empanadas',
     description: confirmada
       ? `Intensivo con lo esencial para arrancar: ${ed.fechaTexto}, ${ed.horario}, en Tres Empanadas. Teoría y práctica en el escenario, y un plan para seguir.`
       : `Intensivo con lo esencial para arrancar en Tres Empanadas, La Plata. Fecha probable: ${ed.fechaTexto} (a confirmar). Teoría y práctica en el escenario.`,
