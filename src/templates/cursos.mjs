@@ -47,7 +47,24 @@ const COURSE_SCHEMA = `<script type="application/ld+json">
 "@type": "Person",
 "name": "Checho Falco"
 },
-"courseMode": ["onsite", "online"],
+"hasCourseInstance": [
+{
+"@type": "CourseInstance",
+"courseMode": "onsite",
+"courseSchedule": { "@type": "Schedule", "repeatFrequency": "P1W", "byDay": "https://schema.org/Thursday", "startTime": "18:00", "endTime": "19:30" },
+"location": {
+"@type": "Place",
+"name": "Tres Empanadas Comedia",
+"address": { "@type": "PostalAddress", "streetAddress": "Calle 43 N° 1349 esquina 22", "addressLocality": "La Plata", "addressRegion": "Buenos Aires", "addressCountry": "AR" }
+},
+"instructor": { "@type": "Person", "name": "Checho Falco" }
+},
+{
+"@type": "CourseInstance",
+"courseMode": "online",
+"url": "https://aprendestandup.com.ar/notas/"
+}
+],
 "inLanguage": "es",
 "offers": [
 { "@type": "Offer", "name": "Curso presencial (jueves 18 a 19:30)", "category": "Paid", "priceCurrency": "ARS", "price": "50000", "url": "https://tresempanadas.com.ar/cursos/" },
