@@ -2,7 +2,7 @@
 import { page, esc, GOOGLE, estrellaSVG } from './layout.mjs';
 import { eventoCard } from './evento-card.mjs';
 
-const WA = '542215247488';
+const WA = '5492215247488';
 
 /** Es la noche del show, entre las 20 y las 22: el formulario ya no sirve. */
 const AVISO_ULTIMA_HORA = `
@@ -159,7 +159,7 @@ const EXTRA = `
   <p>🔞 El humor y el ambiente son <strong>para adultos</strong>.</p>
   <p>
     🎂 ¿Querés festejar con tu grupo?
-    <a href="https://wa.me/542215247488?text=Hola%21%20Consulta%20por%20festejos" target="_blank" rel="noopener">Escribinos por WhatsApp</a>.
+    <a href="https://wa.me/5492215247488?text=Hola%21%20Consulta%20por%20festejos" target="_blank" rel="noopener">Escribinos por WhatsApp</a>.
   </p>
 </section>`;
 
@@ -215,7 +215,7 @@ export function renderReservasList(eventos, year) {
     <h2>Por ahora no hay funciones cargadas</h2>
     <p>Estamos preparando las próximas fechas. Mientras tanto, podés escribirnos por WhatsApp y te avisamos apenas tengamos novedades.</p>
     <a class="btn btn-primary"
-       href="https://wa.me/542215247488?text=${encodeURIComponent('Hola! Cuándo es la próxima función en Tres Empanadas?')}"
+       href="https://wa.me/5492215247488?text=${encodeURIComponent('Hola! Cuándo es la próxima función en Tres Empanadas?')}"
        target="_blank" rel="noopener">
       Escribirnos por WhatsApp →
     </a>
@@ -244,8 +244,8 @@ ${CARRUSEL}
 </section>
 ${AVISO_ULTIMA_HORA}
 ${AVISO_CERRADO}
-${SEMAFORO_TOP}
 ${cuerpo}
+${SEMAFORO_TOP}
 ${EXTRA}
 ${BLOQUE_RESENAS}
 <script>

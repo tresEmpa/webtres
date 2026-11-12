@@ -35,7 +35,7 @@ const EXTRA = (lugar) => `
   <p>🔞 El humor y el ambiente son <strong>para adultos</strong>.</p>
   <p>
     🎂 ¿Querés festejar con tu grupo?
-    <a href="https://wa.me/${esc(lugar.whatsapp || '542215247488')}?text=${encodeURIComponent('Hola! Consulta sobre festejos / grupos.')}"
+    <a href="https://wa.me/${esc(lugar.whatsapp || '5492215247488')}?text=${encodeURIComponent('Hola! Consulta sobre festejos / grupos.')}"
        target="_blank" rel="noopener">Escribinos por WhatsApp</a>.
   </p>
 
@@ -262,7 +262,7 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
   const [isoStart, isoEnd] = eventoFechasISO(ev);
   const [schemaStatus, schemaAvail] = eventoSchemaEstado(estado);
 
-  const wa = esc(lugar.whatsapp || '542215247488');
+  const wa = esc(lugar.whatsapp || '5492215247488');
 
   // Cuándo se abren las reservas de ESTA función (lunes de su semana). Para
   // una función ya activa las reservas están abiertas, así que la fecha nunca

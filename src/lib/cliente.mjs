@@ -29,7 +29,7 @@ export const HORA_CIERRE = 22;        // 22:00
 export const ZONA = 'America/Argentina/Buenos_Aires';
 
 /** WhatsApp del local (sin +, formato wa.me). */
-export const WHATSAPP = '542215247488';
+export const WHATSAPP = '5492215247488';
 
 /**
  * ID de Google Analytics 4. Empieza con "G-".

@@ -19,7 +19,7 @@
 import { page, esc, GOOGLE, estrellaSVG } from './layout.mjs';
 import { eventoCard } from './evento-card.mjs';
 
-const WA = '542215247488';
+const WA = '5492215247488';
 
 /** Lo propio de cada ciclo. Es el contenido que le da sentido a la URL. */
 const DIAS = {
