@@ -159,7 +159,7 @@ export function renderDia(dia, eventosDelDia, year, now = new Date()) {
       <span class="gmaps-chapa__nota">${GOOGLE.nota}</span>
       <span class="gmaps-chapa__lado">
         <span class="gmaps-estrellas">${estrellaSVG(18).repeat(5)}</span>
-        <span class="gmaps-chapa__txt">Opiniones en Google Maps</span>
+        <span class="gmaps-chapa__txt">${GOOGLE.opiniones} en Google Maps</span>
       </span>
     </a>
   </div>

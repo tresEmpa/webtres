@@ -1,5 +1,5 @@
 /** Home — port de index.php */
-import { page } from './layout.mjs';
+import { page, GOOGLE } from './layout.mjs';
 import { proximaFuncion } from './proxima-funcion.mjs';
 
 const FAQ_SCHEMA = `<script type="application/ld+json">
@@ -73,7 +73,7 @@ export function renderHome(year, listado = [], now = new Date()) {
       <span class="gmaps-chapa__nota">4,9</span>
       <span class="gmaps-chapa__lado">
         <span class="gmaps-estrellas" aria-hidden="true">${'★'.repeat(5)}</span>
-        <span class="gmaps-chapa__txt">Opiniones en Google Maps</span>
+        <span class="gmaps-chapa__txt">${GOOGLE.opiniones} en Google Maps</span>
       </span>
     </a>
 

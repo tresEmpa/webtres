@@ -16,6 +16,8 @@ const DEFAULT_IMAGE = `${BASE_URL}/assets/img/og-default.jpg`;
 /** Reputación en Google Maps. La nota queda fija y no mostramos cantidades. */
 export const GOOGLE = {
   nota: '4,9',
+  // Redondeado a propósito: no queda viejo con cada reseña nueva.
+  opiniones: 'Casi 200 opiniones',
   url: 'https://share.google/dyTTJVXR25JTlU7kX',
 };
 
