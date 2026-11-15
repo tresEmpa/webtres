@@ -24,7 +24,7 @@ from buffer_x import AR, ahora_ar, ajustar, publicar
 CANAL = "6af9e12dece6dfde5fd49552"  # Tres Empanadas en Buffer
 SITIO = "https://tresempanadas.com.ar"
 HORA = time(18, 0)
-HASHTAGS = "#StandUp #LaPlata"
+HASHTAGS = "#StandUpLaPlata #LaPlata #QuéHacerEnLaPlata"
 
 DIAS = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
 
