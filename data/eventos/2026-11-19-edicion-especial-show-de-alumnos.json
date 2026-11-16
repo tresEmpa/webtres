@@ -1,0 +1,19 @@
+{
+    "fecha": "2026-11-19",
+    "nombre_show": "Edición Especial — Show de Alumnos",
+    "descripcion": "Una noche especial en Tres Empanadas: suben al escenario los alumnos del taller de stand up. Nuevas voces alumnos probando material.",
+    "hora": "21:30",
+    "duracion_minutos": 90,
+    "estado": "activo",
+    "motivo_cancelacion": "",
+    "plantilla": "edicion-especial-alumnos",
+    "link_instagram": "",
+    "notas_internas": "",
+    "color": "violeta",
+    "flyer": "",
+    "elenco": [],
+    "dia_semana": "jueves",
+    "actualizado": "2026-11-16T00:18:01.277Z",
+    "creado": "2026-11-16T00:18:01.277Z",
+    "id": "2026-11-19-edicion-especial-show-de-alumnos"
+}
