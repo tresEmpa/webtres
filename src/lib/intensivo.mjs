@@ -24,7 +24,7 @@ function hoyAR(now = new Date()) {
 
 export const INTENSIVO = {
   nombre: 'Intensivo con lo esencial para arrancar',
-  fecha: '2026-11-19',                       // AAAA-MM-DD, o null
+  fecha: null,                               // AAAA-MM-DD, o null (sin fecha → "a confirmar" + avisame)
   // Se confirma sola desde `abreDesde` (hora AR, a la hora del build): la página
   // pasa de "a confirmar / avisame" a "Anotarme". Mismo día que abre la
   // inscripción en Aprende (functions/alumnos/api/intensivo/_edicion.js).
