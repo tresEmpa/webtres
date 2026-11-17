@@ -96,8 +96,26 @@ function accion(b, despues) {
 }
 
 // ---------- sonido ----------
-function beep() { if (!S.sonido) return; try { snd.currentTime = 0; } catch (e) {} try { snd.play(); } catch (e) {} }
-function activarSonido() { S.sonido = true; try { snd.load(); } catch (e) {} beep(); dibujar(); }
+// Primero Web Audio (Chrome 42 lo tiene); si no hay, el archivo WAV.
+var actx = null;
+function tono(t0, f) {
+  var o = actx.createOscillator(), g = actx.createGain();
+  o.type = 'square'; o.frequency.value = f; o.connect(g); g.connect(actx.destination);
+  g.gain.setValueAtTime(0.0001, t0); g.gain.linearRampToValueAtTime(0.6, t0 + 0.02); g.gain.linearRampToValueAtTime(0.0001, t0 + 0.2);
+  o.start(t0); o.stop(t0 + 0.22);
+}
+function beep() {
+  if (!S.sonido) return;
+  if (actx) { try { var t = actx.currentTime + 0.05; tono(t, 1000); tono(t + 0.28, 1320); tono(t + 0.56, 1000); return; } catch (e) {} }
+  try { snd.currentTime = 0; } catch (e) {} try { snd.play(); } catch (e) {}
+}
+function activarSonido() {
+  S.sonido = true;
+  try { var AC = window.AudioContext || window.webkitAudioContext; if (AC && !actx) actx = new AC(); if (actx && actx.resume) actx.resume(); } catch (e) { actx = null; }
+  beep();
+  toast('Sonido: ' + (actx ? 'Web Audio (' + (actx.state || 'sin estado') + ')' : 'archivo WAV') + '. Si no oíste nada, subí el volumen de multimedia.');
+  dibujar();
+}
 
 // ---------- alerta de pedido nuevo (pantalla completa hasta tocar "Visto") ----------
 var parpadeo = null, repite = null;
