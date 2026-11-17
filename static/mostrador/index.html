@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="robots" content="noindex,nofollow">
+<title>Mostrador · Tres Empanadas</title>
+<!-- Terminal de mostrador para Android 4.0.3 (navegador de stock). Solo ES5, sin flexbox ni variables CSS. -->
+<style>
+*{-webkit-box-sizing:border-box;box-sizing:border-box}
+body{margin:0;background:#111;color:#f2f2f2;font:18px/1.3 sans-serif;padding:0 0 20px}
+button{font:inherit;font-weight:bold;color:#f2f2f2;background:#333;border:0;border-radius:8px;padding:12px 10px;min-height:52px;margin:0}
+input{font:inherit;color:#f2f2f2;background:#222;border:1px solid #555;border-radius:8px;padding:10px;width:100%;margin:6px 0}
+.pri{background:#ff8a3d;color:#111}.ok{background:#2fbf71;color:#06210f}.gh{background:#111;border:1px solid #555}
+.top{background:#1c1c1e;border-bottom:1px solid #333;padding:6px;overflow:hidden}
+.top .st{float:left;padding:14px 6px;font-weight:bold}
+.top .bt{float:right}.top .bt button{margin-left:6px}
+.dot{display:inline-block;width:12px;height:12px;border-radius:6px;background:#2fbf71;margin-right:6px}
+.dot.off{background:#e5484d}
+.tabs{overflow:hidden;border-bottom:1px solid #333}
+.tabs button{float:left;width:33.33%;border-radius:0;background:#161618;color:#9a9aa2}
+.tabs button.on{color:#ff8a3d;background:#222}
+.n{background:#e5484d;color:#fff;border-radius:9px;padding:0 7px;font-size:15px}
+.main{padding:8px}
+.card{background:#1c1c1e;border-radius:10px;padding:10px;margin-bottom:10px;border:3px solid #1c1c1e}
+.card.late{border-color:#e5484d}.card.nuevo{border-color:#ff8a3d}
+.fila{display:table;width:100%}.fila>*{display:table-cell;vertical-align:middle}
+.der{text-align:right}
+.big{font-size:24px;font-weight:bold}
+.mut{color:#9a9aa2;font-size:15px}
+.lin{display:block;width:100%;text-align:left;background:#2a2a2e;margin:6px 0;font-weight:normal}
+.lin.hecho{opacity:.4;text-decoration:line-through}
+.lin b{display:inline-block;min-width:40px}
+.w100{width:100%;margin-top:6px}
+.aviso{background:#3a2f0b;color:#ffd978;padding:10px;border-radius:8px;margin-bottom:10px}
+#alerta{position:fixed;left:0;top:0;right:0;bottom:0;background:#ff8a3d;color:#111;z-index:50;text-align:center;padding:40px 10px;display:none}
+#alerta.b{background:#ffd23d}
+#alerta .big{font-size:34px;margin:16px 0}
+#alerta button{width:80%;background:#111;color:#fff;font-size:24px;min-height:80px;margin-top:20px}
+#capa{position:fixed;left:0;top:0;right:0;bottom:0;background:#111;z-index:40;overflow:auto;display:none;padding:8px}
+.stp button{width:56px}.stp b{display:inline-block;width:40px;text-align:center;font-size:22px}
+#toast{position:fixed;left:8px;right:8px;bottom:8px;background:#1d5b3a;border-radius:8px;padding:14px;z-index:45;display:none}
+</style>
+</head>
+<body>
+<div id="app"><p style="padding:20px">Cargando…</p></div>
+<div id="capa"></div>
+<div id="alerta"></div>
+<div id="toast"></div>
+<audio id="snd" src="/mostrador/beep.wav" preload="auto"></audio>
+<script>
+(function () {
+'use strict';
+var S = { ok: false, est: null, crudo: '', tab: 'pedidos', visto: {}, primera: true, sonido: false,
+  conectado: true, capa: null, alertas: [], pagoMax: null, pagoPropio: 0, offset: 0, carro: {}, idBarra: null, ocupado: false };
+var app = document.getElementById('app'), capa = document.getElementById('capa'),
+  alerta = document.getElementById('alerta'), toastEl = document.getElementById('toast'), snd = document.getElementById('snd');
+
+// ---------- utilidades ----------
+function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+function plata(n) { n = Math.round(n || 0); var s = String(Math.abs(n)), o = ''; while (s.length > 3) { o = '.' + s.slice(-3) + o; s = s.slice(0, -3); } return '$ ' + (n < 0 ? '-' : '') + s + o; }
+function ms(iso) { // "2026-11-17T21:05:00.000Z" sin depender de Date.parse
+  var m = /^(\d{4})-(\d\d)-(\d\d)[T ](\d\d):(\d\d):(\d\d)/.exec(iso || '');
+  return m ? Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5], +m[6]) : 0;
+}
+function ahora() { return new Date().getTime() + S.offset; } // corrige el reloj del aparato con la hora del servidor
+function dos(n) { return n < 10 ? '0' + n : '' + n; }
+function hora(iso) { var d = new Date(ms(iso) - 3 * 3600000); return dos(d.getUTCHours()) + ':' + dos(d.getUTCMinutes()); } // hora argentina fija
+function edad(iso) { return Math.floor((ahora() - ms(iso)) / 60000); }
+function filtra(a, f) { var o = []; for (var i = 0; i < a.length; i++) if (f(a[i])) o.push(a[i]); return o; }
+function totalPedido(p) { var t = 0; for (var i = 0; i < p.renglones.length; i++) t += p.renglones[i].cantidad * p.renglones[i].precio; return t; }
+function nuevoId() { return 'mos' + new Date().getTime().toString(36) + Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 8); }
+
+function xhr(metodo, url, cuerpo, listo) {
+  var x = new XMLHttpRequest();
+  x.open(metodo, url, true);
+  if (cuerpo !== undefined) { x.setRequestHeader('Content-Type', 'application/json'); x.setRequestHeader('X-Panel', '1'); }
+  x.timeout = 12000;
+  x.onreadystatechange = function () {
+    if (x.readyState !== 4) return;
+    var j = null; try { j = JSON.parse(x.responseText); } catch (e) {}
+    listo(x.status, j, x.responseText);
+  };
+  x.send(cuerpo === undefined ? null : JSON.stringify(cuerpo));
+}
+function accion(b, despues) {
+  xhr('POST', '/api/panel/accion', b, function (st, j) {
+    if (st === 401) { S.ok = false; dibujar(); return; }
+    if (!j || !j.ok) alert('No se pudo: ' + (j && j.error === 'sin_stock' ? 'sin stock' : (j ? j.error : 'sin conexión')));
+    if (despues) despues(j);
+    refrescar(true);
+  });
+}
+
+// ---------- sonido ----------
+function beep() { if (!S.sonido) return; try { snd.currentTime = 0; } catch (e) {} try { snd.play(); } catch (e) {} }
+function activarSonido() { S.sonido = true; try { snd.load(); } catch (e) {} beep(); dibujar(); }
+
+// ---------- alerta de pedido nuevo (pantalla completa hasta tocar "Visto") ----------
+var parpadeo = null, repite = null;
+function mostrarAlerta() {
+  if (!S.alertas.length) { alerta.style.display = 'none'; clearInterval(parpadeo); clearInterval(repite); parpadeo = repite = null; document.title = 'Mostrador · Tres Empanadas'; return; }
+  var nombres = [];
+  for (var i = 0; i < S.alertas.length; i++) nombres.push(esc(S.alertas[i].mesa) + ' · ' + plata(totalPedido(S.alertas[i])));
+  alerta.innerHTML = '<div class="big">PEDIDO NUEVO</div><div class="big">' + nombres.join('<br>') + '</div><button data-a="visto">VISTO</button>';
+  alerta.style.display = 'block';
+  if (!parpadeo) parpadeo = setInterval(function () { alerta.className = alerta.className ? '' : 'b'; document.title = document.title.charAt(0) === '●' ? 'PEDIDO NUEVO' : '● PEDIDO NUEVO'; }, 700);
+  if (!repite) repite = setInterval(beep, 15000);
+}
+
+function toast(t) { toastEl.innerHTML = esc(t); toastEl.style.display = 'block'; setTimeout(function () { toastEl.style.display = 'none'; }, 8000); }
+
+// ---------- datos ----------
+function refrescar(forzar) {
+  if (!S.ok && !S.primera) return;
+  xhr('GET', '/api/panel/estado?t=' + new Date().getTime(), undefined, function (st, r, txt) {
+    if (st === 401) { S.ok = false; S.primera = false; dibujar(); return; }
+    if (!r || !r.ok) { if (S.conectado) { S.conectado = false; dibujar(); } return; }
+    var cambio = txt !== S.crudo || !S.conectado;
+    S.crudo = txt; S.conectado = true; S.ok = true;
+    if (r.ahora) S.offset = ms(r.ahora) - new Date().getTime();
+    var ped = r.pedidos || [], i;
+    for (i = 0; i < ped.length; i++) {
+      var p = ped[i];
+      if (!S.visto[p.id]) {
+        S.visto[p.id] = 1;
+        if (!S.primera && p.origen === 'cliente' && !p.anulado_en) { S.alertas.push(p); beep(); }
+      }
+    }
+    var pagos = r.pagos || [], max = 0, txtPagos = [];
+    for (i = 0; i < pagos.length; i++) {
+      max = Math.max(max, pagos[i].id);
+      if (!S.primera && S.pagoMax != null && pagos[i].id > S.pagoMax && pagos[i].medio === 'transferencia' && ahora() - S.pagoPropio > 6000)
+        txtPagos.push(pagos[i].mesa + ' pagó ' + plata(pagos[i].monto) + ' por transferencia');
+    }
+    if (txtPagos.length) { beep(); toast(txtPagos.join(' · ')); }
+    S.pagoMax = Math.max(S.pagoMax || 0, max);
+    S.primera = false; S.est = r;
+    mostrarAlerta();
+    if ((cambio || forzar) && !S.capa) dibujar();
+  });
+}
+setInterval(function () { if (S.ok) refrescar(); }, 4000);
+setInterval(function () { if (S.ok && !S.capa) dibujar(); }, 30000); // actualiza los minutos de espera
+
+// ---------- vistas ----------
+function pendientes() { return S.est && S.est.jornada ? filtra(S.est.pedidos, function (p) { return p.estado === 'recibido' || p.estado === 'parcial'; }) : []; }
+
+function dibujar() {
+  if (!S.ok) { app.innerHTML = vistaLogin(); return; }
+  var e = S.est, abiertos = pendientes(), y = window.pageYOffset;
+  var h = '<div class="top"><div class="st"><span class="dot' + (S.conectado ? '' : ' off') + '"></span>' + (e.jornada ? 'Noche abierta' : 'Cerrado') + '</div><div class="bt">' +
+    (S.sonido ? '<button class="gh" data-a="probar">Probar sonido</button>' : '<button class="pri" data-a="sonido">ACTIVAR SONIDO</button>') +
+    (e.jornada ? '' : ' <button class="ok" data-a="abrir">Abrir noche</button>') + '</div></div>' +
+    '<div class="tabs"><button data-a="tab" data-v="pedidos" class="' + (S.tab === 'pedidos' ? 'on' : '') + '">Pedidos ' + (abiertos.length ? '<span class="n">' + abiertos.length + '</span>' : '') + '</button>' +
+    '<button data-a="tab" data-v="cuentas" class="' + (S.tab === 'cuentas' ? 'on' : '') + '">Cuentas</button>' +
+    '<button data-a="barra">+ Pedido</button></div><div class="main">' +
+    (S.conectado ? '' : '<div class="aviso">Sin conexión. Reintentando…</div>') +
+    (S.tab === 'pedidos' ? vistaPedidos(abiertos) : vistaCuentas()) + '</div>';
+  app.innerHTML = h;
+  window.scrollTo(0, y);
+}
+
+function vistaLogin() {
+  return '<div style="max-width:360px;margin:40px auto;padding:10px"><div class="big">Mostrador</div>' +
+    '<input id="u" placeholder="Usuario" autocapitalize="off" autocorrect="off"><input id="c" type="password" placeholder="Clave">' +
+    '<button class="pri w100" data-a="login">Entrar</button><p class="mut" id="msg"></p></div>';
+}
+
+function vistaPedidos(abiertos) {
+  var e = S.est;
+  if (!e.jornada) return '<div class="card"><div class="big">La noche está cerrada</div><p class="mut">Cargá el stock (desde el panel del celu) y tocá "Abrir noche".</p></div>';
+  var h = '';
+  var bajos = filtra(e.productos, function (p) { return p.activo && p.control === 'cantidad' && p.modo !== 'manual' && p.stock <= 3; });
+  if (bajos.length) { var t = []; for (var b = 0; b < bajos.length; b++) t.push(bajos[b].stock > 0 ? 'Quedan ' + bajos[b].stock + ' de ' + bajos[b].nombre : 'Sin stock: ' + bajos[b].nombre); h += '<div class="aviso">' + esc(t.join(' · ')) + '</div>'; }
+  if (!abiertos.length) h += '<div class="card mut">No hay pedidos pendientes.</div>';
+  for (var i = 0; i < abiertos.length; i++) h += tarjeta(abiertos[i], true);
+  var hechos = filtra(e.pedidos, function (p) { return p.estado === 'servido'; }).reverse().slice(0, 8);
+  if (hechos.length) { h += '<p class="mut">Últimos entregados</p>'; for (var k = 0; k < hechos.length; k++) h += tarjeta(hechos[k], false); }
+  return h;
+}
+
+function tarjeta(p, activo) {
+  var min = edad(p.creado_en), sinTocar = true, i, r;
+  for (i = 0; i < p.renglones.length; i++) if (p.renglones[i].entregadas > 0) sinTocar = false;
+  var cls = 'card' + (activo && sinTocar && min >= 5 ? ' late' : '');
+  var h = '<div class="' + cls + '"><div class="fila"><div class="big">' + esc(p.mesa) + '</div><div class="der big">' + plata(totalPedido(p)) + '</div></div>' +
+    '<div class="mut">' + hora(p.creado_en) + ' · ' + (min < 1 ? 'recién' : min + ' min') + (p.origen === 'barra' ? ' · barra' : '') + (p.estado === 'parcial' ? ' · PARCIAL' : '') + '</div>';
+  for (i = 0; i < p.renglones.length; i++) {
+    r = p.renglones[i];
+    var hecho = r.entregadas === r.cantidad;
+    h += activo ? '<button class="lin' + (hecho ? ' hecho' : '') + '" data-a="lin" data-r="' + r.id + '" data-n="' + (hecho ? 0 : r.cantidad) + '"><b>' + r.cantidad + '×</b> ' + esc(r.nombre) + (r.entregadas && !hecho ? ' (' + r.entregadas + ' entregadas)' : '') + '</button>'
+      : '<div class="mut">' + r.cantidad + '× ' + esc(r.nombre) + '</div>';
+  }
+  if (activo) h += '<button class="ok w100" data-a="todo" data-p="' + esc(p.id) + '">ENTREGAR TODO</button>';
+  return h + '</div>';
+}
+
+function vistaCuentas() {
+  var e = S.est;
+  if (!e.jornada) return '<div class="card mut">No hay noche abierta.</div>';
+  var cs = e.cuentas.slice().sort(function (a, b) { return ((a.saldo > 0) ? 0 : 1) - ((b.saldo > 0) ? 0 : 1) || (String(a.mesa) < String(b.mesa) ? -1 : 1); });
+  var cobrado = 0, porCobrar = 0, ef = 0, tr = 0, i;
+  for (i = 0; i < (e.pagos || []).length; i++) { var x = e.pagos[i]; cobrado += x.monto; if (x.medio === 'efectivo') ef += x.monto; if (x.medio === 'transferencia') tr += x.monto; }
+  for (i = 0; i < cs.length; i++) porCobrar += cs[i].saldo || 0;
+  var h = '<div class="card"><div class="fila"><div>Cobrado<div class="big">' + plata(cobrado) + '</div></div><div class="der">Por cobrar<div class="big">' + plata(porCobrar) + '</div></div></div>' +
+    '<div class="mut">Efectivo ' + plata(ef) + ' · Transf. ' + plata(tr) + '</div></div>';
+  if (!cs.length) h += '<div class="card mut">Todavía no hay cuentas.</div>';
+  for (i = 0; i < cs.length; i++) {
+    var c = cs[i];
+    h += '<button class="card lin" style="background:#1c1c1e" data-a="cuenta" data-m="' + esc(c.mesa) + '"><div class="fila"><div class="big">' + esc(c.mesa) + '</div><div class="der big">' + plata(c.entregado) + '</div></div>' +
+      '<div class="mut">' + (c.saldo > 0 ? '<span style="color:#f0b429">DEBE ' + plata(c.saldo) + '</span>' : '<span style="color:#2fbf71">PAGÓ' + (c.medio ? ' · ' + esc(c.medio) : '') + '</span>') +
+      (c.pendientes ? ' · ' + c.pendientes + ' sin entregar' : '') + '</div></button>';
+  }
+  return h;
+}
+
+function abrirCapa(html) { S.capa = 1; capa.innerHTML = html; capa.style.display = 'block'; window.scrollTo(0, 0); }
+function cerrarCapa() { S.capa = null; capa.style.display = 'none'; capa.innerHTML = ''; dibujar(); }
+
+function verCuenta(mesa) {
+  xhr('POST', '/api/panel/accion', { tipo: 'cuenta', mesa: mesa }, function (st, r) {
+    if (!r || !r.ok) { alert('No se pudo abrir la cuenta.'); return; }
+    var c = r.cuenta, h = '<div class="fila"><div class="big">' + esc(mesa) + '</div><div class="der"><button class="gh" data-a="cerrar">Volver</button></div></div>';
+    for (var i = 0; i < c.lineas.length; i++) { var l = c.lineas[i]; if (l.cobrar > 0) h += '<div class="fila" style="padding:6px 0"><div>' + l.cobrar + '× ' + esc(l.nombre) + '</div><div class="der">' + plata(l.cobrar * l.precio) + '</div></div>'; }
+    h += '<div class="fila big" style="border-top:1px solid #444;padding:10px 0"><div>Total</div><div class="der">' + plata(c.total) + '</div></div>';
+    if (c.pagado > 0) h += '<div class="fila"><div>Ya pagó</div><div class="der">' + plata(c.pagado) + '</div></div>';
+    if (c.pagado > 0 && c.saldo > 0) h += '<div class="fila big" style="color:#f0b429"><div>Debe</div><div class="der">' + plata(c.saldo) + '</div></div>';
+    if (c.pendientes > 0) h += '<div class="aviso">' + c.pendientes + ' unidades sin entregar (están en el total).</div>';
+    if (c.pagada_en) h += '<p style="color:#2fbf71" class="big">Pagada · ' + esc(c.medio || '') + '</p>';
+    else h += '<button class="ok w100" data-a="pagar" data-m="' + esc(mesa) + '" data-v="efectivo" data-q="' + (c.pendientes || 0) + '">PAGÓ EFECTIVO</button>' +
+      '<button class="ok w100" data-a="pagar" data-m="' + esc(mesa) + '" data-v="transferencia" data-q="' + (c.pendientes || 0) + '">PAGÓ TRANSFERENCIA</button>' +
+      '<div class="fila" style="margin-top:6px"><div><button class="w100" data-a="pagar" data-m="' + esc(mesa) + '" data-v="qr" data-q="' + (c.pendientes || 0) + '">QR</button></div><div style="padding-left:6px"><button class="w100" data-a="pagar" data-m="' + esc(mesa) + '" data-v="tarjeta" data-q="' + (c.pendientes || 0) + '">Tarjeta</button></div></div>';
+    abrirCapa(h);
+  });
+}
+
+function pedidoBarra() {
+  if (!S.est.jornada) { alert('Primero abrí la noche.'); return; }
+  if (!S.idBarra) { S.idBarra = nuevoId(); S.carro = {}; } // un id por pedido: tocar dos veces no duplica
+  var ps = filtra(S.est.productos, function (p) { if (!p.activo) return false; if (p.control === 'ninguno') return true; if (p.control === 'hayno' || p.modo === 'manual') return !!p.disponible; return p.stock > 0; });
+  var total = 0, h = '<div class="fila"><div class="big">Pedido de barra</div><div class="der"><button class="gh" data-a="cancelar">Cancelar</button></div></div>' +
+    '<input id="nom" placeholder="Nombre" value="' + esc(S.nombreBarra || '') + '">';
+  for (var i = 0; i < ps.length; i++) {
+    var p = ps[i], n = S.carro[p.id] || 0; total += n * p.precio;
+    h += '<div class="fila" style="padding:5px 0;border-bottom:1px solid #222"><div>' + esc(p.nombre) + '<div class="mut">' + plata(p.precio) + '</div></div><div class="der stp" style="white-space:nowrap">' +
+      '<button data-a="menos" data-p="' + esc(p.id) + '">−</button><b>' + n + '</b><button data-a="mas" data-p="' + esc(p.id) + '">+</button></div></div>';
+  }
+  h += '<div class="fila big" style="padding:10px 0"><div>Total</div><div class="der">' + plata(total) + '</div></div><button class="pri w100" data-a="cargar">CARGAR PEDIDO</button>';
+  abrirCapa(h);
+}
+
+// ---------- un solo manejador de toques para toda la página ----------
+function manejar(ev) {
+  var t = ev.target;
+  while (t && t !== document && !t.getAttribute('data-a')) t = t.parentNode;
+  if (!t || t === document) return;
+  var a = t.getAttribute('data-a'), nom = document.getElementById('nom');
+  if (nom) S.nombreBarra = nom.value;
+  if (a === 'login') {
+    var msg = document.getElementById('msg'); msg.innerHTML = 'Entrando…';
+    xhr('POST', '/api/panel/login', { usuario: document.getElementById('u').value, clave: document.getElementById('c').value }, function (st, j) {
+      if (st === 0) { msg.innerHTML = 'No conecta con el servidor (revisar Wi-Fi o seguridad HTTPS).'; return; }
+      if (j && j.ok) { S.ok = true; S.primera = true; refrescar(true); } else msg.innerHTML = st >= 500 ? 'Error del servidor' : 'Usuario o clave incorrectos';
+    });
+  } else if (a === 'sonido') activarSonido();
+  else if (a === 'probar') beep();
+  else if (a === 'visto') { S.alertas = []; mostrarAlerta(); S.tab = 'pedidos'; dibujar(); }
+  else if (a === 'tab') { S.tab = t.getAttribute('data-v'); dibujar(); }
+  else if (a === 'abrir') { if (confirm('¿Abrir la noche? ¿Ya cargaste el stock?')) accion({ tipo: 'abrir_jornada' }); }
+  else if (a === 'lin') accion({ tipo: 'fijar_entregadas', renglon_id: +t.getAttribute('data-r'), entregadas: +t.getAttribute('data-n') });
+  else if (a === 'todo') accion({ tipo: 'entregar_todo', pedido_id: t.getAttribute('data-p') });
+  else if (a === 'cuenta') verCuenta(t.getAttribute('data-m'));
+  else if (a === 'cerrar') cerrarCapa();
+  else if (a === 'pagar') {
+    var q = +t.getAttribute('data-q');
+    if (q && !confirm('Hay ' + q + ' unidades SIN ENTREGAR (están en el total). ¿Marcar pagada igual?')) return;
+    S.pagoPropio = ahora();
+    accion({ tipo: 'pagar', mesa: t.getAttribute('data-m'), medio: t.getAttribute('data-v') }, cerrarCapa);
+  }
+  else if (a === 'barra') pedidoBarra();
+  else if (a === 'cancelar') { S.idBarra = null; S.carro = {}; S.nombreBarra = ''; cerrarCapa(); }
+  else if (a === 'mas' || a === 'menos') { var id = t.getAttribute('data-p'); S.carro[id] = Math.max(0, Math.min(99, (S.carro[id] || 0) + (a === 'mas' ? 1 : -1))); pedidoBarra(); }
+  else if (a === 'cargar') {
+    if (S.ocupado) return;
+    var items = [], k;
+    for (k in S.carro) if (S.carro.hasOwnProperty(k) && S.carro[k] > 0) items.push({ producto_id: k, cantidad: S.carro[k] });
+    var mesa = (S.nombreBarra || '').replace(/^\s+|\s+$/g, '');
+    if (!mesa || !items.length) { alert('Falta el nombre o los productos.'); return; }
+    S.ocupado = true;
+    xhr('POST', '/api/panel/accion', { tipo: 'pedido_barra', pedido: { id: S.idBarra, mesa: mesa, items: items } }, function (st, r) {
+      S.ocupado = false;
+      if (!r || !r.ok) { alert(r && r.error === 'sin_stock' ? 'Sin stock de algo del pedido.' : 'No se pudo cargar. Probá de nuevo.'); return; }
+      S.idBarra = null; S.carro = {}; S.nombreBarra = ''; cerrarCapa(); refrescar(true);
+    });
+  }
+}
+document.addEventListener('click', manejar, false);
+document.addEventListener('keydown', function (ev) { if ((ev.keyCode === 13) && document.getElementById('c')) { var b = document.querySelector('[data-a=login]'); if (b) manejar({ target: b }); } }, false);
+
+refrescar(true);
+setTimeout(function () { if (!S.ok) { S.primera = false; dibujar(); } }, 5000);
+})();
+</script>
+</body>
+</html>
