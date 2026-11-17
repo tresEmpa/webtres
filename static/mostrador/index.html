@@ -32,8 +32,10 @@ input{font:inherit;color:#f2f2f2;background:#222;border:1px solid #555;border-ra
 .big{font-size:24px;font-weight:bold}
 .mut{color:#9a9aa2;font-size:15px}
 .lin{display:block;width:100%;text-align:left;background:#2a2a2e;margin:6px 0;font-weight:normal}
-.lin.hecho{opacity:.4;text-decoration:line-through}
 .lin b{display:inline-block;min-width:40px}
+.box{display:inline-block;width:30px;height:30px;border:3px solid #9a9aa2;border-radius:6px;margin-right:12px;vertical-align:middle;text-align:center;line-height:24px;font-size:22px;font-weight:bold;text-decoration:none}
+.lin.hecho{opacity:.55}.lin.hecho .nom{text-decoration:line-through}
+.lin.hecho .box{background:#2fbf71;border-color:#2fbf71;color:#06210f}
 .w100{width:100%;margin-top:6px}
 .aviso{background:#3a2f0b;color:#ffd978;padding:10px;border-radius:8px;margin-bottom:10px}
 #alerta{position:fixed;left:0;top:0;right:0;bottom:0;background:#ff8a3d;color:#111;z-index:50;text-align:center;padding:40px 10px;display:none}
@@ -211,7 +213,7 @@ function tarjeta(p, activo) {
   for (i = 0; i < p.renglones.length; i++) {
     r = p.renglones[i];
     var hecho = r.entregadas === r.cantidad;
-    h += activo ? '<button class="lin' + (hecho ? ' hecho' : '') + '" data-a="lin" data-r="' + r.id + '" data-n="' + (hecho ? 0 : r.cantidad) + '"><b>' + r.cantidad + '×</b> ' + esc(r.nombre) + (r.entregadas && !hecho ? ' (' + r.entregadas + ' entregadas)' : '') + '</button>'
+    h += activo ? '<button class="lin' + (hecho ? ' hecho' : '') + '" data-a="lin" data-r="' + r.id + '" data-n="' + (hecho ? 0 : r.cantidad) + '"><span class="box">' + (hecho ? '✓' : '') + '</span><b>' + r.cantidad + '×</b> <span class="nom">' + esc(r.nombre) + '</span>' + (r.entregadas && !hecho ? ' (' + r.entregadas + ' entregadas)' : '') + '</button>'
       : '<div class="mut">' + r.cantidad + '× ' + esc(r.nombre) + '</div>';
   }
   if (activo) h += '<button class="ok w100" data-a="todo" data-p="' + esc(p.id) + '">ENTREGAR TODO</button>';
