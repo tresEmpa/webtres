@@ -228,7 +228,7 @@ function tarjeta(p) {
   const chipCls = p.estado === 'servido' ? 'ok' : p.estado === 'parcial' ? 'warn' : p.estado === 'anulado' ? 'bad' : '';
   const activo = !p.anulado_en && p.estado !== 'servido';
   return h('div', { class: cls },
-    h('div', { class: 'row' }, h('div', { class: 'big' }, p.mesa), h('div', { class: 'mut' }, hora(p.creado_en) + ' · ' + (min < 1 ? 'recién' : min + ' min') + (p.origen === 'barra' ? ' · barra' : ''))),
+    h('div', { class: 'row' }, h('div', { class: 'big' }, (p.numero ? 'Mesa ' + p.numero + ' · ' : '') + p.mesa), h('div', { class: 'mut' }, hora(p.creado_en) + ' · ' + (min < 1 ? 'recién' : min + ' min') + (p.origen === 'barra' ? ' · barra' : ''))),
     h('div', { class: 'mut' }, h('span', { class: 'chip ' + chipCls }, p.estado.toUpperCase())),
     p.renglones.map((r) => {
       const hecho = r.entregadas === r.cantidad;

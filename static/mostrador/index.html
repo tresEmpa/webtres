@@ -71,6 +71,7 @@ function dos(n) { return n < 10 ? '0' + n : '' + n; }
 function hora(iso) { var d = new Date(ms(iso) - 3 * 3600000); return dos(d.getUTCHours()) + ':' + dos(d.getUTCMinutes()); } // hora argentina fija
 function edad(iso) { return Math.floor((ahora() - ms(iso)) / 60000); }
 function filtra(a, f) { var o = []; for (var i = 0; i < a.length; i++) if (f(a[i])) o.push(a[i]); return o; }
+function quien(p) { return (p.numero ? 'Mesa ' + p.numero + ' · ' : '') + p.mesa; }
 function totalPedido(p) { var t = 0; for (var i = 0; i < p.renglones.length; i++) t += p.renglones[i].cantidad * p.renglones[i].precio; return t; }
 function nuevoId() { return 'mos' + new Date().getTime().toString(36) + Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 8); }
 
@@ -122,7 +123,7 @@ var parpadeo = null, repite = null;
 function mostrarAlerta() {
   if (!S.alertas.length) { alerta.style.display = 'none'; clearInterval(parpadeo); clearInterval(repite); parpadeo = repite = null; document.title = 'Mostrador · Tres Empanadas'; return; }
   var nombres = [];
-  for (var i = 0; i < S.alertas.length; i++) nombres.push(esc(S.alertas[i].mesa) + ' · ' + plata(totalPedido(S.alertas[i])));
+  for (var i = 0; i < S.alertas.length; i++) nombres.push(esc(quien(S.alertas[i])) + ' · ' + plata(totalPedido(S.alertas[i])));
   alerta.innerHTML = '<div class="big">PEDIDO NUEVO</div><div class="big">' + nombres.join('<br>') + '</div><button data-a="visto">VISTO</button>';
   alerta.style.display = 'block';
   if (!parpadeo) parpadeo = setInterval(function () { alerta.className = alerta.className ? '' : 'b'; document.title = document.title.charAt(0) === '●' ? 'PEDIDO NUEVO' : '● PEDIDO NUEVO'; }, 700);
@@ -205,7 +206,7 @@ function tarjeta(p, activo) {
   var min = edad(p.creado_en), sinTocar = true, i, r;
   for (i = 0; i < p.renglones.length; i++) if (p.renglones[i].entregadas > 0) sinTocar = false;
   var cls = 'card' + (activo && sinTocar && min >= 5 ? ' late' : '');
-  var h = '<div class="' + cls + '"><div class="fila"><div class="big">' + esc(p.mesa) + '</div><div class="der big">' + plata(totalPedido(p)) + '</div></div>' +
+  var h = '<div class="' + cls + '"><div class="fila"><div class="big">' + esc(quien(p)) + '</div><div class="der big">' + plata(totalPedido(p)) + '</div></div>' +
     '<div class="mut">' + hora(p.creado_en) + ' · ' + (min < 1 ? 'recién' : min + ' min') + (p.origen === 'barra' ? ' · barra' : '') + (p.estado === 'parcial' ? ' · PARCIAL' : '') + '</div>';
   for (i = 0; i < p.renglones.length; i++) {
     r = p.renglones[i];

@@ -102,11 +102,12 @@ function validar(entrada) {
     juntos.set(it.producto_id, (juntos.get(it.producto_id) || 0) + c);
   }
   for (const c of juntos.values()) if (c > TOPE_POR_RENGLON) throw new ErrorPedido('tope_cantidad');
-  return { id, mesa: m, items: [...juntos].map(([producto_id, cantidad]) => ({ producto_id, cantidad })) };
+  const num = Number.isInteger(entrada.numero) && entrada.numero >= 1 && entrada.numero <= 99 ? entrada.numero : null;
+  return { id, mesa: m, numero: num, items: [...juntos].map(([producto_id, cantidad]) => ({ producto_id, cantidad })) };
 }
 
 export async function crearPedido(db, entrada, { origen = 'cliente', dispositivo = null } = {}) {
-  const { id, mesa, items } = validar(entrada);
+  const { id, mesa, numero, items } = validar(entrada);
 
   // Reintento del mismo pedido: se devuelve el original, no se crea otro.
   const previo = await obtenerPedido(db, id);
@@ -141,8 +142,8 @@ export async function crearPedido(db, entrada, { origen = 'cliente', dispositivo
 
   const t = ahora();
   const lote = [
-    db.prepare('INSERT INTO pedidos (id, jornada_id, mesa, dispositivo, origen, creado_en) VALUES (?,?,?,?,?,?)')
-      .bind(id, jornada.id, mesa, dispositivo, origen, t),
+    db.prepare('INSERT INTO pedidos (id, jornada_id, mesa, dispositivo, origen, creado_en, numero) VALUES (?,?,?,?,?,?,?)')
+      .bind(id, jornada.id, mesa, dispositivo, origen, t, numero),
     db.prepare('INSERT OR IGNORE INTO cuentas (jornada_id, mesa) VALUES (?,?)').bind(jornada.id, mesa),
   ];
   for (const it of items) {

@@ -88,6 +88,9 @@ const S = {
   dev: L.get('tep_dev', null), pedidos: L.get('tep_pedidos', []), estado: null, cuenta: null,
   pendiente: L.get('tep_pendiente', null), msg: '', pagando: false, enviando: false, avisado: L.get('tep_avisado', false),
 };
+// Número de mesa: viene en el QR de cada mesa (?m=7) y se recuerda en el celular.
+try { const m = parseInt(new URLSearchParams(location.search).get('m'), 10); if (m >= 1 && m <= 99) L.set('tep_num', m); } catch (e) {}
+S.numero = L.get('tep_num', null);
 if (!S.dev) { S.dev = (crypto.randomUUID ? crypto.randomUUID() : 'd' + Date.now() + Math.random().toString(36).slice(2)); L.set('tep_dev', S.dev); }
 // La sesión dura la noche: se descartan pedidos de hace más de 14 horas.
 S.pedidos = S.pedidos.filter((p) => Date.now() - p.t < 14 * 3600e3);
@@ -147,7 +150,7 @@ async function enviar() {
   if (S.enviando) return;
   S.enviando = true; S.msg = '';
   if (!S.pendiente) {
-    S.pendiente = { id: uuid(), mesa: S.mesa, items: Object.entries(S.carro).filter(([, n]) => n > 0).map(([producto_id, cantidad]) => ({ producto_id, cantidad })) };
+    S.pendiente = { id: uuid(), mesa: S.mesa, numero: S.numero || undefined, items: Object.entries(S.carro).filter(([, n]) => n > 0).map(([producto_id, cantidad]) => ({ producto_id, cantidad })) };
     L.set('tep_pendiente', S.pendiente);
   }
   drawSheet();
@@ -256,7 +259,7 @@ function drawSheet() {
     const items = S.pendiente ? S.pendiente.items : Object.entries(S.carro).filter(([, n]) => n > 0).map(([producto_id, cantidad]) => ({ producto_id, cantidad }));
     const nom = (id) => S.menu.find((p) => p.id === id) || { nombre: id, precio: 0 };
     const t = items.reduce((s, i) => s + nom(i.producto_id).precio * i.cantidad, 0);
-    cont = h('div', {}, h('h2', {}, S.pendiente ? 'Tu pedido · ' + S.pendiente.mesa : 'Tu pedido'),
+    cont = h('div', {}, h('h2', {}, (S.pendiente ? 'Tu pedido · ' + S.pendiente.mesa : 'Tu pedido') + (S.numero ? ' · Mesa ' + S.numero : '')),
       !S.pendiente && S.pedidos.length > 0 && h('div', { class: 'mesa' }, h('span', {}, 'A nombre de: '), h('b', {}, S.mesa)),
       !S.pendiente && !S.pedidos.length && h('div', { class: 'mesa' }, h('label', { for: 'mesa' }, '¿A nombre de quién?'),
         h('input', { id: 'mesa', inputmode: 'text', maxlength: 20, autocomplete: 'given-name', placeholder: 'Tu nombre (ej: Juan)', value: S.mesa, oninput: (e) => { S.mesa = e.target.value.trim(); L.set('tep_mesa', S.mesa); } })),
