@@ -40,7 +40,7 @@ export async function loginPanel(request, env) {
   try { body = await request.json(); } catch { return json({ ok: false, error: 'formato' }, 400); }
   const user = String(body.usuario || '');
   const pass = String(body.clave || '');
-  const usuarioOk = await secreto(env, 'COCINA_USER');
+  const usuarioOk = (await secreto(env, 'PANEL_USER')) || (await secreto(env, 'COCINA_USER'));
   const okUser = timingSafeEqual(user.trim().toLowerCase(), usuarioOk.trim().toLowerCase());
   let okPass = false;
   try {
