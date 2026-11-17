@@ -115,6 +115,14 @@ export async function crearPedido(db, entrada, { origen = 'cliente', dispositivo
   const jornada = await jornadaAbierta(db);
   if (!jornada) throw new ErrorPedido('cerrado');
 
+  // Un celular = un nombre por noche: si ya pidió, no puede cambiarlo (evita cuentas partidas).
+  if (origen === 'cliente' && dispositivo) {
+    const mio = await db.prepare(
+      'SELECT mesa FROM pedidos WHERE jornada_id = ? AND dispositivo = ? ORDER BY creado_en LIMIT 1',
+    ).bind(jornada.id, dispositivo).first();
+    if (mio && mio.mesa !== mesa) throw new ErrorPedido('nombre_fijo', mio.mesa);
+  }
+
   // Mismo nombre desde otro celular = otra persona: se pide que lo diferencie.
   if (origen === 'cliente' && dispositivo) {
     const choque = await db.prepare(

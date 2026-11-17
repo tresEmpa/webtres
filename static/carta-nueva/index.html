@@ -175,6 +175,7 @@ async function enviar() {
   else {
     S.pendiente = null; L.set('tep_pendiente', null); // el servidor lo rechazó: se puede armar otro
     if (j.error === 'sin_stock') { S.msg = 'Se acabó: ' + (j.detalle || []).map((d) => d.nombre).join(', ') + '. Sacalo del pedido.'; await cargarMenu(); }
+    else if (j.error === 'nombre_fijo') { S.mesa = j.detalle || S.mesa; L.set('tep_mesa', S.mesa); S.msg = 'Ya pediste como "' + S.mesa + '" esta noche: seguimos con ese nombre. Tocá "Enviar pedido" de nuevo.'; }
     else if (j.error === 'nombre_ocupado') S.msg = 'Ya hay alguien pidiendo con ese nombre. Agregale la inicial del apellido (ej: Juan P.) y probá de nuevo.';
     else if (j.error === 'cerrado') S.msg = 'La barra todavía no está tomando pedidos.';
     else if (j.error === 'demasiados') S.msg = 'Demasiados pedidos desde este celular. Acercate a la barra.';
@@ -256,7 +257,8 @@ function drawSheet() {
     const nom = (id) => S.menu.find((p) => p.id === id) || { nombre: id, precio: 0 };
     const t = items.reduce((s, i) => s + nom(i.producto_id).precio * i.cantidad, 0);
     cont = h('div', {}, h('h2', {}, S.pendiente ? 'Tu pedido · ' + S.pendiente.mesa : 'Tu pedido'),
-      !S.pendiente && h('div', { class: 'mesa' }, h('label', { for: 'mesa' }, '¿A nombre de quién?'),
+      !S.pendiente && S.pedidos.length > 0 && h('div', { class: 'mesa' }, h('span', {}, 'A nombre de: '), h('b', {}, S.mesa)),
+      !S.pendiente && !S.pedidos.length && h('div', { class: 'mesa' }, h('label', { for: 'mesa' }, '¿A nombre de quién?'),
         h('input', { id: 'mesa', inputmode: 'text', maxlength: 20, autocomplete: 'given-name', placeholder: 'Tu nombre (ej: Juan)', value: S.mesa, oninput: (e) => { S.mesa = e.target.value.trim(); L.set('tep_mesa', S.mesa); } })),
       items.map((i) => h('div', { class: 'l' }, h('span', {}, i.cantidad + '× ' + nom(i.producto_id).nombre), h('span', {}, $$(nom(i.producto_id).precio * i.cantidad)))),
       h('div', { class: 'l tot' }, h('span', {}, 'Total'), h('span', {}, $$(t))),
