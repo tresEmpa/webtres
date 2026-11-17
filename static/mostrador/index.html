@@ -154,7 +154,7 @@ function dibujar() {
   var e = S.est, abiertos = pendientes(), y = window.pageYOffset;
   var h = '<div class="top"><div class="st"><span class="dot' + (S.conectado ? '' : ' off') + '"></span>' + (e.jornada ? 'Noche abierta' : 'Cerrado') + '</div><div class="bt">' +
     (S.sonido ? '<button class="gh" data-a="probar">Probar sonido</button>' : '<button class="pri" data-a="sonido">ACTIVAR SONIDO</button>') +
-    (e.jornada ? '' : ' <button class="ok" data-a="abrir">Abrir noche</button>') + '</div></div>' +
+    (e.jornada ? '' : ' <button class="ok" data-a="abrir">Abrir noche</button>') + ' <button class="gh" data-a="clave">Clave</button></div></div>' +
     '<div class="tabs"><button data-a="tab" data-v="pedidos" class="' + (S.tab === 'pedidos' ? 'on' : '') + '">Pedidos ' + (abiertos.length ? '<span class="n">' + abiertos.length + '</span>' : '') + '</button>' +
     '<button data-a="tab" data-v="cuentas" class="' + (S.tab === 'cuentas' ? 'on' : '') + '">Cuentas</button>' +
     '<button data-a="barra">+ Pedido</button></div><div class="main">' +
@@ -282,6 +282,19 @@ function manejar(ev) {
     accion({ tipo: 'pagar', mesa: t.getAttribute('data-m'), medio: t.getAttribute('data-v') }, cerrarCapa);
   }
   else if (a === 'barra') pedidoBarra();
+  else if (a === 'clave') abrirCapa('<div class="fila"><div class="big">Cambiar usuario y clave</div><div class="der"><button class="gh" data-a="cerrar">Volver</button></div></div>' +
+    '<input id="k0" type="password" placeholder="Clave actual"><input id="k1" placeholder="Usuario nuevo" autocapitalize="off" autocorrect="off">' +
+    '<input id="k2" type="password" placeholder="Clave nueva (mínimo 6)"><input id="k3" type="password" placeholder="Repetir clave nueva">' +
+    '<button class="pri w100" data-a="guardarClave">GUARDAR</button><p class="mut" id="kmsg"></p>');
+  else if (a === 'guardarClave') {
+    var v = function (i) { return document.getElementById(i).value; }, km = document.getElementById('kmsg');
+    if (v('k2') !== v('k3')) { km.innerHTML = 'Las claves nuevas no coinciden.'; return; }
+    km.innerHTML = 'Guardando…';
+    xhr('POST', '/api/panel/accion', { tipo: 'cambiar_clave', actual: v('k0'), usuario: v('k1'), nueva: v('k2') }, function (st, r) {
+      if (r && r.ok) { alert('Guardado. Usuario: ' + v('k1').replace(/^\s+|\s+$/g, '').toLowerCase()); cerrarCapa(); return; }
+      km.innerHTML = r && r.error === 'clave_actual_mal' ? 'La clave actual no es correcta.' : r && r.error === 'muy_corta' ? 'Usuario de 3+ letras y clave de 6+.' : 'No se pudo guardar.';
+    });
+  }
   else if (a === 'cancelar') { S.idBarra = null; S.carro = {}; S.nombreBarra = ''; cerrarCapa(); }
   else if (a === 'mas' || a === 'menos') { var id = t.getAttribute('data-p'); S.carro[id] = Math.max(0, Math.min(99, (S.carro[id] || 0) + (a === 'mas' ? 1 : -1))); pedidoBarra(); }
   else if (a === 'cargar') {

@@ -2,7 +2,8 @@ import {
   abrirJornada, cerrarJornada, entregarTodo, fijarEntregadas, anularPedido, pagarCuenta,
   fijarStock, crearPedido, jornadaAbierta, cuentaDeMesa, normMesa, ErrorPedido,
 } from '../../_pedidos/core.js';
-import { json, errorJson, exigirPanel } from '../../_pedidos/http.js';
+import { json, errorJson, exigirPanel, secreto } from '../../_pedidos/http.js';
+import { verifyPassword, hashPassword } from '../../_lib/auth.js';
 
 const MEDIOS = ['efectivo', 'transferencia', 'qr', 'tarjeta'];
 
@@ -44,6 +45,20 @@ export async function onRequestPost({ request, env }) {
       case 'pedido_barra': {
         const r = await crearPedido(db, b.pedido, { origen: 'barra' });
         return json({ ok: true, duplicado: r.duplicado, pedido: r.pedido });
+      }
+      case 'cambiar_clave': {
+        // Guarda usuario y clave del panel en la tabla config de ESTA base (no toca /cocina).
+        const actual = (await secreto(env, 'PANEL_PASS_HASH')) || (await secreto(env, 'COCINA_PASS_HASH'));
+        if (!(await verifyPassword(String(b.actual || ''), actual))) throw new ErrorPedido('clave_actual_mal');
+        const usuario = String(b.usuario || '').trim().toLowerCase();
+        const nueva = String(b.nueva || '');
+        if (usuario.length < 3 || nueva.length < 6) throw new ErrorPedido('muy_corta');
+        const h = await hashPassword(nueva, 100000);
+        await db.batch([
+          db.prepare("INSERT INTO config (clave, valor) VALUES ('PANEL_USER', ?) ON CONFLICT(clave) DO UPDATE SET valor = excluded.valor").bind(usuario),
+          db.prepare("INSERT INTO config (clave, valor) VALUES ('PANEL_PASS_HASH', ?) ON CONFLICT(clave) DO UPDATE SET valor = excluded.valor").bind(h),
+        ]);
+        break;
       }
       default: throw new ErrorPedido('accion_desconocida');
     }
