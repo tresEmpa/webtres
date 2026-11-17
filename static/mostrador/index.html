@@ -213,7 +213,9 @@ function tarjeta(p, activo) {
   for (i = 0; i < p.renglones.length; i++) {
     r = p.renglones[i];
     var hecho = r.entregadas === r.cantidad;
-    h += activo ? '<button class="lin' + (hecho ? ' hecho' : '') + '" data-a="lin" data-r="' + r.id + '" data-n="' + (hecho ? 0 : r.cantidad) + '"><span class="box">' + (hecho ? '✓' : '') + '</span><b>' + r.cantidad + '×</b> <span class="nom">' + esc(r.nombre) + '</span>' + (r.entregadas && !hecho ? ' (' + r.entregadas + ' entregadas)' : '') + '</button>'
+    var btn = '<button class="lin' + (hecho ? ' hecho' : '') + '" data-a="lin" data-r="' + r.id + '" data-n="' + (hecho ? 0 : r.cantidad) + '"><span class="box">' + (hecho ? '✓' : '') + '</span><b>' + r.cantidad + '×</b> <span class="nom">' + esc(r.nombre) + '</span>' + '</button>';
+    var stp = r.cantidad > 1 && !hecho ? '<td class="stp" style="white-space:nowrap;padding-left:6px"><button data-a="lin" data-r="' + r.id + '" data-n="' + Math.max(0, r.entregadas - 1) + '">−</button><b>' + r.entregadas + '/' + r.cantidad + '</b><button data-a="lin" data-r="' + r.id + '" data-n="' + Math.min(r.cantidad, r.entregadas + 1) + '">+</button></td>' : '';
+    h += activo ? '<table style="width:100%;border-collapse:collapse"><tr><td>' + btn + '</td>' + stp + '</tr></table>'
       : '<div class="mut">' + r.cantidad + '× ' + esc(r.nombre) + '</div>';
   }
   if (activo) h += '<button class="ok w100" data-a="todo" data-p="' + esc(p.id) + '">ENTREGAR TODO</button>';
