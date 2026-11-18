@@ -178,6 +178,8 @@ async function enviar() {
   const j = await intento(0);
   S.enviando = false;
   if (j.ok) {
+    // Píxel de Meta: marca a quien consumió en el club (para armar públicos). Si el píxel no cargó, no pasa nada.
+    try { if (window.fbq) fbq('track', 'Purchase', { value: total(), currency: 'ARS', content_type: 'product', num_items: Object.values(S.carro).reduce((a, b) => a + b, 0) }, { eventID: S.pendiente.id }); } catch (e) {}
     S.pedidos.push({ id: S.pendiente.id, mesa: S.pendiente.mesa, t: Date.now() }); L.set('tep_pedidos', S.pedidos);
     S.pendiente = null; L.set('tep_pendiente', null); S.carro = {}; S.sheet = null; S.msg = '';
     S.recien = true; drawSheet(); await cargarEstado(); draw(); window.scrollTo({ top: 0, behavior: 'smooth' });
