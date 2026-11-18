@@ -1,7 +1,7 @@
 {
     "fecha": "2026-11-20",
     "nombre_show": "Sociedad Platense de Stand Up",
-    "descripcion": "El clásico de los viernes en Tres Empanadas. Stand up con Julián Dorati, Checho Falco e invitados. Show a la gorra.",
+    "descripcion": "El clásico de los viernes en Tres Empanadas en esta ocasión con dos invitados de Azul y GBA. Show a la gorra.",
     "hora": "21:30",
     "duracion_minutos": 90,
     "estado": "activo",
@@ -10,13 +10,14 @@
     "link_instagram": "",
     "notas_internas": "",
     "color": "rojo",
-    "flyer": "",
+    "flyer": "2026-11-20-sociedad-platense-de-stand-up.png",
     "elenco": [
-        "Julián Dorati",
-        "Checho Falco"
+        "Checho Falco",
+        "Lucas Agüero",
+        "Carli de Villa Adelina"
     ],
     "dia_semana": "viernes",
-    "actualizado": "2026-11-16T00:13:28.762Z",
+    "actualizado": "2026-11-18T14:37:47.834Z",
     "creado": "2026-10-25T12:55:53.373Z",
     "id": "2026-11-20-sociedad-platense-de-stand-up"
 }
