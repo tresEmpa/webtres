@@ -19,7 +19,7 @@ import json
 import os
 from datetime import datetime, time, timedelta
 
-from buffer_x import AR, ahora_ar, ajustar, publicar
+from buffer_x import AR, ahora_ar, ajustar, marcar, proxima, publicar, ya_hecho
 
 CANAL = "6af9e12dece6dfde5fd49552"  # Tres Empanadas en Buffer
 SITIO = "https://tresempanadas.com.ar"
@@ -91,7 +91,12 @@ def main():
     ap.add_argument("--eventos", required=True)
     ap.add_argument("--fecha")
     a = ap.parse_args()
-    hoy = datetime.strptime(a.fecha, "%Y-%m-%d").date() if a.fecha else ahora_ar().date()
+    # Programa el proximo post de las 18:00 (hoy o mañana) para que Buffer lo saque en hora.
+    hoy = datetime.strptime(a.fecha, "%Y-%m-%d").date() if a.fecha else proxima(HORA)
+    clave = f"tres-{hoy.isoformat()}"
+    if ya_hecho(clave):
+        print(f"{clave}: ya programado.")
+        return
     eventos = cargar(a.eventos)
     campana = f"x-{hoy.isoformat()}"
 
@@ -114,7 +119,8 @@ def main():
         pie = f"Reservas 👉 {destino}\n📍 Calle 43 N°1349, La Plata\n{HASHTAGS}"
         texto = ajustar(cabeza, [linea(e, hoy) for e in shows], pie)
 
-    publicar(CANAL, texto, datetime.combine(hoy, HORA, tzinfo=AR))
+    if publicar(CANAL, texto, datetime.combine(hoy, HORA, tzinfo=AR)):
+        marcar(clave)
 
 
 if __name__ == "__main__":
