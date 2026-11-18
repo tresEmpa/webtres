@@ -3,14 +3,14 @@
 Solo cuentan los shows en estado "activo" (confirmados, toman reservas).
 Los "programados", "agotados" y "cancelados" no salen nunca.
 
-- Cada show sale UNA vez, 2 dias antes. Si se habilito tarde (despues de la
-  pasada de ayer) y es mañana o hoy, sale en la pasada siguiente.
+- Cada show sale UNA vez, 2 dias antes (o 1, si se habilito tarde). Lo ya
+  anunciado queda anotado en el estado (.x-estado) para no repetirlo.
   Si hay varios (jueves y viernes), van juntos en un solo post.
 - Lunes: post casi generico ("una buena opcion para ver stand up en La Plata
   esta semana"), con las fechas confirmadas de la semana si las hay. Ese dia
   reemplaza al aviso de 2 dias antes, asi no salen dos.
 
-Sin estado guardado: decide solo por fechas. Uso:
+Uso:
   python3 tres_x.py --eventos ../../data/eventos [--fecha AAAA-MM-DD]
 """
 import argparse
@@ -72,18 +72,9 @@ def link(ev, campana):
 
 
 def a_publicar(eventos, hoy):
-    """Shows que tocan en la pasada de hoy (sin contar el lunes)."""
-    corte = datetime.combine(hoy - timedelta(1), time(17, 0), tzinfo=AR)  # pasada de ayer
-    out = []
-    for ev in eventos:
-        d = (fecha(ev) - hoy).days
-        if d == 2:
-            out.append(ev)
-        elif d in (0, 1):
-            act = actualizado(ev)
-            if act and act > corte:  # se habilito despues de la pasada de ayer
-                out.append(ev)
-    return out
+    """Shows de mañana y pasado que todavia no se anunciaron."""
+    return [ev for ev in eventos
+            if (fecha(ev) - hoy).days in (1, 2) and not ya_hecho(f"show-{ev['id']}")]
 
 
 def main():
@@ -107,6 +98,7 @@ def main():
             f"{SITIO}/reservas/?utm_source=x&utm_medium=social&utm_campaign={campana}"
         pie = f"Reservá tu lugar 👉 {destino}\n{HASHTAGS}"
         texto = ajustar(cabeza, [linea(e, hoy) for e in semana], pie)
+        avisados = [e for e in semana if (fecha(e) - hoy).days in (1, 2)]
     else:
         shows = a_publicar(eventos, hoy)
         if not shows:
@@ -118,9 +110,12 @@ def main():
             f"{SITIO}/reservas/?utm_source=x&utm_medium=social&utm_campaign={campana}"
         pie = f"Reservas 👉 {destino}\n📍 Calle 43 N°1349, La Plata\n{HASHTAGS}"
         texto = ajustar(cabeza, [linea(e, hoy) for e in shows], pie)
+        avisados = shows
 
     if publicar(CANAL, texto, datetime.combine(hoy, HORA, tzinfo=AR)):
         marcar(clave)
+        for ev in avisados:
+            marcar(f"show-{ev['id']}")
 
 
 if __name__ == "__main__":
