@@ -66,6 +66,7 @@ button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:12px 16px
 .alias{font-family:var(--fd);font-size:1.7rem;font-weight:800;color:var(--rojo);text-align:center;margin:8px 0;word-break:break-all}
 .gracias{text-align:center;padding:18px}
 .gracias a{display:inline-block;background:var(--dorado);color:var(--negro);font-family:var(--fd);font-weight:800;border-radius:12px;padding:14px 18px;text-decoration:none;margin-top:12px}
+.gorra-btn{display:block;width:100%;margin:18px 0 10px;background:transparent;border:2px dashed var(--dorado);color:var(--dorado);font-family:var(--fd);font-weight:800;border-radius:12px;padding:12px}
 .gorra{background:#141414;color:#f6efe0;border:3px dashed var(--dorado);border-radius:14px;padding:14px;margin:18px 0 10px;text-align:center}
 .gorra h2{font-family:var(--fd);color:var(--dorado);margin:0 0 6px}
 .gorra .alias{color:var(--dorado);font-size:1.4rem}
@@ -250,7 +251,11 @@ function pintarBarra() {
   const u = unidades();
   if (S.pendiente) { b.append(h('button', { onclick: () => { S.sheet = 'confirmar'; drawSheet(); } }, 'Reintentar el pedido en curso')); return; }
   const hay = S.estado && S.estado.length && !S.fin;
-  if (!u && !hay) { b.style.display = 'none'; return; }
+  if (!u && !hay) {
+    // Sin nada elegido: se ve igual dónde va a estar el botón, así nadie lo busca.
+    if (S.abierta && !S.fin) { b.style.display = ''; b.append(h('button', { disabled: true }, 'Elegí con ＋ y pedí desde acá')); return; }
+    b.style.display = 'none'; return;
+  }
   b.style.display = '';
   if (u) {
     b.append(h('button', { disabled: !S.abierta, onclick: () => { S.sheet = 'confirmar'; drawSheet(); } },
@@ -288,6 +293,11 @@ function textoEstado(e) { return { recibido: 'Recibido', parcial: 'En camino (pa
 
 // Gorra: va para los comediantes. Alias DISTINTO al de la cuenta (Comedia123); el diseño la separa a propósito.
 function gorraCard() {
+  // Cerrada por defecto: un botón discreto; se abre solo si la tocan.
+  if (!S.gorra) return h('button', { class: 'gorra-btn', onclick: () => { S.gorra = true; draw(); document.querySelector('.gorra')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }, '🧢 Gorra para los comediantes');
+  return gorraAbierta();
+}
+function gorraAbierta() {
   const btn = h('button', {}, 'Copiar alias de la gorra');
   btn.onclick = async () => {
     try { await navigator.clipboard.writeText(GORRA_ALIAS); btn.textContent = '✓ ¡Alias de la gorra copiado!'; setTimeout(() => { btn.textContent = 'Copiar alias de la gorra'; }, 2500); }
