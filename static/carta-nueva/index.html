@@ -66,6 +66,8 @@ button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:12px 16px
 .alias{font-family:var(--fd);font-size:1.7rem;font-weight:800;color:var(--rojo);text-align:center;margin:8px 0;word-break:break-all}
 .gracias{text-align:center;padding:18px}
 .gracias a{display:inline-block;background:var(--dorado);color:var(--negro);font-family:var(--fd);font-weight:800;border-radius:12px;padding:14px 18px;text-decoration:none;margin-top:12px}
+.alias-et{text-align:center;font-size:.85rem;opacity:.75}
+.gorra .alias{margin:2px 0}
 .gorra-btn.extra-btn{display:flex;align-items:center;justify-content:center;gap:10px;line-height:1}
 .extra-btn img{width:30px;height:30px}
 .ico-gorra{width:84px;height:84px;display:block;margin:0 auto 4px}
@@ -314,7 +316,9 @@ function gorraAbierta() {
   return h('div', { class: 'gorra' }, h('img', { class: 'ico-gorra', src: '/assets/img/iconos/gorra.svg', alt: '' }),
     h('h2', {}, '¿Te reíste? Eso vale'),
     h('p', {}, 'Los comediantes dieron todo. Valoralo con tu aporte y que la mesa no se haga la rata 😄 Gorra física o virtual, como prefieras.'),
-    h('div', { class: 'alias', id: 'alias-gorra' }, GORRA_ALIAS), btn,
+    h('div', { class: 'alias-et', style: 'margin-top:12px' }, 'Alias para transferir'),
+    h('div', { class: 'alias', id: 'alias-gorra' }, GORRA_ALIAS),
+    h('div', { class: 'alias-et', style: 'font-style:italic;margin-bottom:6px' }, 'Pasáselo al resto de la mesa'), btn,
     h('a', { href: GORRA_MP, target: '_blank', rel: 'noopener' }, '💳 Tarjeta de crédito o débito'),
     h('div', { class: 'nota' }, 'Esto no paga tu consumo: la cuenta va aparte.'));
 }
@@ -381,7 +385,7 @@ function vistaPagar() {
   const paso = (n, ...x) => h('div', { class: 'paso' }, h('i', {}, n), h('div', {}, ...x));
   return h('div', {}, h('h2', {}, 'Pagar · ' + S.mesa), h('div', { class: 'l tot' }, h('span', {}, c.pagado > 0 ? 'Falta pagar' : 'Total a transferir'), h('span', {}, $$(c.saldo))),
     h('div', { class: 'pasos' },
-      paso(1, h('b', {}, 'Copiá el alias'), h('div', { class: 'alias', id: 'alias' }, ALIAS), h('div', { class: 'titular' }, 'Titular: ' + TITULAR), btn),
+      paso(1, h('b', {}, 'Copiá el alias'), h('div', { class: 'alias-et' }, 'Alias para transferir'), h('div', { class: 'alias', id: 'alias' }, ALIAS), h('div', { class: 'titular' }, 'Titular: ' + TITULAR), btn),
       paso(2, h('b', {}, 'Transferí ' + $$(c.saldo)), ' desde la app de tu banco o billetera.'),
       paso(3, h('b', {}, 'Tocá "Ya transferí"'), ' para registrar tu pago.')),
     S.avisado ? h('div', { class: 'banner', style: 'color:var(--crema);margin-top:12px' }, '¡Gracias! Mostrale el comprobante a quien te atienda y lo confirmamos.')
