@@ -66,6 +66,13 @@ button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:12px 16px
 .alias{font-family:var(--fd);font-size:1.7rem;font-weight:800;color:var(--rojo);text-align:center;margin:8px 0;word-break:break-all}
 .gracias{text-align:center;padding:18px}
 .gracias a{display:inline-block;background:var(--dorado);color:var(--negro);font-family:var(--fd);font-weight:800;border-radius:12px;padding:14px 18px;text-decoration:none;margin-top:12px}
+.extra-btn{display:flex;align-items:center;justify-content:center;gap:10px}
+.extra-btn img{width:30px;height:30px}
+.ico-gorra{width:84px;height:84px;display:block;margin:0 auto 4px}
+.ico-resena{position:relative;width:110px;height:104px;margin:0 auto 4px}
+.ico-resena .estr{position:absolute;left:0;top:0;width:110px}
+.ico-resena .logo{position:absolute;left:27px;top:38px;width:56px;height:56px;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.resena-card .ver{display:block;width:100%;margin-top:8px;border-radius:12px;padding:12px;font-family:var(--fd);font-weight:800;text-decoration:none;background:var(--rojo);color:#fff;box-sizing:border-box}
 .gorra-btn{display:block;width:100%;margin:18px 0 10px;background:transparent;border:2px dashed var(--dorado);color:var(--dorado);font-family:var(--fd);font-weight:800;border-radius:12px;padding:12px}
 .gorra{background:var(--papel);color:var(--tx);border:3px dashed var(--dorado);border-radius:14px;padding:14px;margin:18px 0 10px;text-align:center}
 .gorra h2{font-family:var(--fd);color:var(--rojo);margin:0 0 6px}
@@ -220,6 +227,7 @@ function draw() {
       for (const p of vis.filter((x) => x.categoria === c)) app.append(fila(p));
     }
     app.append(gorraCard());
+    app.append(resenaCard());
     app.append(h('div', { style: 'height:38vh' })); // para que la última sección pueda llegar arriba
   }
   pintarBarra();
@@ -294,7 +302,7 @@ function textoEstado(e) { return { recibido: 'Recibido', parcial: 'En camino (pa
 // Gorra: va para los comediantes. Alias DISTINTO al de la cuenta (Comedia123); el diseño la separa a propósito.
 function gorraCard() {
   // Cerrada por defecto: un botón discreto; se abre solo si la tocan.
-  if (!S.gorra) return h('button', { class: 'gorra-btn', onclick: () => { S.gorra = true; draw(); document.querySelector('.gorra')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }, '🧢 Gorra para los comediantes');
+  if (!S.gorra) return h('button', { class: 'gorra-btn extra-btn', onclick: () => { S.gorra = true; draw(); document.querySelector('.gorra')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }, h('img', { src: '/assets/img/iconos/gorra.svg', alt: '' }), 'Gorra para los comediantes');
   return gorraAbierta();
 }
 function gorraAbierta() {
@@ -303,11 +311,25 @@ function gorraAbierta() {
     try { await navigator.clipboard.writeText(GORRA_ALIAS); btn.textContent = '✓ ¡Alias copiado!'; setTimeout(() => { btn.textContent = 'Copiar alias'; }, 2500); }
     catch (e) { const el = document.getElementById('alias-gorra'); const r = document.createRange(); r.selectNodeContents(el); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
   };
-  return h('div', { class: 'gorra' }, h('h2', {}, '🧢 Para los comediantes'),
-    h('p', {}, 'No aportes solo vos: decile a los demás que no sean ratas 😄'),
+  return h('div', { class: 'gorra' }, h('img', { class: 'ico-gorra', src: '/assets/img/iconos/gorra.svg', alt: '' }),
+    h('h2', {}, 'Dejaron todo arriba del escenario'),
+    h('p', {}, 'Es momento de reconocer su laburo con tu aporte. Y decile al resto de la mesa que no sean ratas 😄 Hay gorra física y también acá, virtual.'),
     h('div', { class: 'alias', id: 'alias-gorra' }, GORRA_ALIAS), btn,
     h('a', { href: GORRA_MP, target: '_blank', rel: 'noopener' }, '💳 Tarjeta de crédito o débito'),
     h('div', { class: 'nota' }, 'Esto no paga tu consumo: la cuenta va aparte.'));
+}
+
+function icoResena() {
+  return h('div', { class: 'ico-resena' }, h('img', { class: 'estr', src: '/assets/img/iconos/estrellas.svg', alt: '' }), h('img', { class: 'logo', src: '/assets/img/logo.png', alt: '' }));
+}
+// Reseña: también plegada en un botón al final de la carta.
+function resenaCard() {
+  if (!S.resena) return h('button', { class: 'gorra-btn extra-btn', onclick: () => { S.resena = true; draw(); document.querySelector('.resena-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); } },
+    h('img', { src: '/assets/img/logo.png', alt: '', style: 'border-radius:50%' }), 'Dejanos tu reseña');
+  return h('div', { class: 'gorra resena-card' }, icoResena(),
+    h('h2', {}, '¿La pasaste bien? Contalo'),
+    h('p', {}, 'Somos un club chiquito y cada reseña en Google Maps hace que más gente nos encuentre. Te lleva 30 segundos.'),
+    h('a', { class: 'ver', href: RESENA, target: '_blank', rel: 'noopener' }, '⭐ Dejar mi reseña'));
 }
 
 function graciasCard() {
