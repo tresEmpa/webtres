@@ -312,8 +312,8 @@ function gorraAbierta() {
     catch (e) { const el = document.getElementById('alias-gorra'); const r = document.createRange(); r.selectNodeContents(el); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
   };
   return h('div', { class: 'gorra' }, h('img', { class: 'ico-gorra', src: '/assets/img/iconos/gorra.svg', alt: '' }),
-    h('h2', {}, 'Dejaron todo arriba del escenario'),
-    h('p', {}, 'Es momento de reconocer su laburo con tu aporte. Y decile al resto de la mesa que no sean ratas 😄 Hay gorra física y también acá, virtual.'),
+    h('h2', {}, '¿Te reíste? Eso vale'),
+    h('p', {}, 'Los comediantes dieron todo. Valoralo con tu aporte y que la mesa no se haga la rata 😄 Gorra física o virtual, como prefieras.'),
     h('div', { class: 'alias', id: 'alias-gorra' }, GORRA_ALIAS), btn,
     h('a', { href: GORRA_MP, target: '_blank', rel: 'noopener' }, '💳 Tarjeta de crédito o débito'),
     h('div', { class: 'nota' }, 'Esto no paga tu consumo: la cuenta va aparte.'));
