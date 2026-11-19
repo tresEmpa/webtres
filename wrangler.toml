@@ -10,8 +10,14 @@ pages_build_output_dir = "dist"
 # GITHUB_TOKEN, GITHUB_REPO, GITHUB_BRANCH, APPS_SCRIPT_URL) NO van acá.
 # Se cargan en el panel de Cloudflare como "Environment variables / Secrets".
 
-# Sistema de pedidos nuevo: la base D1 se vincula SOLO a las vistas previas (Preview).
-# Producción no tiene esta base hasta el cambio final.
+# Sistema de pedidos nuevo. Producción usa su propia base (tres-pedidos-prod);
+# las vistas previas (Preview) usan la de pruebas (tres-pedidos).
+# Si /carta/ manda a la carta nueva lo decide CARTA_NUEVA en la tabla config (panel → Carta).
+[[d1_databases]]
+binding = "DB"
+database_name = "tres-pedidos-prod"
+database_id = "7d27342f-3cd0-4e7e-ab54-cb32224d8f57"
+
 [[env.preview.d1_databases]]
 binding = "DB"
 database_name = "tres-pedidos"

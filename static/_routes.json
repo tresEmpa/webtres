@@ -4,7 +4,10 @@
     "/reservas/registrar",
     "/cocina",
     "/cocina/*",
-    "/api/*"
+    "/api/*",
+    "/carta",
+    "/carta/",
+    "/carta/index.html"
   ],
   "exclude": []
 }

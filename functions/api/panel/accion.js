@@ -46,6 +46,11 @@ export async function onRequestPost({ request, env }) {
         const r = await crearPedido(db, b.pedido, { origen: 'barra' });
         return json({ ok: true, duplicado: r.duplicado, pedido: r.pedido });
       }
+      case 'interruptor': {
+        const v = b.prendido ? '1' : '0';
+        await db.prepare("INSERT INTO config (clave, valor) VALUES ('CARTA_NUEVA', ?) ON CONFLICT(clave) DO UPDATE SET valor = excluded.valor").bind(v).run();
+        break;
+      }
       case 'cambiar_clave': {
         // Guarda usuario y clave del panel en la tabla config de ESTA base (no toca /cocina).
         const actual = (await secreto(env, 'PANEL_PASS_HASH')) || (await secreto(env, 'COCINA_PASS_HASH'));
