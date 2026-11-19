@@ -155,6 +155,9 @@ async function refrescar() {
     S.primera = false;
     S.est = r; S.ok = true;
   } catch (e) { if (e.message !== 'sesion') S.conectado = false; }
+  // Si está escribiendo un número (ej. stock de empanadas), no redibujar: se le borraría lo que tipea.
+  const foco = document.activeElement;
+  if (foco && foco.tagName === 'INPUT' && S.ok) return;
   if (!S.modal) draw();
 }
 setInterval(() => { if (S.ok && document.visibilityState === 'visible') refrescar(); }, 4000);
@@ -320,6 +323,7 @@ function filaStock(p) {
   } else {
     const inp = h('input', { type: 'number', inputmode: 'numeric', min: 0, value: p.stock, style: 'width:100px;text-align:center;font-weight:700;font-size:1.2rem',
       onfocus: (e) => e.target.select(),
+      onkeydown: (e) => { if (e.key === 'Enter') e.target.blur(); },
       onchange: (e) => { const v = parseInt(e.target.value, 10); if (v >= 0) accion({ tipo: 'fijar_stock', producto_id: p.id, stock: v, motivo: 'carga' }); else e.target.value = p.stock; } });
     cuerpo = h('div', { class: 'stp', style: 'margin-top:8px' },
       h('button', { onclick: () => p.stock > 0 && accion({ tipo: 'fijar_stock', producto_id: p.id, stock: p.stock - 1 }) }, '−'),
