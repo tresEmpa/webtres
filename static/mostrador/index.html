@@ -175,7 +175,7 @@ function dibujar() {
   var e = S.est, abiertos = pendientes(), y = window.pageYOffset;
   var h = '<div class="top"><div class="st"><span class="dot' + (S.conectado ? '' : ' off') + '"></span>' + (e.jornada ? 'Noche abierta' : 'Cerrado') + '</div><div class="bt">' +
     (S.sonido ? '<button class="gh" data-a="probar">Probar sonido</button>' : '<button class="pri" data-a="sonido">ACTIVAR SONIDO</button>') +
-    (e.jornada ? '' : ' <button class="ok" data-a="abrir">Abrir noche</button>') + ' <button class="gh" data-a="clave">Clave</button></div></div>' +
+    (e.jornada ? ' <button class="gh" data-a="cerrarNoche">Cerrar noche</button>' : ' <button class="ok" data-a="abrir">Abrir noche</button>') + ' <button class="gh" data-a="clave">Clave</button></div></div>' +
     '<div class="tabs"><button data-a="tab" data-v="pedidos" class="' + (S.tab === 'pedidos' ? 'on' : '') + '">Pedidos ' + (abiertos.length ? '<span class="n">' + abiertos.length + '</span>' : '') + '</button>' +
     '<button data-a="tab" data-v="cuentas" class="' + (S.tab === 'cuentas' ? 'on' : '') + '">Cuentas</button>' +
     '<button data-a="barra">+ Pedido</button></div><div class="main">' +
@@ -293,6 +293,10 @@ function manejar(ev) {
   else if (a === 'probar') beep();
   else if (a === 'visto') { S.alertas = []; mostrarAlerta(); S.tab = 'pedidos'; dibujar(); }
   else if (a === 'tab') { S.tab = t.getAttribute('data-v'); dibujar(); }
+  else if (a === 'cerrarNoche') {
+    var pend = pendientes().length, debe = filtra(S.est.cuentas || [], function (c) { return c.saldo > 0; }).length;
+    if (confirm('¿Cerrar la noche?' + (pend ? '\n- ' + pend + ' pedidos sin entregar' : '') + (debe ? '\n- ' + debe + ' cuentas que deben' : '') + '\n\nQueda todo guardado.')) accion({ tipo: 'cerrar_jornada' });
+  }
   else if (a === 'abrir') { if (confirm('¿Abrir la noche? ¿Ya cargaste el stock?')) accion({ tipo: 'abrir_jornada' }); }
   else if (a === 'lin') accion({ tipo: 'fijar_entregadas', renglon_id: +t.getAttribute('data-r'), entregadas: +t.getAttribute('data-n') });
   else if (a === 'todo') accion({ tipo: 'entregar_todo', pedido_id: t.getAttribute('data-p') });
