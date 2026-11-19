@@ -273,7 +273,7 @@ function pintarBarra() {
   const saldo = S.cuenta ? S.cuenta.saldo : 0;
   b.append(h('div', { class: 'dos' },
     h('button', { class: 'o', disabled: !S.abierta, onclick: () => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, '＋ Pedir algo más'),
-    saldo > 0 && h('button', { onclick: () => { S.sheet = 'pagar'; drawSheet(); } }, 'Pagar ' + $$(saldo))));
+    saldo > 0 && h('button', { onclick: () => { S.sheet = 'pagar'; drawSheet(); } }, 'Pagar ahora ' + $$(saldo))));
 }
 
 function drawSheet() {
@@ -358,7 +358,8 @@ function vistaMisPedidos() {
     w.append(h('div', { class: 'ped' }, h('div', { class: 'l tot', style: 'border:0;margin:0;padding:0' }, h('span', {}, 'Tu cuenta'), h('span', {}, $$(c.total))),
       c.pagado > 0 && h('div', { class: 'l' }, h('span', {}, 'Ya pagaste'), h('span', {}, $$(c.pagado))),
       c.pagado > 0 && c.saldo > 0 && h('div', { class: 'l tot' }, h('span', {}, 'Falta pagar'), h('span', {}, $$(c.saldo))),
-            c.saldo > 0 && h('button', { class: 'prim', style: 'margin-top:10px', onclick: () => { S.sheet = 'pagar'; drawSheet(); } }, 'Pagar')));
+            c.saldo > 0 && h('p', { class: 'q', style: 'margin:10px 0 0;text-align:center;opacity:.8' }, 'Sin apuro: podés pagar ahora o al final de la noche.'),
+            c.saldo > 0 && h('button', { class: 'prim', style: 'margin-top:6px', onclick: () => { S.sheet = 'pagar'; drawSheet(); } }, 'Pagar ahora')));
   }
   return w;
 }
