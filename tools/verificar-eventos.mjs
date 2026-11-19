@@ -125,8 +125,8 @@ const evGa = (ga, nombre) => ga.filter((a) => a[0] === 'event' && a[1] === nombr
   chequear('Lead NO lleva el nombre de quien reserva',
     lead[0] && !JSON.stringify(lead[0][2]).includes('Prueba'), JSON.stringify(lead[0] && lead[0][2]));
   chequear('GA4 recibe generate_lead', evGa(ga, 'generate_lead').length === 1);
-  chequear('Sigue la conversión de Google Ads que ya existía',
-    ga.some((a) => a[0] === 'event' && a[1] === 'conversion'));
+  // La conversión de Google Ads se sacó a propósito (30/9) y Tres dejó de
+  // invertir en Google Ads (24/10). Ya no se chequea.
 
   await ctx.close();
 }

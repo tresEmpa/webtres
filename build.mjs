@@ -17,6 +17,7 @@ import { renderReservasList } from './src/templates/reservas-list.mjs';
 import { renderEvento } from './src/templates/evento.mjs';
 import { renderDia } from './src/templates/dia.mjs';
 import { renderCursos } from './src/templates/cursos.mjs';
+import { renderIntensivo } from './src/templates/intensivo.mjs';
 import { renderStandupLaPlata } from './src/templates/standup-la-plata.mjs';
 import { renderNotFound } from './src/templates/not-found.mjs';
 
@@ -139,14 +140,22 @@ async function loadJSON(rel, fallback) {
 
 function sitemap(eventosUpcoming) {
   const base = 'https://tresempanadas.com.ar';
+  // lastmod de las páginas que listan funciones = la última vez que cambió
+  // alguna de las funciones que muestran. Nada de "fecha del build": si
+  // lastmod cambia en cada push sin que cambie la página, Google lo ignora.
+  const ultimo = (evs) => evs
+    .map((ev) => String(ev.actualizado || '').slice(0, 10))
+    .filter(Boolean).sort().pop() || null;
+  const lmTodas = ultimo(eventosUpcoming);
+  const lmDia = (d) => ultimo(eventosUpcoming.filter((ev) => ev.dia_semana === d));
   const urls = [
-    { loc: `${base}/`, freq: 'weekly', pri: '1.0' },
-    { loc: `${base}/reservas/`, freq: 'weekly', pri: '0.9' },
-    { loc: `${base}/reservas/viernes/`, freq: 'weekly', pri: '0.9' },
-    { loc: `${base}/reservas/jueves/`, freq: 'weekly', pri: '0.9' },
+    { loc: `${base}/`, freq: 'weekly', pri: '1.0', lastmod: lmTodas },
+    { loc: `${base}/reservas/`, freq: 'weekly', pri: '0.9', lastmod: lmTodas },
+    { loc: `${base}/reservas/viernes/`, freq: 'weekly', pri: '0.9', lastmod: lmDia('viernes') },
+    { loc: `${base}/reservas/jueves/`, freq: 'weekly', pri: '0.9', lastmod: lmDia('jueves') },
     { loc: `${base}/stand-up-la-plata/`, freq: 'weekly', pri: '0.9' },
     { loc: `${base}/cursos/`, freq: 'monthly', pri: '0.8' },
-    { loc: `${base}/carta/`, freq: 'monthly', pri: '0.3' },
+    { loc: `${base}/intensivo/`, freq: 'weekly', pri: '0.8' },
   ];
   // changefreq 'daily' era mentira para una función a cinco semanas, y Google
   // le da poca bola igual. Lo que sí usa es lastmod, y cada evento ya trae su
@@ -273,16 +282,16 @@ async function main() {
   await medirFlyers(eventos);
   console.log(`  · ${eventos.length} eventos cargados`);
 
-  // 4) Home
-  await writeFile('index.html', renderHome(YEAR));
-
-  // 5) Listado de reservas (próximos, mismos filtros que el PHP)
+  // 4) Listado de reservas (próximos, mismos filtros que el PHP)
   const listado = listarEventos(eventos, {
     estados: ['activo', 'programado', 'agotado'],
     orden: 'asc',
     incluirPasados: false,
     now: NOW,
   });
+
+  // 5) Home (usa el listado para la tarjeta "Próxima función")
+  await writeFile('index.html', renderHome(YEAR, listado, NOW));
   await writeFile('reservas/index.html', renderReservasList(listado, YEAR));
 
   // 6) Una página por evento (incluye pasados, para no romper links viejos)
@@ -301,7 +310,8 @@ async function main() {
   }
 
   // 7) Cursos
-  await writeFile('cursos/index.html', renderCursos(YEAR, lugar));
+  await writeFile('cursos/index.html', renderCursos(YEAR, lugar, NOW));
+  await writeFile('intensivo/index.html', renderIntensivo(YEAR, NOW));
 
   // 8) Landing limpia para Google Ads
   await writeFile('stand-up-la-plata/index.html', renderStandupLaPlata(YEAR));

@@ -6,7 +6,7 @@
   <title>Carta — Tres Empanadas Comedia</title>
   <meta name="description" content="Carta digital de Tres Empanadas Comedia: empanadas, cinco cervezas artesanales tiradas, latas y opciones sin alcohol. Pedí desde la mesa y acercate a la barra.">
   <link rel="canonical" href="https://tresempanadas.com.ar/carta/">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="noindex, follow">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -28,13 +28,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&display=swap">
 
-  <!-- Google Ads -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11304999909"></script>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LCT7DQDGLR"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'AW-11304999909');
+    gtag('config', 'G-LCT7DQDGLR');
   </script>
 
   <!-- Meta Pixel -->
@@ -95,6 +95,7 @@
       padding: 1.8rem 1rem 1.4rem;
       color: var(--dorado);
     }
+    header h1,
     header h3 {
       font-family: var(--font-display);
       font-size: 1.85rem;
@@ -223,6 +224,8 @@
       flex: 1;
       line-height: 1.3;
     }
+
+    .product-label .detalle { display: block; font-size: 0.78rem; opacity: 0.7; margin-top: 2px; }
 
     /* CONTROLES +/- */
     .qty-control {
@@ -629,7 +632,7 @@
   <button id="toggle-tema" type="button" aria-label="Cambiar modo claro/oscuro" title="Modo claro / oscuro">🌙</button>
 
   <header>
-    <h3>Tres Empanadas Comedia</h3>
+    <h1>Tres Empanadas Comedia</h1>
     <h4>¡Qué bueno que viniste!</h4>
     <p>Hacé tu pedido y acercate a la barra.</p>
   </header>
@@ -663,8 +666,8 @@
           <span class="product-label">IPA | Lupulada — $6.000</span>
           <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
         </li>
-        <li data-name="Budweiser Lata" data-price="4500">
-          <span class="product-label">LATA Budweiser — $4.500</span>
+        <li data-name="Lata Budweiser o Amstel" data-price="4500">
+          <span class="product-label">LATA Budweiser o Amstel — $4.500</span>
           <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
         </li>
         <li data-name="Cerveza SIN" data-price="4500">
@@ -713,16 +716,16 @@
     <div class="category">
       <div class="category-header"><h2>Snacks 🍿</h2></div>
       <ul>
-        <li data-name="Maní" data-price="2500">
-          <span class="product-label">Maní Salado — $2.500</span>
+        <li data-name="Maní" data-price="3000">
+          <span class="product-label">Maní Salado — $3.000</span>
           <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
         </li>
-        <li data-name="Papitas" data-price="2500">
-          <span class="product-label">Papitas Fritas — $2.500</span>
+        <li data-name="Papitas" data-price="3000">
+          <span class="product-label">Papitas Fritas — $3.000</span>
           <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
         </li>
-        <li data-name="Conitos de Queso" data-price="2500">
-          <span class="product-label">Conitos de Queso — $2.500</span>
+        <li data-name="Conitos de Queso" data-price="3000">
+          <span class="product-label">Conitos de Queso — $3.000</span>
           <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
         </li>
       </ul>
@@ -740,8 +743,8 @@
           <span class="product-label">Jamón y Queso — $3.000</span>
           <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
         </li>
-        <li data-name="Calabaza" data-price="3000">
-          <span class="product-label">Calabaza y Muzzarella — $3.000</span>
+        <li data-name="Verdura" data-price="3000">
+          <span class="product-label">Verdura — $3.000<small class="detalle">Acelga, muzzarella, morrón y cebolla</small></span>
           <div class="qty-control"><button class="qty-btn menos" disabled>−</button><span class="qty-display">0</span><button class="qty-btn mas">+</button></div>
         </li>
       </ul>
@@ -774,7 +777,7 @@
       #grupo-nombre .nombre-hint { font-weight: 400; opacity: .65; font-size: .85em; }
     </style>
     <div class="input-group" id="grupo-nombre">
-      <label for="nombre">Tu nombre / alias <span class="nombre-hint">— para llamarte cuando esté listo</span></label>
+      <label for="nombre">Tu nombre <span class="nombre-hint">— para llamarte cuando esté listo</span></label>
       <input type="text" id="nombre" placeholder="¿A quién llamamos?" autocomplete="name" enterkeyhint="send">
     </div>
     <div id="saludo-nombre"></div>

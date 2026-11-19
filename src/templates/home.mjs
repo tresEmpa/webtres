@@ -1,5 +1,6 @@
 /** Home — port de index.php */
-import { page } from './layout.mjs';
+import { page, GOOGLE } from './layout.mjs';
+import { proximaFuncion } from './proxima-funcion.mjs';
 
 const FAQ_SCHEMA = `<script type="application/ld+json">
 {
@@ -42,7 +43,7 @@ function semaforo(aria) {
       </div>`;
 }
 
-export function renderHome(year) {
+export function renderHome(year, listado = [], now = new Date()) {
   const content = `
 <!-- ============= APERTURA ============= -->
 <section class="apertura">
@@ -63,13 +64,16 @@ export function renderHome(year) {
       <em>El stand up de la ciudad.</em>
     </h1>
 
+    <!-- Próxima función: atajo a reservar en el hueco del hero (sólo desktop) -->
+    ${proximaFuncion(listado, now)}
+
     <!-- Chapa de Google: prueba social sin una cantidad que quede desactualizada -->
     <a class="gmaps-chapa" href="https://share.google/dyTTJVXR25JTlU7kX"
        target="_blank" rel="noopener" aria-label="4,9 estrellas en Google Maps">
       <span class="gmaps-chapa__nota">4,9</span>
       <span class="gmaps-chapa__lado">
         <span class="gmaps-estrellas" aria-hidden="true">${'★'.repeat(5)}</span>
-        <span class="gmaps-chapa__txt">Opiniones en Google Maps</span>
+        <span class="gmaps-chapa__txt">${GOOGLE.opiniones} en Google Maps</span>
       </span>
     </a>
 
@@ -233,10 +237,10 @@ export function renderHome(year) {
 </style>
 <section class="curso-banner">
   <div class="curso-banner__inner">
-    <span class="curso-banner__badge">🔥 Cupos limitados · Arranca jueves 13/8</span>
+    <span class="curso-banner__badge">Presencial, online o con práctica</span>
     <h2>¿Y si el próximo en el escenario sos vos?</h2>
-    <p>Curso de stand up en La Plata: aprendé a escribir, probá tu material y subite al escenario. Cuota $35.000 por mes.</p>
-    <a href="/cursos/#inscripcion" class="curso-banner__btn">Anotarme al curso →</a>
+    <p>Curso de stand up en La Plata: aprendé a escribir, probá tu material y subite al escenario. Elegí entre el curso presencial, el online gratis o el online con práctica los jueves.</p>
+    <a href="/cursos/#opciones" class="curso-banner__btn">Ver los cursos →</a>
   </div>
 </section>
 
@@ -368,7 +372,7 @@ export function renderHome(year) {
 `;
 
   return page({
-    title: 'Tres Empanadas Comedia | Microteatro de Stand Up en La Plata',
+    title: 'Tres Empanadas Comedia | Club de comedia en 43 y 22, La Plata',
     description: 'Vení a reír. Microteatro de stand up en La Plata. Funciones jueves y viernes 21:30hs. Reservá gratis.',
     url: 'https://tresempanadas.com.ar/',
     image: 'https://tresempanadas.com.ar/assets/img/og-default.jpg',

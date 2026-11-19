@@ -1,19 +1,10 @@
-/** Landing informativa para Google Ads: sin venta, sin reservas, sin CTA de conversión.
+/** /stand-up-la-plata/ — página de SEO para "stand up la plata".
  *
- *  Objetivo: presencia. La página cuenta qué es el lugar, cuándo abre y dónde
- *  queda. No pide nada. No hay botón de reservar, no hay enlaces a /reservas/,
- *  no aparece la palabra "gratis" ni nada que Google pueda leer como venta de
- *  entradas (el clasificador venía marcando la campaña por la landing anterior).
- *  Si alguien quiere venir, tiene los datos de contacto en el pie.
- *
- *  OJO al redactar: el filtro automático de Google no lee negaciones. Escribir
- *  "no se venden entradas" le deja igual la frase "venden entradas" en una
- *  landing de anuncio. Por eso se dice "no hay ticketera ni cobro anticipado",
- *  que significa lo mismo y no usa ninguna de las palabras marcadas.
- *
- *  El único enlace interno permitido acá es /cursos/. Nada de /reservas/ ni sus
- *  derivados, y tampoco /carta/: la página muestra precios y esta landing no
- *  habla de plata (decisión de Tres, 27/9).
+ *  Hasta el 24/10/2026 fue la landing de Google Ads y estaba recortada para el
+ *  clasificador de Google (sin enlaces a /reservas/, navegación mínima).
+ *  Tres decidió no invertir más en Google Ads (la pauta va a Meta), así que la
+ *  página vuelve a ser una página normal del sitio: navegación completa, atajo
+ *  a reservar y enlaces internos a funciones, carta y cursos.
  */
 import { page } from './layout.mjs';
 
@@ -46,51 +37,6 @@ function semaforo(aria) {
 const SCHEMA = `<script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "ComedyClub",
-  "@id": "https://tresempanadas.com.ar/#comedyclub",
-  "name": "Tres Empanadas Comedia",
-  "alternateName": "Club de Comedia Tres Empanadas",
-  "description": "Microteatro de stand up en La Plata. Sala chica, comediantes platenses y funciones jueves y viernes en 43 y 22.",
-  "url": "https://tresempanadas.com.ar/stand-up-la-plata/",
-  "image": [
-    "https://tresempanadas.com.ar/assets/img/interior-publico.jpg",
-    "https://tresempanadas.com.ar/assets/img/escenario-mondrian.jpg",
-    "https://tresempanadas.com.ar/assets/img/lugar-fachada.webp"
-  ],
-  "logo": "https://tresempanadas.com.ar/assets/img/logo.png",
-  "telephone": "+5492215247488",
-  "email": "info@tresempanadas.com.ar",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Calle 43 N° 1349",
-    "addressLocality": "La Plata",
-    "addressRegion": "Buenos Aires",
-    "postalCode": "B1902AFA",
-    "addressCountry": "AR"
-  },
-  "areaServed": [
-    {"@type": "City", "name": "La Plata"},
-    {"@type": "City", "name": "Berisso"},
-    {"@type": "City", "name": "Ensenada"}
-  ],
-  "openingHoursSpecification": [{
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Thursday", "Friday"],
-    "opens": "21:00",
-    "closes": "23:45"
-  }],
-  "publicAccess": true,
-  "isAccessibleForFree": false,
-  "sameAs": [
-    "https://www.instagram.com/tresempanadascomedia",
-    "https://www.facebook.com/TresEmpanadasComedia",
-    "https://nochesdestandup.com.ar"
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {"@type":"Question","name":"¿Dónde hay stand up en La Plata?","acceptedAnswer":{"@type":"Answer","text":"En Tres Empanadas Comedia, Calle 43 N° 1349 esquina 22, en el casco de La Plata. Es la fachada violeta con cortinas amarillas."}},
@@ -114,6 +60,7 @@ export function renderStandupLaPlata(year) {
         el público cerca del escenario y una función distinta cada semana.
       </p>
       <div class="ads-actions">
+        <a class="btn btn-primary" href="/reservas/">Ver funciones y reservar</a>
         <a class="btn btn-outline" href="#donde">Ver dónde queda</a>
       </div>
     </div>
@@ -196,12 +143,12 @@ export function renderStandupLaPlata(year) {
       <article>
         <h3>Los ciclos</h3>
         <p>
-          Los viernes toca <strong>Sociedad Platense de Stand Up</strong>, con Checho
+          Los viernes toca <a href="/reservas/viernes/"><strong>Sociedad Platense de Stand Up</strong></a>, con Checho
           Falco y Julián Dorati. Es el clásico de la casa, y viene haciendo comedia
           en La Plata desde 2013.
         </p>
         <p>
-          Muchos jueves va <strong>El Rotativo Platense</strong>: ahí el line-up cambia
+          Muchos jueves va <a href="/reservas/jueves/"><strong>El Rotativo Platense</strong></a>: ahí el line-up cambia
           cada semana, con comediantes de años de escenario y voces nuevas que rotan.
         </p>
         <p>
@@ -228,6 +175,10 @@ export function renderStandupLaPlata(year) {
           gorra: al final aportás lo que puedas y lo que te haya parecido que valió.
         </p>
         <p>
+          Reservar es gratis y te guarda el lugar:
+          <a href="/reservas/">elegí la función</a>.
+        </p>
+        <p>
           Se puede ver el show sin consumir nada.
         </p>
       </article>
@@ -236,7 +187,7 @@ export function renderStandupLaPlata(year) {
         <h3>Para comer y tomar</h3>
         <p>
           Hay <strong>empanadas</strong>, snacks, cervezas artesanales tiradas, latas
-          y opciones sin alcohol.
+          y opciones sin alcohol. Mirá <a href="/carta/">la carta</a>.
         </p>
         <p>
           No tenemos menú sin TACC, pero podés traer tu propia comida. Sin drama.
@@ -253,8 +204,8 @@ export function renderStandupLaPlata(year) {
           rápido.
         </p>
         <p>
-          Los jueves desde las 18:00 hay
-          <a href="/cursos/">taller libre de stand up</a>.
+          Los jueves desde las 19:30 hay
+          <a href="/cursos/">espacio abierto de stand up</a>, para trabajar tu material.
         </p>
       </article>
 
@@ -305,6 +256,5 @@ export function renderStandupLaPlata(year) {
     currentPath: '/stand-up-la-plata/',
     content,
     year,
-    adsSafe: true,
   });
 }

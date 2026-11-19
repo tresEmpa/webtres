@@ -29,16 +29,13 @@ export const HORA_CIERRE = 22;        // 22:00
 export const ZONA = 'America/Argentina/Buenos_Aires';
 
 /** WhatsApp del local (sin +, formato wa.me). */
-export const WHATSAPP = '542215247488';
+export const WHATSAPP = '5492215247488';
 
 /**
  * ID de Google Analytics 4. Empieza con "G-".
- * ⚠ HOY ESTÁ VACÍO: el sitio tiene gtag cargado sólo para Google Ads
- * (AW-11304999909), que NO es lo mismo que Analytics. Mientras esto esté vacío
- * los eventos igual se disparan, pero ninguna propiedad de Analytics los recibe.
  * Se saca de analytics.google.com → Administrar → Flujos de datos.
  */
-export const GA4_ID = '';
+export const GA4_ID = 'G-LCT7DQDGLR';
 
 // ══════════════════════════════════════════════════════════════════════
 //  1) ESTADO DE LA NOCHE
@@ -280,4 +277,23 @@ export const WSP_FLOTANTE_JS = `
                                 'contact',  { content_category: 'wsp_flotante' });
     });
   })();
+  </script>`;
+
+/**
+ * Clicks en los atajos a reservar ([data-atajo]): botón de la cabecera mobile
+ * y tarjeta "Próxima función" de la home.
+ *
+ * Evento personalizado a propósito, NO Lead: un click no es una reserva, y
+ * meterlo en Lead inflaría la señal con la que optimiza Meta. Sirve para ver
+ * si los atajos se usan; la reserva real se sigue midiendo en cada función.
+ */
+export const ATAJO_JS = `
+  <script>
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-atajo]');
+    if (!a) return;
+    var cat = a.getAttribute('data-atajo');
+    try { if (typeof fbq === 'function') fbq('trackCustom', 'AtajoReserva', { content_category: cat }); } catch (x) {}
+    try { if (typeof gtag === 'function') gtag('event', 'select_content', { content_type: cat, transport_type: 'beacon' }); } catch (x) {}
+  });
   </script>`;

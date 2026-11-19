@@ -35,14 +35,14 @@ const EXTRA = (lugar) => `
   <p>🔞 El humor y el ambiente son <strong>para adultos</strong>.</p>
   <p>
     🎂 ¿Querés festejar con tu grupo?
-    <a href="https://wa.me/${esc(lugar.whatsapp || '542215247488')}?text=${encodeURIComponent('Hola! Consulta sobre festejos / grupos.')}"
+    <a href="https://wa.me/${esc(lugar.whatsapp || '5492215247488')}?text=${encodeURIComponent('Hola! Consulta sobre festejos / grupos.')}"
        target="_blank" rel="noopener">Escribinos por WhatsApp</a>.
   </p>
 
   <h3>Aprendé stand-up</h3>
   <p>
     ¿Querés hacer reír? Tenemos cursos y coaching personalizados.
-    Los <strong>jueves desde las 18hs hay taller libre</strong>.
+    Los <strong>jueves desde las 19:30 hay espacio abierto</strong> para trabajar tu material.
   </p>
   <p>
     📝 <a href="/cursos/" target="_blank" rel="noopener">Ver próximo curso</a>
@@ -262,7 +262,7 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
   const [isoStart, isoEnd] = eventoFechasISO(ev);
   const [schemaStatus, schemaAvail] = eventoSchemaEstado(estado);
 
-  const wa = esc(lugar.whatsapp || '542215247488');
+  const wa = esc(lugar.whatsapp || '5492215247488');
 
   // Cuándo se abren las reservas de ESTA función (lunes de su semana). Para
   // una función ya activa las reservas están abiertas, así que la fecha nunca
@@ -583,7 +583,22 @@ function enviarReserva(e) {
   var show = ${JSON.stringify(ev.nombre_show)};
   var evId = ${JSON.stringify(ev.id)};
 
-  // Vio la función.
+  // Vio la función. El layout no dispara su ViewContent genérico en estas
+  // páginas (viewContentPropio), así sale uno solo, con categoría y eventID.
+  TEP.track('ViewContent', { content_name: show, content_category: 'funcion' },
+            'view_item',    { content_name: show, content_category: 'funcion' });
+
+  // Empezó a completar el formulario: primer foco en cualquier campo, una sola
+  // vez por sesión y por función.
+  var form = document.getElementById('reserva-form');
+  if (form) {
+    form.addEventListener('focusin', function () {
+      TEP.unaVez('checkout:' + evId, function () {
+        TEP.track('InitiateCheckout', { content_name: show },
+                  'begin_checkout',   { content_name: show });
+      });
+    }, { once: true });
+  }
 
   // Consultó por WhatsApp estando sobre la hora. Mismo Lead, otra categoría.
   // Sin preventDefault: el link abre en pestaña nueva y la página no se
@@ -625,7 +640,7 @@ ${trackScript}
   return page({
     // El año va SIEMPRE en el title aunque no se muestre en la página: sin él,
     // el 14 de mayo de 2027 generaría un título idéntico al de 2026.
-    title: `${ev.nombre_show} — ${fechaTitulo} | Tres Empanadas Comedia`,
+    title: `${ev.nombre_show} — ${fechaTitulo}`,
     description: metaDescripcion(ev, fechaH),
     // Función pasada: la página sigue viva (hay links viejos dando vueltas en
     // WhatsApp) pero sale del índice. Si no, se acumulan decenas de páginas
@@ -639,6 +654,7 @@ ${trackScript}
     extraCss: '/assets/css/reservas.css',
     extraSchema,
     currentPath: `/reservas/${ev.id}/`,
+    viewContentPropio: true,
     // Sólo la fecha de ESTA función: el jueves a las 21:10 se apaga la página
     // del jueves, no la del viernes que viene.
     funciones: formScript ? [ev.fecha] : null,

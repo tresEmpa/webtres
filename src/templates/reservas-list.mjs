@@ -2,7 +2,7 @@
 import { page, esc, GOOGLE, estrellaSVG } from './layout.mjs';
 import { eventoCard } from './evento-card.mjs';
 
-const WA = '542215247488';
+const WA = '5492215247488';
 
 /** Es la noche del show, entre las 20 y las 22: el formulario ya no sirve. */
 const AVISO_ULTIMA_HORA = `
@@ -34,7 +34,7 @@ const CHAPA_GOOGLE = `
   <span class="gmaps-chapa__nota">${GOOGLE.nota}</span>
   <span class="gmaps-chapa__lado">
     <span class="gmaps-estrellas">${estrellaSVG(18).repeat(5)}</span>
-    <span class="gmaps-chapa__txt">Opiniones en Google Maps</span>
+    <span class="gmaps-chapa__txt">${GOOGLE.opiniones} en Google Maps</span>
   </span>
 </a>`;
 
@@ -132,6 +132,10 @@ const EXTRA = `
     🎭 ¿Primera vez? Te contamos <a href="/stand-up-la-plata/">cómo es una noche de stand up
     en La Plata</a>: horarios, cuánto sale y qué esperar.
   </p>
+  <p>
+    📅 Conocé cada ciclo: <a href="/reservas/viernes/">la Sociedad Platense, los viernes</a>
+    y <a href="/reservas/jueves/">El Rotativo Platense, los jueves</a>.
+  </p>
 
   <div class="tep-galeria">
     <figure class="tep-galeria__item">
@@ -155,7 +159,7 @@ const EXTRA = `
   <p>🔞 El humor y el ambiente son <strong>para adultos</strong>.</p>
   <p>
     🎂 ¿Querés festejar con tu grupo?
-    <a href="https://wa.me/542215247488?text=Hola%21%20Consulta%20por%20festejos" target="_blank" rel="noopener">Escribinos por WhatsApp</a>.
+    <a href="https://wa.me/5492215247488?text=Hola%21%20Consulta%20por%20festejos" target="_blank" rel="noopener">Escribinos por WhatsApp</a>.
   </p>
 </section>`;
 
@@ -211,7 +215,7 @@ export function renderReservasList(eventos, year) {
     <h2>Por ahora no hay funciones cargadas</h2>
     <p>Estamos preparando las próximas fechas. Mientras tanto, podés escribirnos por WhatsApp y te avisamos apenas tengamos novedades.</p>
     <a class="btn btn-primary"
-       href="https://wa.me/542215247488?text=${encodeURIComponent('Hola! Cuándo es la próxima función en Tres Empanadas?')}"
+       href="https://wa.me/5492215247488?text=${encodeURIComponent('Hola! Cuándo es la próxima función en Tres Empanadas?')}"
        target="_blank" rel="noopener">
       Escribirnos por WhatsApp →
     </a>
@@ -240,8 +244,8 @@ ${CARRUSEL}
 </section>
 ${AVISO_ULTIMA_HORA}
 ${AVISO_CERRADO}
-${SEMAFORO_TOP}
 ${cuerpo}
+${SEMAFORO_TOP}
 ${EXTRA}
 ${BLOQUE_RESENAS}
 <script>
@@ -275,8 +279,8 @@ ${BLOQUE_RESENAS}
 `;
 
   return page({
-    title: 'Reservar — Próximas funciones | Tres Empanadas Comedia',
-    description: 'Próximas funciones de stand up en Tres Empanadas — La Plata. Reservá gratis tu mesa.',
+    title: 'Funciones de esta semana | Stand up hoy en La Plata',
+    description: 'Stand up jueves y viernes 21:30 en Tres Empanadas, 43 y 22, La Plata. Elegí la función y reservá gratis: el show es a la gorra.',
     url: 'https://tresempanadas.com.ar/reservas/',
     bodyClass: 'page-reservas-listado',
     extraCss: '/assets/css/reservas.css',

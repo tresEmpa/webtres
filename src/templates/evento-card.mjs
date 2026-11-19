@@ -14,7 +14,7 @@ const MICRO_GOOGLE = `
         <span class="evento-card__gmaps">
           <span class="gmaps-estrellas">${estrellaSVG(13)}</span>
           <span class="evento-card__gmaps-nota">${GOOGLE.nota}</span>
-          <span>· Opiniones en Google</span>
+          <span>· ${GOOGLE.opiniones.toLowerCase()} en Google</span>
         </span>`;
 
 /**

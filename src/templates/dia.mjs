@@ -19,7 +19,7 @@
 import { page, esc, GOOGLE, estrellaSVG } from './layout.mjs';
 import { eventoCard } from './evento-card.mjs';
 
-const WA = '542215247488';
+const WA = '5492215247488';
 
 /** Lo propio de cada ciclo. Es el contenido que le da sentido a la URL. */
 const DIAS = {
@@ -126,12 +126,26 @@ export function renderDia(dia, eventosDelDia, year, now = new Date()) {
 
   // A propósito no lleva schema Event: la función puntual ya lo declara en su
   // propia página, y dos URLs marcando el mismo evento sólo confunden a Google.
-  const extraSchema = `<script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>`;
+  // Lo que sí lleva es un ItemList que sólo apunta a esas páginas (patrón de
+  // "página resumen" de Google): le dice que esta URL es la puerta de entrada
+  // a las próximas fechas, sin repetir los datos del evento.
+  const itemList = eventosDelDia.length ? {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Próximas funciones de ${d.ciclo}`,
+    itemListElement: eventosDelDia.map((ev, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `https://tresempanadas.com.ar/reservas/${ev.id}/`,
+    })),
+  } : null;
+  const extraSchema = [breadcrumb, itemList].filter(Boolean)
+    .map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join('\n');
 
   const tallerBlock = d.taller ? `
-  <h3>De paso: el taller</h3>
+  <h3>De paso: el espacio abierto</h3>
   <p>
-    Los jueves desde las 18hs hay <strong>taller libre</strong>, antes del show.
+    Los jueves desde las 19:30 hay <strong>espacio abierto</strong> para trabajar tu material, antes del show.
     Si querés probar, <a href="/cursos/">mirá cómo es</a>.
   </p>` : '';
 
@@ -145,7 +159,7 @@ export function renderDia(dia, eventosDelDia, year, now = new Date()) {
       <span class="gmaps-chapa__nota">${GOOGLE.nota}</span>
       <span class="gmaps-chapa__lado">
         <span class="gmaps-estrellas">${estrellaSVG(18).repeat(5)}</span>
-        <span class="gmaps-chapa__txt">Opiniones en Google Maps</span>
+        <span class="gmaps-chapa__txt">${GOOGLE.opiniones} en Google Maps</span>
       </span>
     </a>
   </div>

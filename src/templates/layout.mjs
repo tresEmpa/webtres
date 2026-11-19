@@ -4,7 +4,7 @@
  */
 
 import {
-  ESTADO_CSS, estadoScript, TRACKING_JS, WSP_FLOTANTE_JS, GA4_ID,
+  ESTADO_CSS, estadoScript, TRACKING_JS, WSP_FLOTANTE_JS, ATAJO_JS, GA4_ID,
 } from '../lib/cliente.mjs';
 
 const SITE_NAME = 'Tres Empanadas Comedia';
@@ -16,6 +16,8 @@ const DEFAULT_IMAGE = `${BASE_URL}/assets/img/og-default.jpg`;
 /** Reputación en Google Maps. La nota queda fija y no mostramos cantidades. */
 export const GOOGLE = {
   nota: '4,9',
+  // Redondeado a propósito: no queda viejo con cada reseña nueva.
+  opiniones: 'Casi 200 opiniones',
   url: 'https://share.google/dyTTJVXR25JTlU7kX',
 };
 
@@ -38,13 +40,19 @@ const ORG_SCHEMA = `
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": "ComedyClub",
     "@id": "https://tresempanadas.com.ar/#business",
     "name": "Tres Empanadas Comedia",
-    "alternateName": "Casa de Comedia",
+    "alternateName": ["Casa de Comedia", "Club de Comedia Tres Empanadas"],
+    "description": "Club de comedia y microteatro de stand up en La Plata. Sala chica, comediantes platenses y funciones jueves y viernes en 43 y 22. El show es a la gorra.",
     "url": "https://tresempanadas.com.ar",
     "logo": "https://tresempanadas.com.ar/assets/img/logo.png",
-    "image": "https://tresempanadas.com.ar/assets/img/og-default.jpg",
+    "image": [
+      "https://tresempanadas.com.ar/assets/img/og-default.jpg",
+      "https://tresempanadas.com.ar/assets/img/interior-publico.jpg",
+      "https://tresempanadas.com.ar/assets/img/escenario-mondrian.jpg",
+      "https://tresempanadas.com.ar/assets/img/lugar-fachada.webp"
+    ],
     "telephone": "+5492215247488",
     "email": "info@tresempanadas.com.ar",
     "address": {
@@ -55,6 +63,12 @@ const ORG_SCHEMA = `
       "postalCode": "B1902AFA",
       "addressCountry": "AR"
     },
+    "areaServed": [
+      {"@type": "City", "name": "La Plata"},
+      {"@type": "City", "name": "Berisso"},
+      {"@type": "City", "name": "Ensenada"}
+    ],
+    "publicAccess": true,
     "openingHoursSpecification": [{
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": ["Thursday", "Friday"],
@@ -76,7 +90,8 @@ const ORG_SCHEMA = `
     },
     "sameAs": [
       "https://www.instagram.com/tresempanadascomedia",
-      "https://www.facebook.com/TresEmpanadasComedia",
+      "https://www.youtube.com/@TresEmpanadasComediaLP",
+      "https://www.facebook.com/109058717527447",
       "https://twitter.com/StandUpDeNoche",
       "https://nochesdestandup.com.ar",
       "https://aprendestandup.com.ar"
@@ -84,17 +99,14 @@ const ORG_SCHEMA = `
   }
   </script>`;
 
-const TRACKING = `
-  <!-- Google Ads (gtag.js) — AW-11304999909 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11304999909"></script>
+const tracking = (opts = {}) => `
+  <!-- Google Analytics 4 — ${GA4_ID} (Google Ads se sacó el 26/10/2026) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_ID}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'AW-11304999909');${GA4_ID ? `
-    gtag('config', '${GA4_ID}');` : `
-    // Google Analytics 4: falta el ID "G-…". Cargalo en GA4_ID, arriba de
-    // src/lib/cliente.mjs, y los eventos empiezan a llegar a Analytics.`}
+    gtag('config', '${GA4_ID}');
   </script>
 
   <!-- Meta Pixel — 546014447181846 -->
@@ -109,11 +121,11 @@ const TRACKING = `
   'https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', '546014447181846');
   fbq('track', 'PageView');
-  fbq('track', 'ViewContent', {
+  ${opts.viewContentPropio ? '' : `fbq('track', 'ViewContent', {
     content_name: document.title || 'Tres Empanadas Comedia',
     content_type: 'show',
     content_category: 'shows'
-  });
+  });`}
   </script>
   <noscript>
     <img height="1" width="1" style="display:none"
@@ -202,7 +214,7 @@ ${opts.noindex ? '  <meta name="robots" content="noindex, follow">\n' : ''}
   ${extraCss ? `<link rel="stylesheet" href="${esc(extraCss)}">` : ''}
 ${ORG_SCHEMA}
   ${extraSchema || ''}
-${TRACKING}
+${tracking(opts)}
 ${TRACKING_JS}
 ${opts.funciones ? ESTADO_CSS + estadoScript(opts.funciones, !!opts.refrescarAgenda) : ''}
 </head>
@@ -218,6 +230,10 @@ ${opts.funciones ? ESTADO_CSS + estadoScript(opts.funciones, !!opts.refrescarAge
         </span>
       </a>
 
+${opts.adsSafe || currentPath.startsWith('/reservas') ? '' : `      <!-- Atajo a reservar, sólo mobile (en desktop ya está el CTA del nav).
+           No va en la landing de Ads ni dentro de /reservas, donde sobra. -->
+      <a href="/reservas/" class="site-header__reservar" data-atajo="atajo_header">Reservar</a>
+`}
       <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
         <span></span>
         <span></span>
@@ -238,12 +254,12 @@ ${opts.content || ''}
 
       <div class="site-footer__brand">
         <h3>Tres Empanadas Comedia</h3>
-        <p>Microteatro de stand up en La Plata.</p>
+        <p>Microteatro de <a href="/stand-up-la-plata/">stand up en La Plata</a>.</p>
         <p style="margin-top: var(--space-md);">
           Calle 43 N° 1349, esquina 22<br>
           La Plata, Buenos Aires<br>
           <a href="https://wa.me/5492215247488">WhatsApp 221 524-7488</a><br>
-          <a href="mailto:info@tresempanadas.com.ar">info@tresempanadas.com.ar</a>
+          <!--email_off--><a href="mailto:info@tresempanadas.com.ar">info@tresempanadas.com.ar</a><!--/email_off-->
         </p>
         <p style="margin-top: var(--space-md);">
           Funciones jueves y viernes — 21:30hs
@@ -254,7 +270,7 @@ ${opts.content || ''}
         <h4>Más del proyecto</h4>
         <ul>
           <li><a href="https://nochesdestandup.com.ar">Noches de Stand Up — nuestra historia</a></li>
-          <li><a href="https://aprendestandup.com.ar">Aprendé Stand Up — el curso</a></li>
+          <li><a href="https://aprendestandup.com.ar">Aprende Stand Up — el curso</a></li>
         </ul>
       </div>
 
@@ -262,7 +278,8 @@ ${opts.content || ''}
         <h4>Seguinos</h4>
         <ul>
           <li><a href="https://www.instagram.com/tresempanadascomedia">Instagram</a></li>
-          <li><a href="https://www.facebook.com/TresEmpanadasComedia">Facebook</a></li>
+          <li><a href="https://www.youtube.com/@TresEmpanadasComediaLP">YouTube</a></li>
+          <li><a href="https://www.facebook.com/109058717527447">Facebook</a></li>
           <li><a href="${GOOGLE.url}">Google Maps · ${GOOGLE.nota} ⭐</a></li>
         </ul>
       </div>
@@ -329,6 +346,7 @@ ${opts.content || ''}
     });
   </script>
 ${WSP_FLOTANTE_JS}
+${ATAJO_JS}
 </body>
 </html>`;
 }
