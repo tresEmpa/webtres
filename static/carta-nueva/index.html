@@ -67,13 +67,13 @@ button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:12px 16px
 .gracias{text-align:center;padding:18px}
 .gracias a{display:inline-block;background:var(--dorado);color:var(--negro);font-family:var(--fd);font-weight:800;border-radius:12px;padding:14px 18px;text-decoration:none;margin-top:12px}
 .gorra-btn{display:block;width:100%;margin:18px 0 10px;background:transparent;border:2px dashed var(--dorado);color:var(--dorado);font-family:var(--fd);font-weight:800;border-radius:12px;padding:12px}
-.gorra{background:#141414;color:#f6efe0;border:3px dashed var(--dorado);border-radius:14px;padding:14px;margin:18px 0 10px;text-align:center}
-.gorra h2{font-family:var(--fd);color:var(--dorado);margin:0 0 6px}
-.gorra .alias{color:var(--dorado);font-size:1.4rem}
+.gorra{background:var(--papel);color:var(--tx);border:3px dashed var(--dorado);border-radius:14px;padding:14px;margin:18px 0 10px;text-align:center}
+.gorra h2{font-family:var(--fd);color:var(--rojo);margin:0 0 6px}
+.gorra .alias{color:var(--rojo);font-size:1.4rem}
 .gorra .nota{font-size:.85rem;opacity:.8;margin-top:8px}
 .gorra a,.gorra button{display:block;width:100%;margin-top:8px;border-radius:12px;padding:12px;font-family:var(--fd);font-weight:800;text-decoration:none;box-sizing:border-box}
 .gorra button{background:var(--dorado);color:var(--negro);border:0}
-.gorra a{background:transparent;color:var(--dorado);border:2px solid var(--dorado)}
+.gorra a{background:transparent;color:var(--tx);border:2px solid var(--tx)}
 .err{color:#ffd9d4;background:var(--tinto);padding:10px;border-radius:10px;margin:8px 0}
 </style>
 </head>
@@ -298,16 +298,16 @@ function gorraCard() {
   return gorraAbierta();
 }
 function gorraAbierta() {
-  const btn = h('button', {}, 'Copiar alias de la gorra');
+  const btn = h('button', {}, 'Copiar alias');
   btn.onclick = async () => {
-    try { await navigator.clipboard.writeText(GORRA_ALIAS); btn.textContent = '✓ ¡Alias de la gorra copiado!'; setTimeout(() => { btn.textContent = 'Copiar alias de la gorra'; }, 2500); }
+    try { await navigator.clipboard.writeText(GORRA_ALIAS); btn.textContent = '✓ ¡Alias copiado!'; setTimeout(() => { btn.textContent = 'Copiar alias'; }, 2500); }
     catch (e) { const el = document.getElementById('alias-gorra'); const r = document.createRange(); r.selectNodeContents(el); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
   };
-  return h('div', { class: 'gorra' }, h('h2', {}, '🧢 La gorra es para los comediantes'),
-    h('p', {}, 'El show es a la gorra: aportá lo que puedas. ¡Que no sean ratas! 😄'),
+  return h('div', { class: 'gorra' }, h('h2', {}, '🧢 Para los comediantes'),
+    h('p', {}, 'No aportes solo vos: decile a los demás que no sean ratas 😄'),
     h('div', { class: 'alias', id: 'alias-gorra' }, GORRA_ALIAS), btn,
-    h('a', { href: GORRA_MP, target: '_blank', rel: 'noopener' }, '💰 Aportar con Mercado Pago'),
-    h('div', { class: 'nota' }, 'Esto NO paga tu consumo. Tu cuenta se paga aparte, al alias del club.'));
+    h('a', { href: GORRA_MP, target: '_blank', rel: 'noopener' }, '💳 Tarjeta de crédito o débito'),
+    h('div', { class: 'nota' }, 'Esto no paga tu consumo: la cuenta va aparte.'));
 }
 
 function graciasCard() {
