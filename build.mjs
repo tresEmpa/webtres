@@ -13,6 +13,9 @@ import { fileURLToPath } from 'node:url';
 
 import { listarEventos, fechaHumana, enArchivo } from './src/lib/eventos.mjs';
 import { renderFuncionesAnteriores } from './src/templates/funciones-anteriores.mjs';
+import { renderComediante, renderComediantesIndex } from './src/templates/comediantes.mjs';
+import { cruzar, enlazarElenco } from './src/lib/comediantes.mjs';
+import { esc } from './src/templates/layout.mjs';
 import { renderHome } from './src/templates/home.mjs';
 import { renderReservasList } from './src/templates/reservas-list.mjs';
 import { renderEvento } from './src/templates/evento.mjs';
@@ -139,7 +142,7 @@ async function loadJSON(rel, fallback) {
   }
 }
 
-function sitemap(eventosUpcoming, archivo = []) {
+function sitemap(eventosUpcoming, archivo = [], comediantes = []) {
   const base = 'https://tresempanadas.com.ar';
   // lastmod de las páginas que listan funciones = la última vez que cambió
   // alguna de las funciones que muestran. Nada de "fecha del build": si
@@ -157,6 +160,8 @@ function sitemap(eventosUpcoming, archivo = []) {
     { loc: `${base}/stand-up-la-plata/`, freq: 'weekly', pri: '0.9' },
     { loc: `${base}/cursos/`, freq: 'monthly', pri: '0.8' },
     { loc: `${base}/intensivo/`, freq: 'weekly', pri: '0.8' },
+    { loc: `${base}/comediantes/`, freq: 'weekly', pri: '0.6' },
+    ...comediantes.map((c) => ({ loc: `${base}/comediantes/${c.slug}/`, freq: 'weekly', pri: '0.6' })),
     { loc: `${base}/funciones-anteriores/`, freq: 'weekly', pri: '0.5', lastmod: archivo[0]?.fecha || null },
   ];
   // changefreq 'daily' era mentira para una función a cinco semanas, y Google
@@ -307,9 +312,14 @@ async function main() {
   await writeFile('index.html', renderHome(YEAR, listado, NOW));
   await writeFile('reservas/index.html', renderReservasList(listado, YEAR));
 
+  // 5 bis) Comediantes con página propia, cruzados con los eventos.
+  const comediantes = cruzar(await loadJSON('comediantes.json', []), eventos, NOW);
+  // Para enlazar el elenco de cada función a la página del comediante.
+  const elencoHTML = (item) => enlazarElenco(item, comediantes, esc);
+
   // 6) Una página por evento (incluye pasados, para no romper links viejos)
   for (const ev of eventos) {
-    await writeFile(`reservas/${ev.id}/index.html`, renderEvento(ev, lugar, YEAR, NOW));
+    await writeFile(`reservas/${ev.id}/index.html`, renderEvento(ev, lugar, YEAR, NOW, elencoHTML));
   }
 
   // 6 bis) Páginas perennes de jueves y viernes.
@@ -328,6 +338,12 @@ async function main() {
     .sort((a, b) => (a.fecha < b.fecha ? 1 : a.fecha > b.fecha ? -1 : 0));
   await writeFile('funciones-anteriores/index.html', renderFuncionesAnteriores(archivo, YEAR, NOW));
 
+  // 6 quater) Comediantes
+  await writeFile('comediantes/index.html', renderComediantesIndex(comediantes, YEAR, NOW));
+  for (const c of comediantes) {
+    await writeFile(`comediantes/${c.slug}/index.html`, renderComediante(c, YEAR, NOW));
+  }
+
   // 7) Cursos
   await writeFile('cursos/index.html', renderCursos(YEAR, lugar, NOW));
   await writeFile('intensivo/index.html', renderIntensivo(YEAR, NOW));
@@ -339,7 +355,7 @@ async function main() {
   await writeFile('404.html', renderNotFound(YEAR));
 
   // 10) Sitemap (base + próximos eventos)
-  await writeFile('sitemap.xml', sitemap(listado, archivo));
+  await writeFile('sitemap.xml', sitemap(listado, archivo, comediantes));
 
   // 11) Agenda para las Functions jueves/viernes (todos los eventos, mínima)
   const agenda = eventos.map((ev) => ({

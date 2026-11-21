@@ -249,7 +249,7 @@ function globoWsp(ev, fechaH, wa, now) {
   </script>`;
 }
 
-export function renderEvento(ev, lugar, year, now = new Date()) {
+export function renderEvento(ev, lugar, year, now = new Date(), elencoHTML = (n) => esc(n)) {
   const hoy = hoyISO(now);
   const esPasado = ev.fecha < hoy;
   const estado = ev.estado || 'activo';
@@ -330,7 +330,7 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
   const heroDesc = ev.descripcion
     ? `<p class="evento-hero__desc">${esc(ev.descripcion)}</p>` : '';
   const heroElenco = (ev.elenco && ev.elenco.length)
-    ? `<div class="funcion-info__elenco"><strong>En escena</strong> ${esc(ev.elenco.join(' · '))}</div>` : '';
+    ? `<div class="funcion-info__elenco"><strong>En escena</strong> ${ev.elenco.filter(Boolean).map(elencoHTML).join(' · ')}</div>` : '';
   const flyer = ev.flyer
     ? `
 <section class="evento-flyer">

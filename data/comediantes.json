@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "checho-falco",
+    "nombre": "Checho Falco",
+    "alias": ["Checho Falco", "Checho Falco (MC)", "Presentado por Checho Falco"],
+    "bio": "Fundador de Tres Empanadas Comedia y de la productora Noches de Stand Up. Sube a escenarios desde 2013, cuando arrancó con Julián Dorati el dúo Dres & Reos en Las Tres Ranas. Hoy es parte del elenco estable de la Sociedad Platense de Stand Up.",
+    "instagram": "serfalco"
+  },
+  {
+    "slug": "julian-dorati",
+    "nombre": "Julián Dorati",
+    "alias": ["Julián Dorati", "Julian Dorati"],
+    "bio": "Cofundador de la productora en 2013, cuando con Checho Falco armó el dúo Dres & Reos (los dos son abogados). Es parte del elenco estable de la Sociedad Platense de Stand Up, todos los viernes en Tres Empanadas.",
+    "instagram": "yojuliandorati"
+  },
+  {
+    "slug": "ruben-vaena",
+    "nombre": "Rubén Vaena",
+    "alias": ["Rubén Vaena", "Ruben Vaena"],
+    "bio": "Alumno del curso de stand up de 2024 que se ganó la tarima. Alterna en la Sociedad Platense de Stand Up de los viernes y pasa seguido por El Rotativo Platense de los jueves.",
+    "instagram": "rubenvaena"
+  },
+  {
+    "slug": "ema-chanta",
+    "nombre": "Ema Chanta",
+    "alias": ["Ema Chanta"],
+    "bio": "Comediante de la escena platense. Pasa seguido por El Rotativo Platense de los jueves en Tres Empanadas.",
+    "instagram": "emanuelchanda"
+  },
+  {
+    "slug": "bea-malvaso",
+    "nombre": "Bea Malvaso",
+    "alias": ["Bea Malvaso"],
+    "bio": "Comediante de Mal Humor Producciones. Alterna en la Sociedad Platense de Stand Up de los viernes en Tres Empanadas.",
+    "instagram": "beamalvaso"
+  },
+  {
+    "slug": "jesus-chaudary",
+    "nombre": "Jesús Chaudary",
+    "alias": ["Jesús Chaudary", "Jesus Chaudary"],
+    "bio": "Comediante invitado de El Rotativo Platense, los jueves en Tres Empanadas.",
+    "instagram": "jesuschaudary_"
+  }
+]
