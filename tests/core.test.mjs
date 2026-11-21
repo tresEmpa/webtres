@@ -1,6 +1,6 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { Miniflare } from 'miniflare';
 import * as core from '../functions/_pedidos/core.js';
@@ -13,7 +13,10 @@ before(async () => {
     modules: true, script: 'export default { fetch() { return new Response("") } }', d1Databases: ['DB'],
   });
   db = await mf.getD1Database('DB');
-  for (const f of ['0001_init.sql', '0002_seed.sql']) {
+  // Todas las migraciones en orden: con solo 0001 y 0002 faltaban columnas
+  // nuevas (pedidos.numero, 0009) y 6 de 8 tests fallaban.
+  const migraciones = readdirSync(new URL('../migrations/', import.meta.url)).filter((f) => f.endsWith('.sql')).sort();
+  for (const f of migraciones) {
     const limpio = sql(f).split('\n').map((l) => l.replace(/--.*$/, '')).join('\n');
     for (const st of limpio.split(/;\s*\n/).map((x) => x.trim()).filter(Boolean)) await db.prepare(st).run();
   }
@@ -25,6 +28,9 @@ after(async () => { await mf.dispose(); });
 
 const pedir = (mesa, producto_id, cantidad, id = randomUUID()) =>
   core.crearPedido(db, { id, mesa, items: [{ producto_id, cantidad }] });
+// Desde la migración 0005 latas y snacks son "hay / no hay" (no cuentan
+// stock). Los tests de stock exacto los vuelven a "cantidad" a propósito.
+const conStockExacto = (id) => db.prepare("UPDATE productos SET control='cantidad', modo='auto' WHERE id=?").bind(id).run();
 const stock = async (id) => (await db.prepare('SELECT stock FROM productos WHERE id=?').bind(id).first()).stock;
 
 test('100 pedidos simultáneos por 5 empanadas: se venden exactamente 5', async () => {
@@ -36,6 +42,7 @@ test('100 pedidos simultáneos por 5 empanadas: se venden exactamente 5', async 
 });
 
 test('1000 reintentos del mismo id crean un solo pedido y descuentan una vez', async () => {
+  await conStockExacto('budweiser-lata');
   await core.fijarStock(db, 'budweiser-lata', 10, 'carga');
   const id = randomUUID();
   await Promise.all(Array.from({ length: 1000 }, () => pedir('M1', 'budweiser-lata', 2, id).catch((e) => e)));
@@ -81,6 +88,7 @@ test('cuenta suma todo lo pedido (lo anulado no entregado no se cobra)', async (
 });
 
 test('anular devuelve el stock una sola vez y respeta lo entregado', async () => {
+  await conStockExacto('papitas');
   await core.fijarStock(db, 'papitas', 10, 'carga');
   const { pedido } = await pedir('M6', 'papitas', 4);
   await core.fijarEntregadas(db, pedido.renglones[0].id, 1);
@@ -89,7 +97,7 @@ test('anular devuelve el stock una sola vez y respeta lo entregado', async () =>
   await core.anularPedido(db, pedido.id);
   assert.equal(await stock('papitas'), 9); // vuelven 3 (las no entregadas)
   const j = await core.jornadaAbierta(db);
-  assert.equal((await core.cuentaDeMesa(db, j.id, 'M6')).total, 2500); // lo entregado se cobra
+  assert.equal((await core.cuentaDeMesa(db, j.id, 'M6')).total, 3000); // lo entregado se cobra (1 papitas)
 });
 
 test('sin jornada abierta no se puede pedir', async () => {
