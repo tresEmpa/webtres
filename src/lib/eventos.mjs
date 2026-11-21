@@ -27,6 +27,25 @@ export function hoyISO(now = new Date()) {
   return ar.toISOString().slice(0, 10);
 }
 
+/**
+ * Cuánto tiempo sigue en Google la página de una función que ya pasó.
+ * Igual que en MoVeTe: un año. Después sale del índice (la página sigue viva).
+ */
+export const DIAS_EN_ARCHIVO = 365;
+
+/** 'YYYY-MM-DD' de hace DIAS_EN_ARCHIVO días. */
+export function limiteArchivo(now = new Date()) {
+  return hoyISO(new Date(now.getTime() - DIAS_EN_ARCHIVO * 86400000));
+}
+
+/** Función pasada que sigue indexable: del último año y no cancelada. */
+export function enArchivo(ev, now = new Date()) {
+  if (!ev || !ev.fecha) return false;
+  return ev.fecha < hoyISO(now)
+    && ev.fecha >= limiteArchivo(now)
+    && (ev.estado || 'activo') !== 'cancelado';
+}
+
 /** Día de la semana en castellano (0 = domingo). */
 export function diaSemana(fechaIso) {
   const d = parseFecha(fechaIso);

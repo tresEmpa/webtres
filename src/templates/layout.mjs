@@ -271,6 +271,7 @@ ${opts.content || ''}
         <ul>
           <li><a href="https://nochesdestandup.com.ar">Noches de Stand Up — nuestra historia</a></li>
           <li><a href="https://aprendestandup.com.ar">Aprende Stand Up — el curso</a></li>
+          <li><a href="/funciones-anteriores/">Funciones anteriores</a></li>
         </ul>
       </div>
 
