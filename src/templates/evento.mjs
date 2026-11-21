@@ -1,7 +1,7 @@
 /** Página individual de evento — port de reservas/evento.php */
 import { page, esc } from './layout.mjs';
 import {
-  fechaHumana, ucfirst, eventoFechasISO, eventoSchemaEstado, hoyISO, reservasAbren,
+  fechaHumana, ucfirst, eventoFechasISO, eventoSchemaEstado, hoyISO, reservasAbren, enArchivo,
 } from '../lib/eventos.mjs';
 
 const EXTRA = (lugar) => `
@@ -316,13 +316,15 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
     ],
   };
 
-  // Las funciones que ya pasaron no llevan schema Event. Antes seguían
-  // declarando "EventScheduled" meses después, que es sencillamente falso, y
-  // schema.org no tiene un estado "ya sucedió". Se va entero: el breadcrumb
-  // alcanza para una página que además está en noindex.
-  const extraSchema = (esPasado
-    ? ''
-    : `<script type="application/ld+json">${JSON.stringify(eventSchema, null, 2)}</script>`)
+  // Funciones pasadas del último año: siguen en Google con su schema Event
+  // (EventScheduled = se hizo como estaba previsto; Google no muestra
+  // resultado enriquecido de eventos pasados, pero sí lee fecha y elenco).
+  // Las de hace más de un año, y las canceladas que ya pasaron, salen del
+  // índice y pierden el schema.
+  const indexable = !esPasado || enArchivo(ev, now);
+  const extraSchema = (indexable
+    ? `<script type="application/ld+json">${JSON.stringify(eventSchema, null, 2)}</script>`
+    : '')
     + `<script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>`;
 
   const heroDesc = ev.descripcion
@@ -642,10 +644,10 @@ ${trackScript}
     // el 14 de mayo de 2027 generaría un título idéntico al de 2026.
     title: `${ev.nombre_show} — ${fechaTitulo}`,
     description: metaDescripcion(ev, fechaH),
-    // Función pasada: la página sigue viva (hay links viejos dando vueltas en
-    // WhatsApp) pero sale del índice. Si no, se acumulan decenas de páginas
-    // huérfanas y casi idénticas compitiendo con las que sí importan.
-    noindex: esPasado,
+    // Función pasada: la página sigue viva siempre (hay links viejos en
+    // WhatsApp). Durante un año sigue en Google y se enlaza desde
+    // /funciones-anteriores/; después sale del índice.
+    noindex: !indexable,
     url: `https://tresempanadas.com.ar/reservas/${ev.id}/`,
     image: ev.flyer
       ? `https://tresempanadas.com.ar/data/flyers/${ev.flyer}`
@@ -669,5 +671,6 @@ function pasadoBlock() {
     <h2>Esta función ya pasó</h2>
     <p>Te esperamos en la próxima.</p>
     <a href="/reservas/" class="btn btn-primary">Ver próximas funciones</a>
+    <p style="margin-top: var(--space-md);"><a href="/funciones-anteriores/">Funciones anteriores</a></p>
   </section>`;
 }

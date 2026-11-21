@@ -11,7 +11,8 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { listarEventos, fechaHumana } from './src/lib/eventos.mjs';
+import { listarEventos, fechaHumana, enArchivo } from './src/lib/eventos.mjs';
+import { renderFuncionesAnteriores } from './src/templates/funciones-anteriores.mjs';
 import { renderHome } from './src/templates/home.mjs';
 import { renderReservasList } from './src/templates/reservas-list.mjs';
 import { renderEvento } from './src/templates/evento.mjs';
@@ -138,7 +139,7 @@ async function loadJSON(rel, fallback) {
   }
 }
 
-function sitemap(eventosUpcoming) {
+function sitemap(eventosUpcoming, archivo = []) {
   const base = 'https://tresempanadas.com.ar';
   // lastmod de las páginas que listan funciones = la última vez que cambió
   // alguna de las funciones que muestran. Nada de "fecha del build": si
@@ -156,6 +157,7 @@ function sitemap(eventosUpcoming) {
     { loc: `${base}/stand-up-la-plata/`, freq: 'weekly', pri: '0.9' },
     { loc: `${base}/cursos/`, freq: 'monthly', pri: '0.8' },
     { loc: `${base}/intensivo/`, freq: 'weekly', pri: '0.8' },
+    { loc: `${base}/funciones-anteriores/`, freq: 'weekly', pri: '0.5', lastmod: archivo[0]?.fecha || null },
   ];
   // changefreq 'daily' era mentira para una función a cinco semanas, y Google
   // le da poca bola igual. Lo que sí usa es lastmod, y cada evento ya trae su
@@ -166,6 +168,17 @@ function sitemap(eventosUpcoming) {
       freq: 'weekly',
       pri: '0.7',
       lastmod: String(ev.actualizado || '').slice(0, 10) || null,
+    });
+  }
+  // Funciones del último año que ya pasaron: siguen en el índice (ver
+  // enArchivo). lastmod = el día de la función, que es cuando cambió por
+  // última vez (pasó de "reservá" a "ya pasó").
+  for (const ev of archivo) {
+    urls.push({
+      loc: `${base}/reservas/${ev.id}/`,
+      freq: 'yearly',
+      pri: '0.3',
+      lastmod: ev.fecha,
     });
   }
   const body = urls.map((u) => `  <url>
@@ -309,6 +322,12 @@ async function main() {
     await writeFile(`reservas/${dia}/index.html`, renderDia(dia, delDia, YEAR, NOW));
   }
 
+  // 6 ter) Archivo: funciones del último año, más reciente primero.
+  const archivo = eventos
+    .filter((ev) => enArchivo(ev, NOW))
+    .sort((a, b) => (a.fecha < b.fecha ? 1 : a.fecha > b.fecha ? -1 : 0));
+  await writeFile('funciones-anteriores/index.html', renderFuncionesAnteriores(archivo, YEAR, NOW));
+
   // 7) Cursos
   await writeFile('cursos/index.html', renderCursos(YEAR, lugar, NOW));
   await writeFile('intensivo/index.html', renderIntensivo(YEAR, NOW));
@@ -320,7 +339,7 @@ async function main() {
   await writeFile('404.html', renderNotFound(YEAR));
 
   // 10) Sitemap (base + próximos eventos)
-  await writeFile('sitemap.xml', sitemap(listado));
+  await writeFile('sitemap.xml', sitemap(listado, archivo));
 
   // 11) Agenda para las Functions jueves/viernes (todos los eventos, mínima)
   const agenda = eventos.map((ev) => ({
