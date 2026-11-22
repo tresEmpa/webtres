@@ -116,7 +116,7 @@ export function renderHome(year, listado = [], now = new Date()) {
   <div class="cuando-donde__inner">
 
     <div class="cuando-donde__bloque">
-      <h3>Cuándo</h3>
+      <h2>Cuándo</h2>
       <ul>
         <li><strong>Todos los viernes</strong></li>
         <li>Muchos jueves</li>
@@ -126,7 +126,7 @@ export function renderHome(year, listado = [], now = new Date()) {
     </div>
 
     <div class="cuando-donde__bloque">
-      <h3>Dónde</h3>
+      <h2>Dónde</h2>
       <p>
         <strong>Calle 43 N° 1349</strong><br>
         Esquina 22 · La Plata
@@ -235,7 +235,7 @@ export function renderHome(year, listado = [], now = new Date()) {
   .curso-banner__inner { max-width: 640px; margin: 0 auto; }
   .curso-banner__badge { display: inline-block; background: var(--dorado, #D9B76A); color: var(--rojo-tinto, #6E1F18); font-family: var(--font-display); font-weight: 800; font-size: 0.8rem; letter-spacing: 0.04em; padding: 6px 14px; border-radius: 999px; margin-bottom: 1rem; text-transform: uppercase; }
   .curso-banner h2 { font-family: var(--font-display); font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.15; margin-bottom: 0.6rem; color: var(--crema, #F1E8D2); }
-  .curso-banner p { font-family: var(--font-body); font-size: 1.05rem; line-height: 1.5; margin-bottom: 1.4rem; opacity: 0.92; }
+  .curso-banner p { font-family: var(--font-body); font-size: 1.05rem; line-height: 1.5; margin-bottom: 1.4rem; }
   .curso-banner__btn { display: inline-block; background: var(--dorado, #D9B76A) !important; color: var(--rojo-tinto, #6E1F18) !important; border: none; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; padding: 15px 28px; border-radius: var(--radius, 8px); text-decoration: none; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
   .curso-banner__btn:hover { transform: translateY(-1px); }
 </style>

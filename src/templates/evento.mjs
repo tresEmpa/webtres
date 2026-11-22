@@ -650,7 +650,8 @@ ${trackScript}
   return page({
     // El año va SIEMPRE en el title aunque no se muestre en la página: sin él,
     // el 14 de mayo de 2027 generaría un título idéntico al de 2026.
-    title: `${ev.nombre_show} — ${fechaTitulo}`,
+    // Sin el año si es este año: con año pasaba los 60 caracteres y Google lo cortaba.
+    title: `${ev.nombre_show} — ${fechaHumana(ev.fecha, false, now)}`,
     description: metaDescripcion(ev, fechaH),
     // Función pasada: la página sigue viva siempre (hay links viejos en
     // WhatsApp). Durante un año sigue en Google y se enlaza desde

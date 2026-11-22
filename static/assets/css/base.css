@@ -463,7 +463,7 @@ a:focus-visible, button:focus-visible {
 }
 
 .btn-violeta {
-  background: var(--violeta);
+  background: #5F5B8E; /* violeta un tono más oscuro: contraste AA con crema */
   color: var(--crema);
 }
 

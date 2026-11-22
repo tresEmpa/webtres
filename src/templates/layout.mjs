@@ -88,6 +88,13 @@ const ORG_SCHEMA = `
       "description": "Productora de stand up en La Plata desde 2013. Organiza la Sociedad Platense de Stand Up.",
       "url": "https://nochesdestandup.com.ar"
     },
+    "subjectOf": {
+      "@type": "NewsArticle",
+      "headline": "Doce años haciendo reír a la gorra",
+      "url": "https://www.pagina12.com.ar/2026/05/19/doce-anos-haciendo-reir-a-la-gorra/",
+      "datePublished": "2026-05-19",
+      "publisher": {"@type": "Organization", "name": "Página/12"}
+    },
     "hasMap": "https://share.google/dyTTJVXR25JTlU7kX",
     "sameAs": [
       "https://share.google/dyTTJVXR25JTlU7kX",
