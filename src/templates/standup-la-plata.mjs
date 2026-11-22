@@ -144,7 +144,7 @@ export function renderStandupLaPlata(year) {
         <h3>Los ciclos</h3>
         <p>
           Los viernes toca <a href="/reservas/viernes/"><strong>Sociedad Platense de Stand Up</strong></a>, con Checho
-          Falco e invitados. Es el clásico de la casa, y viene haciendo comedia
+          Falco, Julián Dorati e invitados. Es el clásico de la casa, y viene haciendo comedia
           en La Plata desde 2013.
         </p>
         <p>
