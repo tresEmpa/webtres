@@ -212,6 +212,9 @@ ${opts.noindex ? '  <meta name="robots" content="noindex, follow">\n' : ''}
   <meta name="theme-color" content="#B33227">
 
   <!-- CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&display=swap">
   <link rel="stylesheet" href="/assets/css/base.css">
   ${extraCss ? `<link rel="stylesheet" href="${esc(extraCss)}">` : ''}
 ${ORG_SCHEMA}
@@ -225,7 +228,7 @@ ${opts.funciones ? ESTADO_CSS + estadoScript(opts.funciones, !!opts.refrescarAge
   <header class="site-header">
     <div class="site-header__inner">
       <a href="/" class="site-header__logo" aria-label="Tres Empanadas Comedia, ir al inicio">
-        <img src="/assets/img/logo.png" alt="Tres Empanadas Comedia" width="48" height="48">
+        <img src="/assets/img/logo-96.webp" alt="Tres Empanadas Comedia" width="48" height="48">
         <span class="site-header__logo-text">
           Tres Empanadas
           <small>Comedia · La Plata</small>

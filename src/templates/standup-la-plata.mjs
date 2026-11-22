@@ -132,9 +132,9 @@ export function renderStandupLaPlata(year) {
     <h2>Cómo es una noche de stand up acá</h2>
 
     <figure class="ads-foto">
-      <img src="/assets/img/interior-publico.jpg"
+      <img src="/assets/img/interior-publico-800.webp"
            alt="Público riéndose durante una función de stand up en Tres Empanadas Comedia, La Plata"
-           width="1400" height="1050" loading="lazy">
+           width="800" height="600" loading="lazy">
       <figcaption>Una noche cualquiera en 43 y 22.</figcaption>
     </figure>
 
