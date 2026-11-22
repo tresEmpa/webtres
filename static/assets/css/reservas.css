@@ -1204,3 +1204,6 @@
   .tep-globo { transition: opacity .2s ease; transform: none; }
   .tep-globo--visible { transform: none; }
 }
+
+/* Bajada del h1 de /reservas/: suma "stand up hoy en La Plata" sin cambiar el título grande. */
+.reservas-hero__sub { display: block; font-size: 0.42em; font-weight: 600; letter-spacing: 0; text-transform: none; margin-top: 0.35em; }
