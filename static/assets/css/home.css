@@ -158,7 +158,7 @@
   font-family: var(--font-body);
 }
 
-.cuando-donde__bloque h3 {
+.cuando-donde__bloque h2 {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -373,7 +373,7 @@
 }
 
 .show-card--jueves .show-card__day {
-  background: var(--violeta);
+  background: #5F5B8E;
   color: var(--crema);
 }
 
