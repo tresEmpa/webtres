@@ -88,7 +88,9 @@ const ORG_SCHEMA = `
       "description": "Productora de stand up en La Plata desde 2013. Organiza la Sociedad Platense de Stand Up.",
       "url": "https://nochesdestandup.com.ar"
     },
+    "hasMap": "https://share.google/dyTTJVXR25JTlU7kX",
     "sameAs": [
+      "https://share.google/dyTTJVXR25JTlU7kX",
       "https://www.instagram.com/tresempanadascomedia",
       "https://www.youtube.com/@TresEmpanadasComediaLP",
       "https://www.facebook.com/109058717527447",
