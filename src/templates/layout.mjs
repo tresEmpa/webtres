@@ -98,6 +98,7 @@ const ORG_SCHEMA = `
     "hasMap": "https://share.google/dyTTJVXR25JTlU7kX",
     "sameAs": [
       "https://share.google/dyTTJVXR25JTlU7kX",
+      "https://www.wikidata.org/wiki/Q142250936",
       "https://www.instagram.com/tresempanadascomedia",
       "https://www.youtube.com/@TresEmpanadasComediaLP",
       "https://www.facebook.com/109058717527447",
