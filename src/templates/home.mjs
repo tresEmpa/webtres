@@ -7,11 +7,15 @@ const FAQ_SCHEMA = `<script type="application/ld+json">
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
+    {"@type":"Question","name":"¿Dónde ver stand up en La Plata?","acceptedAnswer":{"@type":"Answer","text":"En Tres Empanadas Comedia, un microteatro de stand up en Calle 43 N° 1349, esquina 22, La Plata. Hay funciones todos los viernes, muchos jueves y algún martes, a las 21:30."}},
+    {"@type":"Question","name":"¿Qué días hay funciones?","acceptedAnswer":{"@type":"Answer","text":"Todos los viernes con la Sociedad Platense de Stand Up, muchos jueves con El Rotativo Platense y funciones de alumnos, y algún martes. Siempre a las 21:30."}},
+    {"@type":"Question","name":"¿A qué hora conviene llegar?","acceptedAnswer":{"@type":"Answer","text":"A las 21:00 llegás tranquilo. El show empieza 21:30, las reservas vencen 21:45 y a las 22:01 no se entra más."}},
     {"@type":"Question","name":"¿Hay que reservar?","acceptedAnswer":{"@type":"Answer","text":"Sí, conviene. Es gratis y te asegura la mesa. Las reservas vencen 21:45hs."}},
     {"@type":"Question","name":"¿Cuánto cuesta?","acceptedAnswer":{"@type":"Answer","text":"El show es a la gorra. No es gratis, es con onda. Aportás lo que puedas al final."}},
     {"@type":"Question","name":"¿Qué hay para tomar y comer?","acceptedAnswer":{"@type":"Answer","text":"Empanadas, snacks, cinco cervezas artesanales de barril, latas y opciones sin alcohol. Somos un teatrito, no un resto."}},
     {"@type":"Question","name":"¿Hay opciones sin TACC?","acceptedAnswer":{"@type":"Answer","text":"No tenemos menú celiaco, pero podés traer tu propia comida. Sin drama."}},
     {"@type":"Question","name":"¿Aceptan tarjeta?","acceptedAnswer":{"@type":"Answer","text":"Aceptamos efectivo, tarjeta, QR y transferencia."}},
+    {"@type":"Question","name":"¿Puedo ir solo?","acceptedAnswer":{"@type":"Answer","text":"Sí, mucha gente lo hace. Hay barra y siempre se conoce a alguien. La idea es reírse."}},
     {"@type":"Question","name":"¿Pueden venir menores?","acceptedAnswer":{"@type":"Answer","text":"Es para adultos. El humor y el ambiente no son para menores."}},
     {"@type":"Question","name":"¿Festejos?","acceptedAnswer":{"@type":"Answer","text":"Despedidas, cumples, casamientos, divorcios. Festejamos cualquier cosa, menos velorios. Escribinos por WhatsApp."}}
   ]
