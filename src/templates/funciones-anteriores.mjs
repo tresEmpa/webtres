@@ -39,7 +39,7 @@ export function renderFuncionesAnteriores(eventos, year, now = new Date()) {
     </section>`;
   }).join('');
 
-  const nombres = new Set(eventos.flatMap((ev) => (ev.elenco || []).filter(Boolean)));
+  const nombres = new Set(eventos.flatMap((ev) => (ev.elenco || []).filter((n) => n && !/^(e\s+)?invitad[oa]s?$/i.test(String(n).trim()))));
 
   const content = `
 <style>

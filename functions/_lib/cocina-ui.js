@@ -269,6 +269,34 @@ export function editarPage({ ev, plantillas, idOriginal, csrf, errores }) {
 <script>
 const PLANTILLAS = ${JSON.stringify(plantillas || {})};
 
+// Flyer liviano: si suben un PNG o una imagen de más de 500 KB, el navegador
+// la pasa a JPG (máx. 1400 px de ancho) antes de mandarla. La página de la
+// función carga más rápido y Google mira la velocidad.
+(function () {
+  const input = document.querySelector('#form-evento input[name="flyer"]');
+  if (!input || !window.DataTransfer) return;
+  input.addEventListener('change', async function () {
+    const f = input.files && input.files[0];
+    if (!f || (f.type !== 'image/png' && f.size <= 500 * 1024)) return;
+    try {
+      const bmp = await createImageBitmap(f);
+      const escala = Math.min(1, 1400 / bmp.width);
+      const c = document.createElement('canvas');
+      c.width = Math.round(bmp.width * escala);
+      c.height = Math.round(bmp.height * escala);
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.drawImage(bmp, 0, 0, c.width, c.height);
+      const blob = await new Promise((r) => c.toBlob(r, 'image/jpeg', 0.82));
+      if (!blob || blob.size >= f.size) return;
+      const dt = new DataTransfer();
+      dt.items.add(new File([blob], f.name.replace(/\\.[a-z]+$/i, '') + '.jpg', { type: 'image/jpeg' }));
+      input.files = dt.files;
+    } catch (e) { /* si falla, se sube el original */ }
+  });
+})();
+
 (function () {
   const estadoEl = document.getElementById('estado');
   const motivoWrap = document.getElementById('motivo-cancelacion-wrap');
