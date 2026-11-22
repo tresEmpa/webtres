@@ -465,12 +465,12 @@ ${CURSO_REGULAR_ABIERTO ? '' : mencionCursoRegular}
 
 const meta = CURSO_REGULAR_ABIERTO
 ? {
-title: 'Curso de Stand Up en La Plata | Tres Empanadas Comedia',
+title: 'Curso y clases de stand up en La Plata | Tres Empanadas Comedia',
 description: 'Curso de stand up en La Plata en Tres Empanadas Comedia. Práctica presencial los jueves y show El Rotativo Platense. Anotate.',
 }
 : {
-title: 'Curso de Stand Up en La Plata: presencial, online y práctica',
-description: 'Curso de stand up en La Plata: presencial los jueves, online gratis u online con el espacio abierto de los jueves desde las 19:30 en Tres Empanadas Comedia. Elegí cómo empezar.',
+title: 'Curso y clases de stand up en La Plata | Tres Empanadas Comedia',
+description: 'Curso de stand up en La Plata: presencial, online gratis u online con práctica los jueves desde las 19:30 en Tres Empanadas Comedia. Elegí cómo empezar.',
 };
 
 return page({

@@ -379,7 +379,7 @@ export function renderHome(year, listado = [], now = new Date()) {
     // La home es la que rankea "stand up la plata" (puesto ~7, Search Console
     // 28 días al 19/11/2026) y el título no decía "stand up": va adelante.
     title: 'Stand up en La Plata | Tres Empanadas Comedia, 43 y 22',
-    description: 'Stand up en vivo en La Plata: jueves y viernes 21:30 en 43 y 22. Microteatro con comediantes platenses, el show es a la gorra. Reservá gratis.',
+    description: 'Club de comedia en La Plata: stand up en vivo jueves y viernes 21:30 en 43 y 22, con comediantes platenses. El show es a la gorra. Reservá gratis.',
     url: 'https://tresempanadas.com.ar/',
     image: 'https://tresempanadas.com.ar/assets/img/og-default.jpg',
     bodyClass: 'page-home',
