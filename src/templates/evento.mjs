@@ -4,6 +4,9 @@ import {
   fechaHumana, ucfirst, eventoFechasISO, eventoSchemaEstado, hoyISO, reservasAbren, enArchivo,
 } from '../lib/eventos.mjs';
 
+/** "Invitados" / "e invitados" en el elenco: comodín, no una persona. */
+export const esInvitados = (n) => /^(e\s+)?invitad[oa]s?$/i.test(String(n).trim());
+
 const EXTRA = (lugar) => `
 <section class="reservas-extra">
   <h3>Antes de venir</h3>
@@ -89,7 +92,9 @@ function metaDescripcion(ev, fechaH) {
 
   partes.push(`${ucfirst(fechaH)}, ${ev.hora || '21:30'}.`);
 
-  const nombres = (ev.elenco || []).filter(Boolean);
+  // "Invitados" en el elenco no es una persona: va al final como "e invitados".
+  const conInvitados = (ev.elenco || []).some(esInvitados);
+  const nombres = (ev.elenco || []).filter((n) => n && !esInvitados(n));
   if (nombres.length === 0) {
     partes.push(`${ev.nombre_show} en Tres Empanadas.`);
   } else {
@@ -103,6 +108,7 @@ function metaDescripcion(ev, fechaH) {
     } else {
       lista = muestra[0];
     }
+    if (conInvitados && nombres.length <= 3) lista = `${muestra.join(', ')} e invitados`;
     partes.push(`${ev.nombre_show} con ${lista}.`);
   }
 
@@ -282,6 +288,7 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     location: {
       '@type': 'Place',
+      '@id': 'https://tresempanadas.com.ar/#business',
       name: lugar.nombre || 'Tres Empanadas Comedia',
       address: {
         '@type': 'PostalAddress',
@@ -292,9 +299,10 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
         addressCountry: lugar.pais || 'AR',
       },
     },
-    performer: (ev.elenco || []).map((p) => ({ '@type': 'Person', name: p })),
+    performer: (ev.elenco || []).filter((p) => p && !esInvitados(p)).map((p) => ({ '@type': 'Person', name: p })),
     organizer: {
       '@type': 'Organization',
+      '@id': 'https://tresempanadas.com.ar/#business',
       name: 'Tres Empanadas Comedia',
       url: 'https://tresempanadas.com.ar',
     },
