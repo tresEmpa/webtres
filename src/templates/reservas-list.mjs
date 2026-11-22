@@ -236,7 +236,7 @@ export function renderReservasList(eventos, year) {
 ${CARRUSEL}
 <section class="reservas-hero">
   <div class="container">
-    <h1>Reservar</h1>
+    <h1>Reservar <small class="reservas-hero__sub">Stand up hoy y esta semana en La Plata</small></h1>
     <p>Reservar es gratis y te asegura la mesa. Conviene — los lugares vuelan.</p>
     ${CHAPA_GOOGLE}
     ${CLAIM}

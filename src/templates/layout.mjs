@@ -79,8 +79,9 @@ const ORG_SCHEMA = `
     "founder": {
       "@type": "Person",
       "name": "Checho Falco",
+      "@id": "https://nochesdestandup.com.ar/#checho",
       "description": "Abogado de profesión, comediante por elección. Desde 2013 arriba de los escenarios. Productor de la Sociedad Platense de Stand Up.",
-      "sameAs": "https://nochesdestandup.com.ar"
+      "sameAs": ["https://nochesdestandup.com.ar", "https://www.wikidata.org/wiki/Q142251025", "https://www.alternativateatral.com/persona286985-checho-falco"]
     },
     "parentOrganization": {
       "@type": "Organization",
