@@ -55,7 +55,7 @@ export function renderHome(year, listado = [], now = new Date()) {
 
     <!-- Cabecera visual full-bleed con el claim encima (mobile; en desktop se oculta) -->
     <figure class="apertura__hero">
-      <img src="/assets/img/publico.jpg" alt=""
+      <img src="/assets/img/publico.webp" alt=""
            width="1000" height="750" fetchpriority="high">
       <figcaption class="apertura__hero-overlay">
         <strong>Vení a reír.</strong>
@@ -99,7 +99,7 @@ export function renderHome(year, listado = [], now = new Date()) {
     </p>
 
     <figure class="apertura__foto" aria-hidden="true">
-      <img src="/assets/img/publico.jpg" alt="">
+      <img src="/assets/img/publico.webp" alt="" width="1000" height="750" loading="lazy">
       <figcaption>Una noche cualquiera</figcaption>
     </figure>
 
@@ -175,10 +175,10 @@ export function renderHome(year, listado = [], now = new Date()) {
 
     <div class="como-es-venir__galeria">
       <figure class="como-es-venir__foto como-es-venir__foto--rotated">
-        <img src="/assets/img/escenario-mondrian.jpg" alt="Escenario de Tres Empanadas con mural Mondrian al fondo">
+        <img src="/assets/img/escenario-mondrian-800.webp" alt="Escenario de Tres Empanadas con mural Mondrian al fondo" width="800" height="600" loading="lazy">
       </figure>
       <figure class="como-es-venir__foto como-es-venir__foto--rotated-r">
-        <img src="/assets/img/interior-publico.jpg" alt="Público en una función de stand up en Tres Empanadas">
+        <img src="/assets/img/interior-publico-800.webp" alt="Público en una función de stand up en Tres Empanadas" width="800" height="600" loading="lazy">
       </figure>
     </div>
 
