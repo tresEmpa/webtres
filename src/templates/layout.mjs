@@ -36,6 +36,12 @@ export function esc(s) {
     .replace(/>/g, '&gt;');
 }
 
+export const AVISO_FIESTAS = {
+  desde: '2026-12-10',
+  cerrados: ['2026-12-24', '2026-12-25', '2026-12-31', '2027-01-01'],
+  texto: 'Fiestas: no hay funciones el jueves 24 y viernes 25 de diciembre, ni el jueves 31 y viernes 1 de enero. El resto de las fechas, como siempre.',
+};
+
 const ORG_SCHEMA = `
   <script type="application/ld+json">
   {
@@ -75,6 +81,7 @@ const ORG_SCHEMA = `
       "opens": "21:00",
       "closes": "23:45"
     }],
+    "specialOpeningHoursSpecification": ${JSON.stringify(AVISO_FIESTAS.cerrados.map((d) => ({ "@type": "OpeningHoursSpecification", opens: "00:00", closes: "00:00", validFrom: d, validThrough: d })))},
     "priceRange": "$",
     "founder": {
       "@type": "Person",
@@ -144,6 +151,22 @@ const tracking = (opts = {}) => `
          src="https://www.facebook.com/tr?id=546014447181846&ev=PageView&noscript=1"
          alt="">
   </noscript>`;
+
+/**
+ * Días sin función por fiestas. Para cambiarlo, editar solo esta lista.
+ * El aviso se muestra solo (con la fecha del visitante, hora de Argentina)
+ * desde AVISO_FIESTAS.desde hasta el último día cerrado, en la home y en /reservas/.
+ * Los mismos días van al schema como specialOpeningHoursSpecification (cerrado).
+ */
+
+function avisoFiestas() {
+  const { desde, cerrados, texto } = AVISO_FIESTAS;
+  const hasta = cerrados[cerrados.length - 1];
+  return `<div class="aviso-fiestas" id="aviso-fiestas" hidden role="status">${esc(texto)}</div>
+<script>(function(){try{var h=new Date(Date.now()-3*3600*1000).toISOString().slice(0,10);
+if(h>='${desde}'&&h<='${hasta}')document.getElementById('aviso-fiestas').hidden=false;}catch(e){}})();</script>
+`;
+}
 
 function navLink(href, path, currentPath, label) {
   const active = currentPath.startsWith(path) ? ' class="active"' : '';
@@ -261,7 +284,7 @@ ${opts.adsSafe || currentPath.startsWith('/reservas') ? '' : `      <!-- Atajo a
     </div>
   </header>
   <main>
-${opts.content || ''}
+${currentPath === '/' || currentPath.startsWith('/reservas') ? avisoFiestas() : ''}${opts.content || ''}
   </main>
 
   <footer class="site-footer" id="contacto">
