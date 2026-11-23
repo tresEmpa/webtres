@@ -42,6 +42,8 @@ export const AVISO_FIESTAS = {
   texto: 'Fiestas: no hay funciones el jueves 24 y viernes 25 de diciembre, ni el jueves 31 y viernes 1 de enero. El resto de las fechas, como siempre.',
 };
 
+// openingHoursSpecification = horario del lugar (cursos, práctica y shows), igual que el
+// Perfil de Google. El horario de cada show va en su Event.
 const ORG_SCHEMA = `
   <script type="application/ld+json">
   {
@@ -75,12 +77,11 @@ const ORG_SCHEMA = `
       {"@type": "City", "name": "Ensenada"}
     ],
     "publicAccess": true,
-    "openingHoursSpecification": [{
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Thursday", "Friday"],
-      "opens": "21:00",
-      "closes": "23:45"
-    }],
+    "openingHoursSpecification": [
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Monday", "opens": "14:00", "closes": "17:00"},
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "18:00", "closes": "23:30"},
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "20:00", "closes": "23:30"}
+    ],
     "specialOpeningHoursSpecification": ${JSON.stringify(AVISO_FIESTAS.cerrados.map((d) => ({ "@type": "OpeningHoursSpecification", opens: "00:00", closes: "00:00", validFrom: d, validThrough: d })))},
     "priceRange": "$",
     "founder": {
