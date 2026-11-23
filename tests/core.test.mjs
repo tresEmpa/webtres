@@ -71,16 +71,18 @@ test('modo manual: no descuenta ni bloquea por cantidad', async () => {
   await db.prepare("UPDATE productos SET modo='auto' WHERE id='empanada-calabaza'").run();
 });
 
+// Mesas propias: el test de 100 pedidos reparte empanadas entre M0–M14 al azar
+// y, si caían en M5 o M6, estos dos tests sumaban de más (fallaban a veces).
 test('cuenta suma todo lo pedido (lo anulado no entregado no se cobra)', async () => {
   const j = await core.jornadaAbierta(db);
   await core.fijarStock(db, 'empanada-jamon-queso', 10, 'carga');
-  const { pedido } = await core.crearPedido(db, { id: randomUUID(), mesa: 'M5', items: [{ producto_id: 'agua', cantidad: 1 }, { producto_id: 'empanada-jamon-queso', cantidad: 3 }] });
-  let c = await core.cuentaDeMesa(db, j.id, 'M5');
+  const { pedido } = await core.crearPedido(db, { id: randomUUID(), mesa: 'Cuenta', items: [{ producto_id: 'agua', cantidad: 1 }, { producto_id: 'empanada-jamon-queso', cantidad: 3 }] });
+  let c = await core.cuentaDeMesa(db, j.id, 'Cuenta');
   assert.equal(c.total, 3500 + 3 * 3000); assert.equal(c.pendientes, 4);
   await core.fijarEntregadas(db, pedido.renglones[0].id, 1);
   await core.fijarEntregadas(db, pedido.renglones[1].id, 2);
   await core.fijarEntregadas(db, pedido.renglones[1].id, 2); // repetir no duplica
-  c = await core.cuentaDeMesa(db, j.id, 'M5');
+  c = await core.cuentaDeMesa(db, j.id, 'Cuenta');
   assert.equal(c.total, 3500 + 3 * 3000); assert.equal(c.pendientes, 1);
   assert.equal((await core.obtenerPedido(db, pedido.id)).estado, 'parcial');
   await core.entregarTodo(db, pedido.id);
@@ -90,14 +92,14 @@ test('cuenta suma todo lo pedido (lo anulado no entregado no se cobra)', async (
 test('anular devuelve el stock una sola vez y respeta lo entregado', async () => {
   await conStockExacto('papitas');
   await core.fijarStock(db, 'papitas', 10, 'carga');
-  const { pedido } = await pedir('M6', 'papitas', 4);
+  const { pedido } = await pedir('Anular', 'papitas', 4);
   await core.fijarEntregadas(db, pedido.renglones[0].id, 1);
   assert.equal(await stock('papitas'), 6);
   await core.anularPedido(db, pedido.id);
   await core.anularPedido(db, pedido.id);
   assert.equal(await stock('papitas'), 9); // vuelven 3 (las no entregadas)
   const j = await core.jornadaAbierta(db);
-  assert.equal((await core.cuentaDeMesa(db, j.id, 'M6')).total, 3000); // lo entregado se cobra (1 papitas)
+  assert.equal((await core.cuentaDeMesa(db, j.id, 'Anular')).total, 3000); // lo entregado se cobra (1 papitas)
 });
 
 test('sin jornada abierta no se puede pedir', async () => {
