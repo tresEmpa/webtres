@@ -507,3 +507,6 @@ a:focus-visible, button:focus-visible {
   .site-header__logo-text small { font-size: 0.5625rem; letter-spacing: 0.12em; }
   .site-header__reservar { padding: 0.55rem 0.7rem; margin-right: 0.25rem; }
 }
+
+/* Aviso de fiestas (días sin función), arriba del contenido en home y /reservas/. */
+.aviso-fiestas { background: var(--negro); color: var(--crema); text-align: center; padding: 0.75rem 1rem; font-weight: 600; line-height: 1.4; }
