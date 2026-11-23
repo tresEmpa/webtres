@@ -162,7 +162,7 @@ const tracking = (opts = {}) => `
 function avisoFiestas() {
   const { desde, cerrados, texto } = AVISO_FIESTAS;
   const hasta = cerrados[cerrados.length - 1];
-  return `<div class="aviso-fiestas" id="aviso-fiestas" hidden role="status">${esc(texto)}</div>
+  return `<div class="aviso-fiestas" id="aviso-fiestas" hidden role="status" style="background:#1A1614;color:#F1E8D2;text-align:center;padding:.75rem 1rem;font-weight:600;line-height:1.4">${esc(texto)}</div>
 <script>(function(){try{var h=new Date(Date.now()-3*3600*1000).toISOString().slice(0,10);
 if(h>='${desde}'&&h<='${hasta}')document.getElementById('aviso-fiestas').hidden=false;}catch(e){}})();</script>
 `;
