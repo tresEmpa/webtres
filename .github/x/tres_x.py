@@ -24,15 +24,22 @@ from buffer_x import AR, ahora_ar, ajustar, marcar, proxima, publicar, ya_hecho
 CANAL = "6af9e12dece6dfde5fd49552"  # Tres Empanadas en Buffer
 SITIO = "https://tresempanadas.com.ar"
 HORA = time(18, 0)
-HASHTAGS = "#StandUpLaPlata #LaPlata #QuéHacerEnLaPlata"
+# Pocos y con busqueda real: X castiga los posts con muchos hashtags.
+# Fijos #StandUp y #LaPlata; el tercero rota por semana. Sin tildes, que cortan el hashtag.
+HASHTAGS_FIJOS = "#StandUp #LaPlata"
+HASHTAGS_ROTAN = ["#StandUpArgentina", "#QueHacerEnLaPlata", "#Comedia", "#HumorArgentino"]
+
+
+def hashtags(dia):
+    return f"{HASHTAGS_FIJOS} {HASHTAGS_ROTAN[dia.isocalendar()[1] % len(HASHTAGS_ROTAN)]}"
 
 DIAS = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
 
 LUNES = [  # rotan por semana para no repetir texto
-    "¿Plan para esta semana? Stand up en vivo en Tres Empanadas, en el centro de La Plata 🎤",
+    "¿Plan para esta semana? Stand up en vivo en Tres Empanadas, 43 y 22, La Plata 🎤",
     "Si esta semana querés reírte en serio, en La Plata hay un club de comedia: Tres Empanadas 🥟🎤",
     "Stand up de verdad, cerca y sin vueltas: esta semana también hay show en Tres Empanadas 😂",
-    "Esta semana, salí a ver stand up en La Plata. Te esperamos en Tres Empanadas, calle 43 🎤",
+    "Esta semana, salí a ver stand up en La Plata. Te esperamos en Tres Empanadas, 43 y 22 🎤",
     "Comedia en vivo en La Plata: comediantes, risas y empanadas. Esta semana en Tres Empanadas 🥟",
     "¿Nunca viste stand up en vivo? Esta semana es buena para arrancar: Tres Empanadas, La Plata 🎤",
 ]
@@ -96,7 +103,7 @@ def main():
         cabeza = LUNES[hoy.isocalendar()[1] % len(LUNES)]
         destino = link(semana[0], campana) if semana else \
             f"{SITIO}/reservas/?utm_source=x&utm_medium=social&utm_campaign={campana}"
-        pie = f"Reservá tu lugar 👉 {destino}\n{HASHTAGS}"
+        pie = f"Reservá tu lugar 👉 {destino}\n📍 43 y 22, La Plata\n{hashtags(hoy)}"
         texto = ajustar(cabeza, [linea(e, hoy) for e in semana], pie)
         avisados = [e for e in semana if (fecha(e) - hoy).days in (1, 2)]
     else:
@@ -108,7 +115,7 @@ def main():
             "Doble fecha de stand up en Tres Empanadas 🥟"
         destino = link(shows[0], campana) if len(shows) == 1 else \
             f"{SITIO}/reservas/?utm_source=x&utm_medium=social&utm_campaign={campana}"
-        pie = f"Reservas 👉 {destino}\n📍 Calle 43 N°1349, La Plata\n{HASHTAGS}"
+        pie = f"Reservas 👉 {destino}\n📍 43 y 22, La Plata\n{hashtags(hoy)}"
         texto = ajustar(cabeza, [linea(e, hoy) for e in shows], pie)
         avisados = shows
 
