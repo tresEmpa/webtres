@@ -297,7 +297,7 @@ async function main() {
 
   // 4) Listado de reservas (próximos, mismos filtros que el PHP)
   const listado = listarEventos(eventos, {
-    estados: ['activo', 'programado', 'agotado'],
+    estados: ['activo', 'programado', 'completo', 'agotado'],
     orden: 'asc',
     incluirPasados: false,
     now: NOW,

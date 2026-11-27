@@ -217,7 +217,8 @@ export function editarPage({ ev, plantillas, idOriginal, csrf, errores }) {
         <select id="estado" name="estado">
           <option value="activo"     ${ev.estado === 'activo' ? 'selected' : ''}>Activo — toma reservas</option>
           <option value="programado" ${ev.estado === 'programado' ? 'selected' : ''}>Programado — confirmado pero sin reservas todavía</option>
-          <option value="agotado"    ${ev.estado === 'agotado' ? 'selected' : ''}>Agotado</option>
+          <option value="completo"   ${ev.estado === 'completo' ? 'selected' : ''}>Completo — no más reservas, quedan bancos por orden de llegada</option>
+          <option value="agotado"    ${ev.estado === 'agotado' ? 'selected' : ''}>Agotado — no entra nadie más</option>
           <option value="cancelado"  ${ev.estado === 'cancelado' ? 'selected' : ''}>Cancelado</option>
         </select>
       </div>

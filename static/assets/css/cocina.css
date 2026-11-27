@@ -164,6 +164,7 @@ h2.cocina-title { font-size: 1.125rem; margin-top: 1.5rem; }
 }
 .cocina-evento__estado--activo     { background: #66BB6A; color: #fff; }
 .cocina-evento__estado--programado { background: #5B7CDF; color: #fff; }
+.cocina-evento__estado--completo   { background: #FF9800; color: #fff; }
 .cocina-evento__estado--agotado    { background: var(--dorado, #D9B76A); color: var(--negro, #1A1614); }
 .cocina-evento__estado--cancelado  { background: #E57373; color: #fff; }
 

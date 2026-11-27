@@ -34,16 +34,19 @@ export function eventoCard(ev, now = new Date()) {
   const estado = ev.estado || 'activo';
   const agotado = estado === 'agotado';
   const programado = estado === 'programado';
+  const completo = estado === 'completo';
 
   let clases = `evento-card evento-card--${esc(color)}`;
   if (agotado) clases += ' evento-card--agotado';
   if (programado) clases += ' evento-card--programado';
+  if (completo) clases += ' evento-card--completo';
 
   const elenco = (ev.elenco && ev.elenco.length)
     ? `<p class="evento-card__elenco">${esc(ev.elenco.join(' · '))}</p>` : '';
 
   const cta = agotado
     ? 'Agotado'
+    : completo ? 'Sin reservas · quedan bancos →'
     : programado ? 'Próximamente — ver más →' : 'Ver y reservar →';
 
   const placa = PLACAS[ev.dia_semana];

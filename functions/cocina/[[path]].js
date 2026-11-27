@@ -244,7 +244,7 @@ async function handleEditarPost(request, env, url) {
   if (!data.fecha) errores.push('Falta la fecha.');
   if (!data.nombre_show) errores.push('Falta el nombre del show.');
   if (!/^\d{2}:\d{2}$/.test(data.hora)) errores.push('Hora con formato incorrecto (usá HH:MM).');
-  if (!['activo', 'programado', 'agotado', 'cancelado'].includes(data.estado)) errores.push('Estado inválido.');
+  if (!['activo', 'programado', 'completo', 'agotado', 'cancelado'].includes(data.estado)) errores.push('Estado inválido.');
   if (data.duracion_minutos < 10 || data.duracion_minutos > 600) errores.push('Duración fuera de rango.');
   if (data.link_instagram && !/^https?:\/\//i.test(data.link_instagram)) errores.push('El link de Instagram debe empezar con http o https.');
 

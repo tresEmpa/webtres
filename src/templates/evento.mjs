@@ -114,6 +114,7 @@ function metaDescripcion(ev, fechaH) {
 
   const estado = ev.estado || 'activo';
   if (estado === 'agotado') partes.push('Función agotada.');
+  else if (estado === 'completo') partes.push('Reservas cerradas: quedan bancos por orden de llegada. Show a la gorra.');
   else if (estado === 'cancelado') partes.push('Función cancelada.');
   // Una fecha programada todavía no toma reservas. Prometer "reservá gratis"
   // en el snippet de Google y después mostrar "las reservas se abren la semana
@@ -359,6 +360,24 @@ export function renderEvento(ev, lugar, year, now = new Date()) {
     <p>Esta función no se va a hacer. Si ya nos habías escrito, te respondemos por WhatsApp.</p>
     ${motivo ? `<div class="evento-aviso__motivo"><strong>Motivo:</strong> ${esc(motivo)}</div>` : ''}
     <a href="/reservas/" class="btn btn-primary">Ver otras funciones</a>
+  </section>`;
+  } else if (estado === 'completo' && !esPasado) {
+    // Se llenaron las reservas pero se entra igual: bancos y banquetas por
+    // orden de llegada. Sigue los estados del reloj: después de 22 h cierra.
+    central = `
+  <section class="evento-aviso evento-aviso--completo" data-tep-estado="NORMAL SIN_FUNCION ULTIMA_HORA">
+    <span class="tep-ultima-hora__hora">Reservas cerradas</span>
+    <h2>Ya no tomamos reservas, pero quedan bancos y banquetas</h2>
+    <p>Los asignamos por estricto orden de llegada. Abrimos a las 21 h y el show empieza ${esc(ev.hora)}. A la gorra.</p>
+    <a href="${esc(lugar.google_maps || 'https://share.google/dyTTJVXR25JTlU7kX')}" target="_blank" rel="noopener" class="btn btn-primary">
+      Cómo llegar · 43 y 22 →
+    </a>
+  </section>
+
+  <section class="evento-aviso tep-cerrado" data-tep-estado="CERRADO">
+    <h2>Por hoy ya cerramos</h2>
+    <p>Mirá las próximas funciones y reservá para la que te quede mejor.</p>
+    <a href="/reservas/" class="btn btn-primary">Ver próximas funciones →</a>
   </section>`;
   } else if (estado === 'agotado') {
     central = `
@@ -668,7 +687,7 @@ ${trackScript}
     viewContentPropio: true,
     // Sólo la fecha de ESTA función: el jueves a las 21:10 se apaga la página
     // del jueves, no la del viernes que viene.
-    funciones: formScript ? [ev.fecha] : null,
+    funciones: (formScript || (estado === 'completo' && !esPasado)) ? [ev.fecha] : null,
     content,
     year,
   });

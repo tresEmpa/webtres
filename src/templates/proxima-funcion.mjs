@@ -25,13 +25,14 @@ function datos(ev, now) {
     hora: ev.hora || '21:30',
     show: ev.nombre_show || '',
     cuando: ucfirst(fechaHumana(ev.fecha, false, now)),
-    cta: programado ? 'Ver función →' : 'Reservar →',
+    cta: programado ? 'Ver función →'
+      : (ev.estado === 'completo') ? 'Quedan bancos →' : 'Reservar →',
   };
 }
 
 export function proximaFuncion(listado, now = new Date()) {
   const lista = listado
-    .filter((ev) => ['activo', 'programado'].includes(ev.estado || 'activo'))
+    .filter((ev) => ['activo', 'programado', 'completo'].includes(ev.estado || 'activo'))
     .slice(0, MAX)
     .map((ev) => datos(ev, now));
 

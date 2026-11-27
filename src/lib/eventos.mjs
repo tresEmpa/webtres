@@ -142,7 +142,7 @@ export function listarEventos(eventos, opts = {}) {
 
 /** Próximo evento (activo/agotado) de un día de la semana dado. */
 export function proximoPorDia(eventos, dia, now = new Date()) {
-  const lista = listarEventos(eventos, { estados: ['activo', 'agotado'], orden: 'asc', now });
+  const lista = listarEventos(eventos, { estados: ['activo', 'completo', 'agotado'], orden: 'asc', now });
   return lista.find((ev) => (ev.dia_semana || '') === dia) || null;
 }
 
@@ -194,6 +194,9 @@ export function eventoSchemaEstado(estado) {
       return ['https://schema.org/EventCancelled', 'https://schema.org/SoldOut'];
     case 'agotado':
       return ['https://schema.org/EventScheduled', 'https://schema.org/SoldOut'];
+    // Sin reservas, pero se entra por orden de llegada.
+    case 'completo':
+      return ['https://schema.org/EventScheduled', 'https://schema.org/LimitedAvailability'];
     case 'programado':
       return ['https://schema.org/EventScheduled', 'https://schema.org/PreOrder'];
     default:
