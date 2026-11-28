@@ -181,7 +181,7 @@ function draw() {
       h('div', { class: 't' }, h('span', { class: 'dot' + (S.conectado ? '' : ' off') }), e && e.jornada ? 'Jornada abierta' : 'Cerrado'),
       !S.sonido && h('button', { class: 'pri', onclick: activarSonido }, '🔔 Activar sonido'),
       h('button', { class: 'ghost', onclick: () => (S.modal = 'pedido', S.carro = {}, modalPedido()) }, '+ Pedido'),
-      e && e.jornada ? h('button', { class: 'ghost', onclick: cerrarJornada }, 'Cerrar noche') : h('button', { class: 'pri', onclick: () => accion({ tipo: 'abrir_jornada' }) }, 'Abrir noche'),
+      e && e.jornada ? h('button', { class: 'ghost', onclick: cerrarJornada }, 'Cerrar noche') : [h('button', { class: 'ghost', onclick: () => verResumen() }, 'Por cobrar'), h('button', { class: 'pri', onclick: () => accion({ tipo: 'abrir_jornada' }) }, 'Abrir noche')],
     ),
     h('main', {}, !S.conectado && h('div', { class: 'aviso' }, '⚠ Sin conexión. Reintentando…'),
       S.tab === 'pedidos' ? vistaPedidos() : S.tab === 'cuentas' ? vistaCuentas() : S.tab === 'stock' ? vistaStock() : vistaCarta()),
@@ -343,7 +343,7 @@ async function bajarNoche(id) {
 function vistaCarta() {
   const fecha = (iso) => new Date(iso).toLocaleDateString('es-AR', { weekday: 'short', day: 'numeric', month: 'numeric' });
   const noches = (S.est.jornadas || []).length ? h('div', { class: 'card' }, h('b', {}, 'Noches anteriores'),
-    (S.est.jornadas || []).map((j) => h('div', { class: 'row', style: 'padding:6px 0' }, h('span', {}, fecha(j.abierta_en)), h('button', { onclick: () => bajarNoche(j.id) }, 'Descargar')))) : null;
+    (S.est.jornadas || []).map((j) => h('div', { class: 'row', style: 'padding:6px 0' }, h('span', {}, fecha(j.abierta_en)), h('div', { class: 'row' }, h('button', { class: 'pri', onclick: () => verResumen(j.id) }, 'Por cobrar'), h('button', { onclick: () => bajarNoche(j.id) }, 'Descargar'))))) : null;
   const on = !!S.est.cartaNueva;
   const inter = h('div', { class: 'card' }, h('b', {}, 'QR de las mesas (/carta/)'),
     h('p', { class: 'mut' }, on ? 'Ahora abren la CARTA NUEVA (este sistema).' : 'Ahora abren la CARTA VIEJA (WhatsApp + planilla).'),
@@ -387,7 +387,27 @@ async function cerrarJornada() {
   const sinPagar = e.cuentas.filter((c) => !c.pagada_en && c.entregado > 0).length;
   const t = 'Vas a cerrar la noche.' + (pend ? `\n• ${pend} pedidos sin terminar.` : '') + (sinPagar ? `\n• ${sinPagar} cuentas sin marcar como pagadas.` : '') + '\n\nTodo queda guardado en el sistema (lo podés bajar después desde la pestaña Carta). ¿Cerrar?';
   if (!confirm(t)) return;
+  const id = e.jornada && e.jornada.id;
   await accion({ tipo: 'cerrar_jornada' });
+  verResumen(id);
+}
+
+async function verResumen(id) {
+  const r = await api('/api/panel/resumen' + (id ? '?jornada=' + id : ''));
+  if (!r.ok) return alert('No se pudo traer el resumen.');
+  const cerrar = () => { S.modal = null; document.querySelector('.modal')?.remove(); draw(); };
+  const deben = r.cuentas.filter((c) => c.saldo > 0), pagos = r.cuentas.filter((c) => c.saldo === 0);
+  const fecha = new Date(r.jornada.abierta_en).toLocaleDateString('es-AR', { weekday: 'short', day: 'numeric', month: 'numeric' });
+  S.modal = 'resumen';
+  document.querySelector('.modal')?.remove();
+  document.body.append(h('div', { class: 'modal' }, h('div', {},
+    h('div', { class: 'row' }, h('div', { class: 'big' }, 'Resta cobrar'), h('button', { class: 'ghost', onclick: cerrar }, 'Cerrar')),
+    h('p', { class: 'mut' }, 'Noche del ' + fecha + ' · vendido ' + $$(r.total) + ' · marcado pagado ' + $$(r.cobrado)),
+    h('div', { class: 'big', style: 'color:var(--warn);margin:8px 0' }, $$(r.porCobrar)),
+    deben.length ? deben.map((c) => h('div', { class: 'row', style: 'padding:8px 0;border-bottom:1px solid #2a2a2e' },
+      h('div', {}, h('b', {}, c.mesa), c.pagado ? h('div', { class: 'mut' }, 'pidió ' + $$(c.total) + ' · pagó ' + $$(c.pagado)) : null),
+      h('b', { style: 'color:var(--warn)' }, $$(c.saldo)))) : h('p', { style: 'color:var(--ok)' }, 'No queda nada por cobrar.'),
+    pagos.length ? h('p', { class: 'mut', style: 'margin-top:14px' }, 'Pagaron: ' + pagos.map((c) => c.mesa + ' ' + $$(c.total)).join(' · ')) : null)));
 }
 
 (async () => { try { await refrescar(); } catch (e) {} draw(); })();
