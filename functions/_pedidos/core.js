@@ -61,6 +61,28 @@ export async function cerrarJornada(db) {
   return j;
 }
 
+/**
+ * Resumen de una noche: por nombre, total pedido, lo marcado como pagado y lo que resta cobrar.
+ * Mismo criterio que la pestaña Cuentas: lo pedido suma; de un pedido anulado, solo lo entregado.
+ */
+export async function resumenJornada(db, jornadaId) {
+  const j = await db.prepare('SELECT * FROM jornadas WHERE id = ?').bind(jornadaId).first();
+  if (!j) return null;
+  const { results } = await db.prepare(
+    `SELECT p.mesa, SUM(CASE WHEN p.anulado_en IS NULL THEN r.cantidad ELSE r.entregadas END * r.precio) AS total
+     FROM renglones r JOIN pedidos p ON p.id = r.pedido_id WHERE p.jornada_id = ? GROUP BY p.mesa`,
+  ).bind(jornadaId).all();
+  const { results: cs } = await db.prepare('SELECT mesa, pagado, medio FROM cuentas WHERE jornada_id = ?').bind(jornadaId).all();
+  const pag = new Map(cs.map((c) => [c.mesa, c]));
+  const cuentas = results.filter((r) => r.total > 0).map((r) => {
+    const c = pag.get(r.mesa);
+    const pagado = c?.pagado || 0;
+    return { mesa: r.mesa, total: r.total, pagado, saldo: Math.max(0, r.total - pagado), medio: c?.medio ?? null };
+  }).sort((a, b) => b.saldo - a.saldo || a.mesa.localeCompare(b.mesa));
+  const suma = (k) => cuentas.reduce((s, c) => s + c[k], 0);
+  return { jornada: j, cuentas, total: suma('total'), cobrado: suma('pagado'), porCobrar: suma('saldo') };
+}
+
 // ---------- Menú ----------
 
 export async function menu(db) {

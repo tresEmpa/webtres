@@ -175,7 +175,7 @@ function dibujar() {
   var e = S.est, abiertos = pendientes(), y = window.pageYOffset;
   var h = '<div class="top"><div class="st"><span class="dot' + (S.conectado ? '' : ' off') + '"></span>' + (e.jornada ? 'Noche abierta' : 'Cerrado') + '</div><div class="bt">' +
     (S.sonido ? '<button class="gh" data-a="probar">Probar sonido</button>' : '<button class="pri" data-a="sonido">ACTIVAR SONIDO</button>') +
-    (e.jornada ? ' <button class="gh" data-a="cerrarNoche">Cerrar noche</button>' : ' <button class="ok" data-a="abrir">Abrir noche</button>') + ' <button class="gh" data-a="clave">Clave</button></div></div>' +
+    (e.jornada ? ' <button class="gh" data-a="cerrarNoche">Cerrar noche</button>' : ' <button class="gh" data-a="resumen">Por cobrar</button> <button class="ok" data-a="abrir">Abrir noche</button>') + ' <button class="gh" data-a="clave">Clave</button></div></div>' +
     '<div class="tabs"><button data-a="tab" data-v="pedidos" class="' + (S.tab === 'pedidos' ? 'on' : '') + '">Pedidos ' + (abiertos.length ? '<span class="n">' + abiertos.length + '</span>' : '') + '</button>' +
     '<button data-a="tab" data-v="cuentas" class="' + (S.tab === 'cuentas' ? 'on' : '') + '">Cuentas</button>' +
     '<button data-a="barra">+ Pedido</button></div><div class="main">' +
@@ -193,7 +193,7 @@ function vistaLogin() {
 
 function vistaPedidos(abiertos) {
   var e = S.est;
-  if (!e.jornada) return '<div class="card"><div class="big">La noche está cerrada</div><p class="mut">Cargá el stock (desde el panel del celu) y tocá "Abrir noche".</p></div>';
+  if (!e.jornada) return '<div class="card"><div class="big">La noche está cerrada</div><p class="mut">Cargá el stock (desde el panel del celu) y tocá "Abrir noche".</p><button class="pri w100" data-a="resumen">VER LO QUE QUEDÓ POR COBRAR</button></div>';
   var h = '';
   var bajos = filtra(e.productos, function (p) { return p.activo && p.control === 'cantidad' && p.modo !== 'manual' && p.stock <= 3; });
   if (bajos.length) { var t = []; for (var b = 0; b < bajos.length; b++) t.push(bajos[b].stock > 0 ? 'Quedan ' + bajos[b].stock + ' de ' + bajos[b].nombre : 'Sin stock: ' + bajos[b].nombre); h += '<div class="aviso">' + esc(t.join(' · ')) + '</div>'; }
@@ -224,7 +224,7 @@ function tarjeta(p, activo) {
 
 function vistaCuentas() {
   var e = S.est;
-  if (!e.jornada) return '<div class="card mut">No hay noche abierta.</div>';
+  if (!e.jornada) return '<div class="card mut">No hay noche abierta.</div><button class="pri w100" data-a="resumen">VER LO QUE QUEDÓ POR COBRAR</button>';
   var cs = e.cuentas.slice().sort(function (a, b) { return ((a.saldo > 0) ? 0 : 1) - ((b.saldo > 0) ? 0 : 1) || (String(a.mesa) < String(b.mesa) ? -1 : 1); });
   var cobrado = 0, porCobrar = 0, ef = 0, tr = 0, i;
   for (i = 0; i < (e.pagos || []).length; i++) { var x = e.pagos[i]; cobrado += x.monto; if (x.medio === 'efectivo') ef += x.monto; if (x.medio === 'transferencia') tr += x.monto; }
@@ -257,6 +257,24 @@ function verCuenta(mesa) {
     else h += '<button class="ok w100" data-a="pagar" data-m="' + esc(mesa) + '" data-v="efectivo" data-q="' + (c.pendientes || 0) + '">PAGÓ EFECTIVO</button>' +
       '<button class="ok w100" data-a="pagar" data-m="' + esc(mesa) + '" data-v="transferencia" data-q="' + (c.pendientes || 0) + '">PAGÓ TRANSFERENCIA</button>' +
       '<div class="fila" style="margin-top:6px"><div><button class="w100" data-a="pagar" data-m="' + esc(mesa) + '" data-v="qr" data-q="' + (c.pendientes || 0) + '">QR</button></div><div style="padding-left:6px"><button class="w100" data-a="pagar" data-m="' + esc(mesa) + '" data-v="tarjeta" data-q="' + (c.pendientes || 0) + '">Tarjeta</button></div></div>';
+    abrirCapa(h);
+  });
+}
+
+function verResumen(id) {
+  xhr('GET', '/api/panel/resumen' + (id ? '?jornada=' + id : ''), undefined, function (st, r) {
+    if (!r || !r.ok) { alert('No se pudo traer el resumen.'); return; }
+    var j = r.jornada, d = new Date(ms(j.abierta_en) - 3 * 3600000), i, c;
+    var h = '<div class="fila"><div class="big">Resta cobrar</div><div class="der"><button class="gh" data-a="cerrar">Volver</button></div></div>' +
+      '<div class="mut">Noche del ' + dos(d.getUTCDate()) + '/' + dos(d.getUTCMonth() + 1) + (j.cerrada_en ? ' · cerrada ' + hora(j.cerrada_en) : ' · abierta') + '</div>' +
+      '<div class="card" style="margin-top:8px"><div class="fila"><div>Por cobrar<div class="big" style="color:#f0b429">' + plata(r.porCobrar) + '</div></div>' +
+      '<div class="der">Vendido ' + plata(r.total) + '<div class="mut">Marcado pagado ' + plata(r.cobrado) + '</div></div></div></div>';
+    var deben = filtra(r.cuentas, function (x) { return x.saldo > 0; }), pagos = filtra(r.cuentas, function (x) { return x.saldo === 0; });
+    if (!deben.length) h += '<div class="card" style="color:#2fbf71">No queda nada por cobrar.</div>';
+    for (i = 0; i < deben.length; i++) { c = deben[i];
+      h += '<div class="fila" style="padding:10px 0;border-bottom:1px solid #333"><div class="big">' + esc(c.mesa) + (c.pagado ? '<div class="mut">pidió ' + plata(c.total) + ' · pagó ' + plata(c.pagado) + '</div>' : '') + '</div><div class="der big" style="color:#f0b429">' + plata(c.saldo) + '</div></div>'; }
+    if (pagos.length) { h += '<p class="mut" style="margin-top:16px">Pagaron</p>';
+      for (i = 0; i < pagos.length; i++) { c = pagos[i]; h += '<div class="fila mut" style="padding:4px 0"><div>' + esc(c.mesa) + (c.medio ? ' · ' + esc(c.medio) : '') + '</div><div class="der">' + plata(c.total) + '</div></div>'; } }
     abrirCapa(h);
   });
 }
@@ -295,8 +313,9 @@ function manejar(ev) {
   else if (a === 'tab') { S.tab = t.getAttribute('data-v'); dibujar(); }
   else if (a === 'cerrarNoche') {
     var pend = pendientes().length, debe = filtra(S.est.cuentas || [], function (c) { return c.saldo > 0; }).length;
-    if (confirm('¿Cerrar la noche?' + (pend ? '\n- ' + pend + ' pedidos sin entregar' : '') + (debe ? '\n- ' + debe + ' cuentas que deben' : '') + '\n\nQueda todo guardado.')) accion({ tipo: 'cerrar_jornada' });
+    if (confirm('¿Cerrar la noche?' + (pend ? '\n- ' + pend + ' pedidos sin entregar' : '') + (debe ? '\n- ' + debe + ' cuentas que deben' : '') + '\n\nQueda todo guardado y te muestro lo que resta cobrar.')) accion({ tipo: 'cerrar_jornada' }, function (j) { if (j && j.ok) verResumen(j.jornada && j.jornada.id); });
   }
+  else if (a === 'resumen') verResumen();
   else if (a === 'abrir') { if (confirm('¿Abrir la noche? ¿Ya cargaste el stock?')) accion({ tipo: 'abrir_jornada' }); }
   else if (a === 'lin') accion({ tipo: 'fijar_entregadas', renglon_id: +t.getAttribute('data-r'), entregadas: +t.getAttribute('data-n') });
   else if (a === 'todo') accion({ tipo: 'entregar_todo', pedido_id: t.getAttribute('data-p') });
